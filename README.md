@@ -1,6 +1,6 @@
 # WrestleWorld
 <h4>The Ultimate Wrestling Destination</h4>
-s
+
 Progetto per l'esame di <i>Tecnologie Software per il Web</i>, Dipartimento di Informatica dell'<i>Università degli Studi di Salerno</i>.
 
 <p align="center">
