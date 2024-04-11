@@ -1,0 +1,9 @@
+<Context>
+    <Resource name = "jdbc/wrestleworld"
+              auth = "Container"
+              driverClassName = "com.mysql.cj.jdbc.Driver"
+              type = "javax.sql.DataSource"
+              username = "root"
+              password = "rootBDCris77"
+              url = "jdbc:mysql://localhost:3306/wrestleworld?serverTimezone=Europe/Rome&amp;useSSL=false"/>
+</Context>
