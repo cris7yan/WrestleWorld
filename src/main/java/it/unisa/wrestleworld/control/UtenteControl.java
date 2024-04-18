@@ -45,19 +45,22 @@ public class UtenteControl extends HttpServlet {
                     HttpSession session = request.getSession(true);
 
                     if(email == null || password == null) {
-                        response.sendRedirect("./index.jsp");
+                        response.sendRedirect("./login.jsp");
                     } else {
                         utente = utModel.doRetrieveByEmailPassword(email, password);
                         if(utente == null) {
                             request.setAttribute("result", "Credenziali errate");
-                            RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/index.jsp");
+                            RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
                             reqDispatcher.forward(request, response);
                         } else {
                             session.setAttribute("email", utente.getEmail());
                             session.setAttribute("tipo", utente.getTipoUtente());
-                            response.sendRedirect("./admin.jsp");
+                            response.sendRedirect("./index.jsp");
                         }
                     }
+                } else if (action.equalsIgnoreCase("logout")) {
+                    request.getSession().invalidate();
+                    response.sendRedirect("./index.jsp");
                 }
             }
         } catch (SQLException e) {
