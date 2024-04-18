@@ -22,11 +22,13 @@ public class UtenteControl extends HttpServlet {
 
     static UtenteDAO utModel = new UtenteModel();
     static final Logger logger = Logger.getLogger(UtenteControl.class.getName());
+    private static final String MSG_ERROR_LOGINPAGE = "Errore durante il reindirizzamento alla pagina di login";
+    private static final String MSG_ERROR_INDEXPAGE = "Errore durante il reindirizzamento alla pagina principale";
+    private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
 
     public UtenteControl () {
         super();
     }
-
 
     @Override
     public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,7 +47,11 @@ public class UtenteControl extends HttpServlet {
                     HttpSession session = request.getSession(true);
 
                     if(email == null || password == null) {
-                        response.sendRedirect("./login.jsp");
+                        try {
+                            response.sendRedirect("./login.jsp");
+                        } catch (IOException ex) {
+                            logger.log(Level.WARNING, MSG_ERROR_LOGINPAGE, ex);
+                        }
                     } else {
                         utente = utModel.doRetrieveByEmailPassword(email, password);
                         if(utente == null) {
@@ -55,12 +61,20 @@ public class UtenteControl extends HttpServlet {
                         } else {
                             session.setAttribute("email", utente.getEmail());
                             session.setAttribute("tipo", utente.getTipoUtente());
-                            response.sendRedirect("./index.jsp");
+                            try {
+                                response.sendRedirect("./index.jsp");
+                            } catch (IOException ex) {
+                                logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
+                            }
                         }
                     }
                 } else if (action.equalsIgnoreCase("logout")) {
                     request.getSession().invalidate();
-                    response.sendRedirect("./index.jsp");
+                    try {
+                        response.sendRedirect("./index.jsp");
+                    } catch (IOException ex) {
+                        logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -70,7 +84,13 @@ public class UtenteControl extends HttpServlet {
 
     @Override
     public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        try {
+            doGet(request, response);
+        } catch (ServletException ex) {
+            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, ex);
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, ex);
+        }
     }
 
 }

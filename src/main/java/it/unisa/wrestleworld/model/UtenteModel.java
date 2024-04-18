@@ -129,7 +129,7 @@ public class UtenteModel implements UtenteDAO {
                 logger.log(Level.WARNING, MSG_ERROR_CONN, e);
             }
         }
-        if(utente == null || utente.getEmail() == null) {
+        if(utente.getEmail() == null) {
             return null;
         } else {
             return utente;
