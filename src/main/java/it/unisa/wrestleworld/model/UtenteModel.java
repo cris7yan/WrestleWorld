@@ -1,7 +1,5 @@
 package it.unisa.wrestleworld.model;
 
-import it.unisa.wrestleworld.control.UtenteControl;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -10,8 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,8 +15,8 @@ public class UtenteModel implements UtenteDAO {
     private static final String TABLE_UTENTE = "Utente";
     private static DataSource dataSource;
     private static Logger logger = Logger.getLogger(UtenteModel.class.getName());
-    private static final String msgErrorPS = "Errore durante la chiusura del PreparedStatement";
-    private static final String msgErrorConn = "Errore durante la chiusura della connessione";
+    private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
+    private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
 
 
     // approccio per ottenere risorse dal database
@@ -69,14 +65,14 @@ public class UtenteModel implements UtenteDAO {
                     ps.close();
                 }
             } catch (SQLException e) {
-                logger.log(Level.WARNING, msgErrorPS, e);
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
             }
             try {
                 if (conn != null) {
                     conn.close();
                 }
             } catch (SQLException e) {
-                logger.log(Level.WARNING, msgErrorConn, e);
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
             }
         }
     }
@@ -123,14 +119,14 @@ public class UtenteModel implements UtenteDAO {
                     ps.close();
                 }
             } catch (SQLException e) {
-                logger.log(Level.WARNING, msgErrorPS, e);
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
             }
             try {
                 if (conn != null) {
                     conn.close();
                 }
             } catch (SQLException e) {
-                logger.log(Level.WARNING, msgErrorConn, e);
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
             }
         }
         if(utente == null || utente.getEmail() == null) {
@@ -173,14 +169,14 @@ public class UtenteModel implements UtenteDAO {
                     ps.close();
                 }
             } catch (SQLException e) {
-                logger.log(Level.WARNING, msgErrorPS, e);
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
             }
             try {
                 if (conn != null) {
                     conn.close();
                 }
             } catch (SQLException e) {
-                logger.log(Level.WARNING, msgErrorConn, e);
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
             }
         }
         return ris;

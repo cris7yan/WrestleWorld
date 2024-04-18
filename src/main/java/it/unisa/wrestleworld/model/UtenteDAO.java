@@ -1,7 +1,6 @@
 package it.unisa.wrestleworld.model;
 
 import java.sql.SQLException;
-import java.util.Collection;
 
 public interface UtenteDAO {
 
