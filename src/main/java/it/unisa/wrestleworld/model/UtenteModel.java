@@ -19,6 +19,8 @@ public class UtenteModel implements UtenteDAO {
     private static final String TABLE_UTENTE = "Utente";
     private static DataSource dataSource;
     private static Logger logger = Logger.getLogger(UtenteModel.class.getName());
+    private static final String msgErrorPS = "Errore durante la chiusura del PreparedStatement";
+    private static final String msgErrorConn = "Errore durante la chiusura della connessione";
 
 
     // approccio per ottenere risorse dal database
@@ -61,11 +63,20 @@ public class UtenteModel implements UtenteDAO {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } finally {
-            if(ps != null) {
-                ps.close();
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, msgErrorPS, e);
             }
-            if(conn != null) {
-                conn.close();
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, msgErrorConn, e);
             }
         }
     }
@@ -106,11 +117,20 @@ public class UtenteModel implements UtenteDAO {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } finally {
-            if(ps != null) {
-                ps.close();
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, msgErrorPS, e);
             }
-            if(conn != null) {
-                conn.close();
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, msgErrorConn, e);
             }
         }
         if(utente == null || utente.getEmail() == null) {
@@ -147,11 +167,20 @@ public class UtenteModel implements UtenteDAO {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } finally {
-            if(ps != null) {
-                ps.close();
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, msgErrorPS, e);
             }
-            if(conn != null) {
-                conn.close();
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, msgErrorConn, e);
             }
         }
         return ris;

@@ -21,7 +21,7 @@ public class UtenteControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     static UtenteDAO utModel = new UtenteModel();
-    Logger logger = Logger.getLogger(UtenteControl.class.getName());
+    static final Logger logger = Logger.getLogger(UtenteControl.class.getName());
 
     public UtenteControl () {
         super();
