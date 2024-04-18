@@ -1,5 +1,7 @@
 package it.unisa.wrestleworld.model;
 
+import it.unisa.wrestleworld.control.UtenteControl;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -10,37 +12,42 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UtenteModel implements UtenteDAO {
+    private static final String TABLE_UTENTE = "Utente";
+    private static DataSource dataSource;
+    private static Logger logger = Logger.getLogger(UtenteModel.class.getName());
 
-    private static DataSource ds;
-    private static final String TABLE_NAME_UTENTE = "Utente";
 
+    // approccio per ottenere risorse dal database
     static {
         try {
-            Context ctx = new InitialContext();
-            Context envCtx = (Context) (ctx).lookup("java:comp/env");
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
 
-            ds = (DataSource) envCtx.lookup("jdbc/wrestleworld");
+            dataSource = (DataSource) envCtx.lookup("jdbc/wrestleworld");
         } catch (NamingException e) {
-            System.out.println("Errore: " + e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
     /**
-     * Metodo per salvare un nuovo utente all'interno del database
+     * funzione che permette di salvare un nuovo utente nel database
+     * utilizzata per la fase di registrazione
      * @param utente
+     * @throws SQLException
      */
-    public synchronized void doSave (UtenteBean utente) throws SQLException {
-
-        System.out.println("Eseguo la save");
+    @Override
+    public void doSave(UtenteBean utente) throws SQLException {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "INSERT INTO " + TABLE_NAME_UTENTE + " (Email, Nome, Cognome, Password, DataNascita, Tipo) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO " + TABLE_UTENTE + " (Email, Nome, Cognome, Password, DataNascita, Tipo) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
-            conn = ds.getConnection();
+            conn = dataSource.getConnection();
             ps = conn.prepareStatement(query);
 
             ps.setString(1, utente.getEmail());
@@ -52,268 +59,101 @@ public class UtenteModel implements UtenteDAO {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            logger.log(Level.WARNING, e.getMessage());
         } finally {
-            try {
-                if(ps != null) {
-                    ps.close();
-                }
-            } finally {
-                if(conn != null) {
-                    conn.close();
-                }
+            if(ps != null) {
+                ps.close();
+            }
+            if(conn != null) {
+                conn.close();
             }
         }
     }
 
     /**
-     * funzione che cancella i dati dell'utente dal database
-     * @param emailUtente
-     */
-    public synchronized boolean doDelete (String emailUtente) throws SQLException {
-
-        System.out.println("Effettuo la delete");
-        Connection conn = null;
-        PreparedStatement ps = null;
-
-        int result = 0;
-
-        String query = "DELETE FROM " + TABLE_NAME_UTENTE + " WHERE Email = ?";
-
-        try {
-            conn = ds.getConnection();
-            ps = conn.prepareStatement(query);
-
-            ps.setString(1, emailUtente);
-            System.out.println(query + emailUtente);
-
-            result = ps.executeUpdate();
-
-            // conferma le modifiche effettuate nel database
-            conn.commit();
-        } finally {
-            try {
-                if(ps != null) {
-                    ps.close();
-                }
-            } finally {
-                if(conn != null) {
-                    conn.close();
-                }
-            }
-        }
-
-        return (result != 0);
-    }
-
-    /**
-     * funzione che restituisce un  utente recuperato dal database tramite l'email
+     * funzione che si occupa di ricercare un utente all'interno del database mediante l'email e la password
+     * funzione utilizzata per effettuare il login
      * @param email
-      */
-    public synchronized UtenteBean doRetriveByEmail(String email) throws SQLException {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
+     * @param password
+     * @return l'utente corrispondente all'email e password passati come parametro
+     * @throws SQLException
+     */
+    @Override
+    public UtenteBean doRetrieveByEmailPassword(String email, String password) throws SQLException {
         UtenteBean utente = new UtenteBean();
 
-        String query = "SELECT * FROM " + TABLE_NAME_UTENTE + " WHERE Email = ?";
-
-        try {
-            conn = ds.getConnection();
-            ps = conn.prepareStatement(query);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                // vengono estratti i valori dal db ed inseriti nel bean utente
-                utente.setEmail(rs.getString("Email"));
-                utente.setNome(rs.getString("Nome"));
-                utente.setCognome(rs.getString("Cognome"));
-                utente.setPassword(rs.getString("Password"));
-                utente.setDataNascita(rs.getString("DataNascita"));
-                utente.setTipoUtente(rs.getString("Tipo"));
-            }
-
-        } finally {
-            try {
-                if(ps != null) {
-                    ps.close();
-                }
-            } finally {
-                if(conn != null) {
-                    conn.close();
-                }
-            }
-        }
-        return utente;
-    }
-
-    /**
-     * funzione che restituisce tutti gli utenti contenuti nel database mediante un ordine
-     * @param order (ASC o DESC)
-     */
-    public synchronized Collection<UtenteBean> doRetriveAllUtentiByOrder (String order) throws SQLException {
-
         Connection conn = null;
         PreparedStatement ps = null;
 
-        Collection<UtenteBean> utenti = new LinkedList<UtenteBean>();
-
-        String query = "SELECT * FROM " + TABLE_NAME_UTENTE;
-
-        if(order != null && !order.equals("")) {
-            query += " ORDER BY " + order;
-        }
+        String query = "SELECT * FROM " + TABLE_UTENTE + " WHERE Email = ? AND Password = ?";
 
         try {
-            conn = ds.getConnection();
+            conn = dataSource.getConnection();
             ps = conn.prepareStatement(query);
+
+            ps.setString(1, email);
+            ps.setString(2, password);
 
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
-                UtenteBean utente = new UtenteBean();
-
-                // vengono estratti i valori dal db ed inseriti nel bean utente
                 utente.setEmail(rs.getString("Email"));
+                utente.setPassword(rs.getString("Password"));
                 utente.setNome(rs.getString("Nome"));
                 utente.setCognome(rs.getString("Cognome"));
-                utente.setPassword(rs.getString("Password"));
                 utente.setDataNascita(rs.getString("DataNascita"));
                 utente.setTipoUtente(rs.getString("Tipo"));
-
-                // viene aggiunto l'utente alla lista
-                utenti.add(utente);
             }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
         } finally {
-            try {
-                if(ps != null) {
-                    ps.close();
-                }
-            } finally {
-                if(conn != null) {
-                    conn.close();
-                }
+            if(ps != null) {
+                ps.close();
+            }
+            if(conn != null) {
+                conn.close();
             }
         }
-        return utenti;
-    }
-
-    // funzione che restituisce tutti gli utenti contenuti nel database
-    public synchronized Collection<UtenteBean> doRetriveAllUtenti() throws SQLException {
-
-        Connection conn = null;
-        PreparedStatement ps = null;
-
-        Collection<UtenteBean> utenti = new LinkedList<UtenteBean>();
-
-        String query = "SELECT * FROM " + TABLE_NAME_UTENTE;
-
-        try {
-            conn = ds.getConnection();
-            ps = conn.prepareStatement(query);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                UtenteBean utente = new UtenteBean();
-
-                // vengono estratti i valori dal db ed inseriti nel bean utente
-                utente.setEmail(rs.getString("Email"));
-                utente.setNome(rs.getString("Nome"));
-                utente.setCognome(rs.getString("Cognome"));
-                utente.setPassword(rs.getString("Password"));
-                utente.setDataNascita(rs.getString("DataNascita"));
-                utente.setTipoUtente(rs.getString("Tipo"));
-
-                // viene aggiunto l'utente alla lista
-                utenti.add(utente);
-            }
-
-        } finally {
-            try {
-                if(ps != null) {
-                    ps.close();
-                }
-            } finally {
-                if(conn != null) {
-                    conn.close();
-                }
-            }
-        }
-        return utenti;
-    }
-
-    /**
-     * funzione che effettua la modifica dei dati di un utente nel database, modificandone la email
-     * @param email -> mail attuale dell'utente
-     * @param  newEmail -> nuova mail che dovrà essere inserita
-     */
-    public synchronized void doUpdateEmail(String email, String newEmail) throws SQLException {
-
-        Connection conn = null;
-        PreparedStatement ps = null;
-
-        String query = "UPDATE " + TABLE_NAME_UTENTE + " SET Email = ? WHERE Email = ?";
-
-        try {
-            conn = ds.getConnection();
-            ps = conn.prepareStatement(query);
-
-            ps.setString(1, newEmail);
-            ps.setString(2, email);
-
-            ps.executeUpdate();
-
-            // conferma le modifiche effettuate nel database
-            conn.commit();
-        } finally {
-            try {
-                if(ps != null) {
-                    ps.close();
-                }
-            } finally {
-                if(conn != null) {
-                    conn.close();
-                }
-            }
+        if(utente == null || utente.getEmail() == null) {
+            return null;
+        } else {
+            return utente;
         }
     }
 
     /**
-     * funzione che effettua la modifica dei dati di un utente nel database, modificandone la email
-     * @param email -> mail attuale dell'utente
-     * @param newPassword -> nuova password che dovrà essere inserita
+     * funzione che verifica se un email è già presente nel database
+     * @param email
+     * @return
+     * @throws SQLException
      */
-    public void doUpdatePassword(String email, String newPassword) throws SQLException {
+    @Override
+    public boolean verificaEmailEsistente(String email) throws SQLException {
         Connection conn = null;
         PreparedStatement ps = null;
+        boolean ris = false;    // memorizziamo il risultato della ricerca
 
-        String query = "UPDATE " + TABLE_NAME_UTENTE + " SET Password = ? WHERE Email = ?";
+        String query = "SELECT * FROM " + TABLE_UTENTE + " WHERE Email = ?";
 
         try {
-            conn = ds.getConnection();
+            conn = dataSource.getConnection();
             ps = conn.prepareStatement(query);
 
-            ps.setString(1, newPassword);
-            ps.setString(2, email);
+            ps.setString(1, email);
 
-            ps.executeUpdate();
-
-            // conferma le modifiche effettuate nel database
-            conn.commit();
-
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                ris = true;
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
         } finally {
-            try {
-                if(ps != null) {
-                    ps.close();
-                }
-            } finally {
-                if(conn != null) {
-                    conn.close();
-                }
+            if(ps != null) {
+                ps.close();
+            }
+            if(conn != null) {
+                conn.close();
             }
         }
+        return ris;
     }
-
 }

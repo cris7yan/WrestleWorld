@@ -45,6 +45,7 @@ public class UtenteBean implements Serializable {
         return this.tipoUtente;
     }
 
+    
     // Metodi Set
     public void setEmail (String email) {
         this.email = email;
