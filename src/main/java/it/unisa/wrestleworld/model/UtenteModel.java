@@ -38,7 +38,7 @@ public class UtenteModel implements UtenteDAO {
      * @throws SQLException
      */
     @Override
-    public void doSave(UtenteBean utente) throws SQLException {
+    public synchronized void doSave(UtenteBean utente) throws SQLException {
         Connection conn = null;
         PreparedStatement ps = null;
 
@@ -86,7 +86,7 @@ public class UtenteModel implements UtenteDAO {
      * @throws SQLException
      */
     @Override
-    public UtenteBean doRetrieveByEmailPassword(String email, String password) throws SQLException {
+    public synchronized UtenteBean doRetrieveByEmailPassword(String email, String password) throws SQLException {
         UtenteBean utente = new UtenteBean();
 
         Connection conn = null;
@@ -143,7 +143,7 @@ public class UtenteModel implements UtenteDAO {
      * @throws SQLException
      */
     @Override
-    public boolean verificaEmailEsistente(String email) throws SQLException {
+    public synchronized boolean verificaEmailEsistente(String email) throws SQLException {
         Connection conn = null;
         PreparedStatement ps = null;
         boolean ris = false;    // memorizziamo il risultato della ricerca

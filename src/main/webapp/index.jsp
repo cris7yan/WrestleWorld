@@ -2,7 +2,30 @@
   Created by IntelliJ IDEA.
   User: cristyanesposito
 --%>
+<%@ page import="java.util.List" %>
+<%@ page import="it.unisa.wrestleworld.model.ProdottoBean" %>
 <%@ page contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
+
+<%
+    List<ProdottoBean> prodotti = (List<ProdottoBean>) request.getAttribute("prodotti");
+    if(prodotti == null) {
+        response.sendRedirect("./ProdottoControl");
+        return;
+    }
+%>
+
+<%!
+    String email = "";
+    String tipo = "";
+%>
+
+<%
+    synchronized (session) {
+        session = request.getSession();
+        email = (String) session.getAttribute("email");
+        tipo = (String) session.getAttribute("tipo");
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="it">
@@ -13,7 +36,29 @@
 <body>
 <%@ include file="navbar.jsp"%>
 
-    Pagina index
+    <h1>Prodotti</h1>
+
+    <%
+        if(prodotti != null && !prodotti.isEmpty()) {
+            for (int i = 0; i < prodotti.size(); i++) {
+                ProdottoBean prod = prodotti.get(i);
+    %>
+
+    <%
+        if(prod != null) {
+    %>
+
+        <%= prod.getDescrizioneProdotto() %>
+        <br><br>
+
+    <%
+        }
+    %>
+
+    <%
+            }
+        }
+    %>
 
 </body>
 </html>

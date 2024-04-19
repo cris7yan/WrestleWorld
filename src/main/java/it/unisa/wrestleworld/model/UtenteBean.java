@@ -11,14 +11,7 @@ public class UtenteBean implements Serializable {
     private String dataNascita;
     private String tipoUtente;
 
-    public UtenteBean () {
-        this.email = "";
-        this.nome = "";
-        this.cognome = "";
-        this.password = "";
-        this.dataNascita = "";
-        this.tipoUtente = "";
-    }
+    public UtenteBean () { }
 
     // Metodi Get
     public String getEmail () {

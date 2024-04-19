@@ -5,18 +5,14 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
 
 <%!
-    String email = "";
-    String password = "";
-    String tipo = "";
+    String emailUtente = "";
 %>
 
 <%
     synchronized (session) {
         session = request.getSession();
         if(session.getAttribute("email") != null) {
-              email = (String) session.getAttribute("email");
-              password = (String) session.getAttribute("password");
-              tipo = (String) session.getAttribute("tipo");
+              emailUtente = (String) session.getAttribute("email");
         }
     }
 %>
@@ -41,7 +37,7 @@
       </div>
 
       <%
-        if(email != null) {
+        if(emailUtente != null) {
       %>
         <div class="logout">
             <a href="UtenteControl?action=logout">
