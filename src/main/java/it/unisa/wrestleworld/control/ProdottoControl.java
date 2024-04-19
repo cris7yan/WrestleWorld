@@ -20,7 +20,7 @@ public class ProdottoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private static ProdottoModel prodModel = new ProdottoModel();
-    static final Logger logger = Logger.getLogger(UtenteControl.class.getName());
+    static final Logger logger = Logger.getLogger(ProdottoControl.class.getName());
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
 
@@ -32,16 +32,12 @@ public class ProdottoControl extends HttpServlet {
         String action = request.getParameter("action");
 
         try {
-            if(action != null) {
+            List<ProdottoBean> prodotti = prodModel.doRetrieveAll();
+            request.setAttribute("prodotti", prodotti);
 
-            } else {
-                List<ProdottoBean> prodotti = prodModel.doRetrieveAll();
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/index.jsp");
+            reqDispatcher.forward(request, response);
 
-                request.setAttribute("prodotti", prodotti);
-
-                RequestDispatcher reqDispatcher = request.getRequestDispatcher("/index.jsp");
-                reqDispatcher.forward(request, response);
-            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {

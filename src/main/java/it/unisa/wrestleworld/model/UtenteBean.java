@@ -11,7 +11,9 @@ public class UtenteBean implements Serializable {
     private String dataNascita;
     private String tipoUtente;
 
-    public UtenteBean () { }
+    public UtenteBean () {
+        // Costruttore
+    }
 
     // Metodi Get
     public String getEmail () {

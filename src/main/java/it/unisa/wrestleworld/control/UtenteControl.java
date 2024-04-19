@@ -26,6 +26,7 @@ public class UtenteControl extends HttpServlet {
     private static final String MSG_ERROR_INDEXPAGE = "Errore durante il reindirizzamento alla pagina principale";
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
+    private static final String INDEX_PAGE = "./index.jsp";
 
 
     public UtenteControl () {
@@ -72,7 +73,7 @@ public class UtenteControl extends HttpServlet {
 
         if(email == null || password == null) {
             try {
-                response.sendRedirect("./index.jsp");
+                response.sendRedirect(INDEX_PAGE);
             } catch (IOException ex) {
                 logger.log(Level.WARNING, MSG_ERROR_LOGINPAGE, ex);
             }
@@ -87,7 +88,7 @@ public class UtenteControl extends HttpServlet {
                     session.setAttribute("email", utente.getEmail());
                     session.setAttribute("tipo", utente.getTipoUtente());
                     try {
-                        response.sendRedirect("./index.jsp");
+                        response.sendRedirect(INDEX_PAGE);
                     } catch (IOException ex) {
                         logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
                     }
@@ -100,10 +101,10 @@ public class UtenteControl extends HttpServlet {
         }
     }
 
-    private void logout (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void logout (HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.getSession().invalidate();
         try {
-            response.sendRedirect("./index.jsp");
+            response.sendRedirect(INDEX_PAGE);
         } catch (IOException ex) {
             logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
         }
