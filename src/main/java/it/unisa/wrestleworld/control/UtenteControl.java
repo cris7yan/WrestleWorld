@@ -94,6 +94,8 @@ public class UtenteControl extends HttpServlet {
                 }
             } catch (SQLException e) {
                 logger.log(Level.WARNING, e.getMessage());
+            } catch (ServletException | IOException e) {
+                logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
             }
         }
     }
