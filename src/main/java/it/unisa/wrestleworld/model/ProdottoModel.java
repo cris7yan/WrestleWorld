@@ -39,7 +39,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT * FROM " + TABLE_PRODOTTO + " WHERE ID_Prodotto BETWEEN 1 AND 10";
+        String query = "SELECT * FROM " + TABLE_PRODOTTO;
 
         try {
             conn = dataSource.getConnection();

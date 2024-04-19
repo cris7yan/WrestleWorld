@@ -22,6 +22,7 @@ public class ProdottoControl extends HttpServlet {
     private static ProdottoModel prodModel = new ProdottoModel();
     static final Logger logger = Logger.getLogger(UtenteControl.class.getName());
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
+    private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
 
     public ProdottoControl () { }
 
@@ -43,6 +44,8 @@ public class ProdottoControl extends HttpServlet {
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
     }
 

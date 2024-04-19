@@ -25,6 +25,8 @@ public class UtenteControl extends HttpServlet {
     private static final String MSG_ERROR_LOGINPAGE = "Errore durante il reindirizzamento alla pagina di login";
     private static final String MSG_ERROR_INDEXPAGE = "Errore durante il reindirizzamento alla pagina principale";
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
+    private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
+
 
     public UtenteControl () {
         super();
@@ -53,19 +55,23 @@ public class UtenteControl extends HttpServlet {
                             logger.log(Level.WARNING, MSG_ERROR_LOGINPAGE, ex);
                         }
                     } else {
-                        utente = utModel.doRetrieveByEmailPassword(email, password);
-                        if(utente == null) {
-                            request.setAttribute("result", "Credenziali errate");
-                            RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
-                            reqDispatcher.forward(request, response);
-                        } else {
-                            session.setAttribute("email", utente.getEmail());
-                            session.setAttribute("tipo", utente.getTipoUtente());
-                            try {
-                                response.sendRedirect("./index.jsp");
-                            } catch (IOException ex) {
-                                logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
+                        try {
+                            utente = utModel.doRetrieveByEmailPassword(email, password);
+                            if (utente == null) {
+                                request.setAttribute("result", "Credenziali errate");
+                                RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+                                reqDispatcher.forward(request, response);
+                            } else {
+                                session.setAttribute("email", utente.getEmail());
+                                session.setAttribute("tipo", utente.getTipoUtente());
+                                try {
+                                    response.sendRedirect("./index.jsp");
+                                } catch (IOException ex) {
+                                    logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
+                                }
                             }
+                        } catch (SQLException e) {
+                            logger.log(Level.WARNING, e.getMessage());
                         }
                     }
                 } else if (action.equalsIgnoreCase("logout")) {
@@ -77,8 +83,8 @@ public class UtenteControl extends HttpServlet {
                     }
                 }
             }
-        } catch (SQLException e) {
-            logger.log(Level.WARNING, e.getMessage());
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
     }
 
