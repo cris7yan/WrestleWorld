@@ -25,6 +25,8 @@ public class UtenteControl extends HttpServlet {
     private static final String MSG_ERROR_LOGINPAGE = "Errore durante il reindirizzamento alla pagina di login";
     private static final String MSG_ERROR_INDEXPAGE = "Errore durante il reindirizzamento alla pagina principale";
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
+    private static final String INDEX_PAGE = "./index.jsp";
+    private static final String LOGIN_PAGE = "./login.jsp";
 
     public UtenteControl () {
         super();
@@ -38,46 +40,12 @@ public class UtenteControl extends HttpServlet {
         try {
             if(action != null) {
                 if(action.equalsIgnoreCase("login")) {
-                    UtenteBean utente;
-
-                    // preleviamo dalla request i valori di email e password
-                    String email = request.getParameter("email");
-                    String password = request.getParameter("password");
-
-                    HttpSession session = request.getSession(true);
-
-                    if(email == null || password == null) {
-                        try {
-                            response.sendRedirect("./login.jsp");
-                        } catch (IOException ex) {
-                            logger.log(Level.WARNING, MSG_ERROR_LOGINPAGE, ex);
-                        }
-                    } else {
-                        utente = utModel.doRetrieveByEmailPassword(email, password);
-                        if(utente == null) {
-                            request.setAttribute("result", "Credenziali errate");
-                            RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
-                            reqDispatcher.forward(request, response);
-                        } else {
-                            session.setAttribute("email", utente.getEmail());
-                            session.setAttribute("tipo", utente.getTipoUtente());
-                            try {
-                                response.sendRedirect("./index.jsp");
-                            } catch (IOException ex) {
-                                logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
-                            }
-                        }
-                    }
+                    login(request, response);
                 } else if (action.equalsIgnoreCase("logout")) {
-                    request.getSession().invalidate();
-                    try {
-                        response.sendRedirect("./index.jsp");
-                    } catch (IOException ex) {
-                        logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
-                    }
+                    logout(request, response);
                 }
             }
-        } catch (SQLException e) {
+        } catch (ServletException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
     }
@@ -90,6 +58,62 @@ public class UtenteControl extends HttpServlet {
             logger.log(Level.SEVERE, MSG_ERROR_DOPOST, ex);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, MSG_ERROR_DOPOST, ex);
+        }
+    }
+
+    /**
+     * funzione che gestisce l'operazione di login
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void login (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // preleviamo dalla request i valori di email e password
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        UtenteBean utente = new UtenteBean();
+
+        HttpSession session = request.getSession(true);
+
+        if(email == null || password == null) {
+            response.sendRedirect(LOGIN_PAGE);
+        } else {
+            try {
+                utente = utModel.doRetrieveByEmailPassword(email, password);
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, e.getMessage());
+            }
+            if(utente == null) {
+                request.setAttribute("result", "Credenziali errate");
+                RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher(LOGIN_PAGE);
+                reqDispatcher.forward(request, response);
+            } else {
+                session.setAttribute("email", utente.getEmail());
+                session.setAttribute("tipo", utente.getTipoUtente());
+                try {
+                    response.sendRedirect(INDEX_PAGE);
+                } catch (IOException ex) {
+                    logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
+                }
+            }
+        }
+    }
+
+    /**
+     * funzione che gestisce l'operazione di logout
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void logout (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().invalidate();
+        try {
+            response.sendRedirect(INDEX_PAGE);
+        } catch (IOException ex) {
+            logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
         }
     }
 

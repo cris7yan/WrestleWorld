@@ -20,7 +20,7 @@ public class ProdottoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private static ProdottoModel prodModel = new ProdottoModel();
-    static final Logger logger = Logger.getLogger(UtenteControl.class.getName());
+    static final Logger logger = Logger.getLogger(ProdottoControl.class.getName());
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
 
     public ProdottoControl () { }
@@ -32,8 +32,6 @@ public class ProdottoControl extends HttpServlet {
 
         try {
             if(action != null) {
-
-            } else {
                 List<ProdottoBean> prodotti = prodModel.doRetrieveAll();
 
                 request.setAttribute("prodotti", prodotti);
