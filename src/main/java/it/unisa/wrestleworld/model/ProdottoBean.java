@@ -6,7 +6,7 @@ public class ProdottoBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     // Variabili Prodotto
-    private int idProdotto;
+    private int IDProdotto;
     private String nome;
     private String descrizione;
     private String materiale;
@@ -19,7 +19,7 @@ public class ProdottoBean implements Serializable {
 
     // Metodi Get
     public int getIDProdotto () {
-        return this.idProdotto;
+        return this.IDProdotto;
     }
 
     public String getNomeProdotto () {
@@ -52,7 +52,7 @@ public class ProdottoBean implements Serializable {
 
     // Metodi Set
     public void setIDProdotto (int idProdotto) {
-        this.idProdotto = idProdotto;
+        this.IDProdotto = idProdotto;
     }
 
     public void setNomeProdotto (String nome) {
