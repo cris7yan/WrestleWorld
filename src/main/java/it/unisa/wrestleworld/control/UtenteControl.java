@@ -63,22 +63,18 @@ public class UtenteControl extends HttpServlet {
     }
 
     private void login (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UtenteBean utente = new UtenteBean();
+        try {
+            UtenteBean utente = new UtenteBean();
 
-        // preleviamo dalla request i valori di email e password
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+            // preleviamo dalla request i valori di email e password
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
-        HttpSession session = request.getSession(true);
+            HttpSession session = request.getSession(true);
 
-        if(email == null || password == null) {
-            try {
+            if (email == null || password == null) {
                 response.sendRedirect(INDEX_PAGE);
-            } catch (IOException ex) {
-                logger.log(Level.WARNING, MSG_ERROR_LOGINPAGE, ex);
-            }
-        } else {
-            try {
+            } else {
                 utente = utModel.doRetrieveByEmailPassword(email, password);
                 if (utente == null) {
                     request.setAttribute("result", "Credenziali errate");
@@ -87,17 +83,13 @@ public class UtenteControl extends HttpServlet {
                 } else {
                     session.setAttribute("email", utente.getEmail());
                     session.setAttribute("tipo", utente.getTipoUtente());
-                    try {
-                        response.sendRedirect(INDEX_PAGE);
-                    } catch (IOException ex) {
-                        logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
-                    }
+                    response.sendRedirect(INDEX_PAGE);
                 }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, e.getMessage());
-            } catch (ServletException | IOException e) {
-                logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
             }
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 

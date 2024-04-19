@@ -24,13 +24,12 @@ public class ProdottoControl extends HttpServlet {
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
 
-    public ProdottoControl () { }
+    public ProdottoControl () {
+        // Costruttore
+    }
 
     @Override
     protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // preleviamo l'azione dalla request
-        String action = request.getParameter("action");
-
         try {
             List<ProdottoBean> prodotti = prodModel.doRetrieveAll();
             request.setAttribute("prodotti", prodotti);
