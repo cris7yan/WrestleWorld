@@ -40,47 +40,9 @@ public class UtenteControl extends HttpServlet {
         try {
             if(action != null) {
                 if(action.equalsIgnoreCase("login")) {
-                    UtenteBean utente;
-
-                    // preleviamo dalla request i valori di email e password
-                    String email = request.getParameter("email");
-                    String password = request.getParameter("password");
-
-                    HttpSession session = request.getSession(true);
-
-                    if(email == null || password == null) {
-                        try {
-                            response.sendRedirect("./login.jsp");
-                        } catch (IOException ex) {
-                            logger.log(Level.WARNING, MSG_ERROR_LOGINPAGE, ex);
-                        }
-                    } else {
-                        try {
-                            utente = utModel.doRetrieveByEmailPassword(email, password);
-                            if (utente == null) {
-                                request.setAttribute("result", "Credenziali errate");
-                                RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
-                                reqDispatcher.forward(request, response);
-                            } else {
-                                session.setAttribute("email", utente.getEmail());
-                                session.setAttribute("tipo", utente.getTipoUtente());
-                                try {
-                                    response.sendRedirect("./index.jsp");
-                                } catch (IOException ex) {
-                                    logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
-                                }
-                            }
-                        } catch (SQLException e) {
-                            logger.log(Level.WARNING, e.getMessage());
-                        }
-                    }
+                    login(request, response);
                 } else if (action.equalsIgnoreCase("logout")) {
-                    request.getSession().invalidate();
-                    try {
-                        response.sendRedirect("./index.jsp");
-                    } catch (IOException ex) {
-                        logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
-                    }
+                    logout(request, response);
                 }
             }
         } catch (ServletException | IOException e) {
@@ -99,4 +61,49 @@ public class UtenteControl extends HttpServlet {
         }
     }
 
+    private void login (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UtenteBean utente = new UtenteBean();
+
+        // preleviamo dalla request i valori di email e password
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        HttpSession session = request.getSession(true);
+
+        if(email == null || password == null) {
+            try {
+                response.sendRedirect("./index.jsp");
+            } catch (IOException ex) {
+                logger.log(Level.WARNING, MSG_ERROR_LOGINPAGE, ex);
+            }
+        } else {
+            try {
+                utente = utModel.doRetrieveByEmailPassword(email, password);
+                if (utente == null) {
+                    request.setAttribute("result", "Credenziali errate");
+                    RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
+                    reqDispatcher.forward(request, response);
+                } else {
+                    session.setAttribute("email", utente.getEmail());
+                    session.setAttribute("tipo", utente.getTipoUtente());
+                    try {
+                        response.sendRedirect("./index.jsp");
+                    } catch (IOException ex) {
+                        logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
+                    }
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, e.getMessage());
+            }
+        }
+    }
+
+    private void logout (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().invalidate();
+        try {
+            response.sendRedirect("./index.jsp");
+        } catch (IOException ex) {
+            logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
+        }
+    }
 }
