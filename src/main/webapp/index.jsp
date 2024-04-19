@@ -48,7 +48,9 @@
         if(prod != null) {
     %>
 
-        <%= prod.getDescrizioneProdotto() %>
+        Nome: <b><%= prod.getNomeProdotto() %></b> <br>
+        Descrizione: <i><%= prod.getDescrizioneProdotto() %></i> <br>
+        Prezzo: <%= prod.getPrezzoProdotto() %>
         <br><br>
 
     <%

@@ -27,7 +27,7 @@
 <body>
     <nav>
       <div class="logo"> 
-          <a href="./index.jsp"> <img src="img/logo/WrestleWorldLogo.png" alt="Logo"></a>
+          <a href="./index.jsp"> <img src="img/logo/WrestleWorldTitle.png" alt="Logo"></a>
       </div>
 
       <div class="profilo">
