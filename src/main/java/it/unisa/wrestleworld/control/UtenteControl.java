@@ -27,6 +27,8 @@ public class UtenteControl extends HttpServlet {
     private static final String MSG_ERROR_INDEXPAGE = "Errore durante il reindirizzamento alla pagina principale";
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
+    private static final String EMAIL_PARAM = "email";
+    private static final String PASSWORD_PARAM = "password";
     private static final String INDEX_PAGE = "./index.jsp";
 
 
@@ -59,6 +61,8 @@ public class UtenteControl extends HttpServlet {
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
     }
 
@@ -93,8 +97,8 @@ public class UtenteControl extends HttpServlet {
             UtenteBean utente = new UtenteBean();
 
             // preleviamo dalla request i valori di email e password
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
+            String email = request.getParameter(EMAIL_PARAM);
+            String password = request.getParameter(PASSWORD_PARAM);
 
             HttpSession session = request.getSession(true);
 
@@ -107,7 +111,7 @@ public class UtenteControl extends HttpServlet {
                     RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
                     reqDispatcher.forward(request, response);
                 } else {
-                    session.setAttribute("email", utente.getEmail());
+                    session.setAttribute(EMAIL_PARAM, utente.getEmail());
                     session.setAttribute("tipo", utente.getTipoUtente());
                     response.sendRedirect(INDEX_PAGE);
                 }
@@ -147,8 +151,8 @@ public class UtenteControl extends HttpServlet {
     private void registrazione (HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         try {
             // preleviamo i dati dalla request
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
+            String email = request.getParameter(EMAIL_PARAM);
+            String password = request.getParameter(PASSWORD_PARAM);
             String nome = request.getParameter("nome");
             String cognome = request.getParameter("cognome");
             Date dataNascita = Date.valueOf(request.getParameter("dataNascita"));
@@ -170,7 +174,7 @@ public class UtenteControl extends HttpServlet {
                 reqDispatcher.forward(request, response);
             } else {
                 utModel.doSave(newUtente);
-                session.setAttribute("email", newUtente.getEmail());
+                session.setAttribute(EMAIL_PARAM, newUtente.getEmail());
                 session.setAttribute("tipo", newUtente.getTipoUtente());
                 response.sendRedirect(INDEX_PAGE);
             }

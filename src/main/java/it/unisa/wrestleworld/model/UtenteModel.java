@@ -34,7 +34,6 @@ public class UtenteModel implements UtenteDAO {
      * @param utente
      * @throws SQLException
      */
-    @Override
     public synchronized void doSave(UtenteBean utente) throws SQLException {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -82,7 +81,6 @@ public class UtenteModel implements UtenteDAO {
      * @return l'utente corrispondente all'email e password passati come parametro
      * @throws SQLException
      */
-    @Override
     public synchronized UtenteBean doRetrieveByEmailPassword(String email, String password) throws SQLException {
         UtenteBean utente = new UtenteBean();
 
@@ -139,11 +137,9 @@ public class UtenteModel implements UtenteDAO {
      * @return
      * @throws SQLException
      */
-    @Override
     public synchronized boolean verificaEmailEsistente(String email) throws SQLException {
         Connection conn = null;
         PreparedStatement ps = null;
-        boolean ris = false;    // memorizziamo il risultato della ricerca
 
         String query = "SELECT * FROM " + TABLE_UTENTE + " WHERE Email = ?";
 
@@ -156,7 +152,7 @@ public class UtenteModel implements UtenteDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 if(rs.getString("Email").equalsIgnoreCase(email))
-                    return ris = true;
+                    return true;
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
@@ -177,6 +173,6 @@ public class UtenteModel implements UtenteDAO {
                 logger.log(Level.WARNING, MSG_ERROR_CONN, e);
             }
         }
-        return ris;
+        return false;
     }
 }
