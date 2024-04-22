@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.Date;
 
 @WebServlet("/UtenteControl")
 public class UtenteControl extends HttpServlet {
@@ -33,6 +34,14 @@ public class UtenteControl extends HttpServlet {
         super();
     }
 
+
+    /**
+     * funzione che gestisce l'operazione doGet
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // preleviamo l'azione dalla request
@@ -44,13 +53,22 @@ public class UtenteControl extends HttpServlet {
                     login(request, response);
                 } else if (action.equalsIgnoreCase("logout")) {
                     logout(request, response);
+                } else if(action.equalsIgnoreCase("registrazione")) {
+                    registrazione(request, response);
                 }
             }
-        } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
+    /**
+     * funzione che gestisce l'operazione di doPost
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -62,6 +80,14 @@ public class UtenteControl extends HttpServlet {
         }
     }
 
+
+    /**
+     * funzione che gestisce l'operazione di login di un utente
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void login (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             UtenteBean utente = new UtenteBean();
@@ -93,12 +119,65 @@ public class UtenteControl extends HttpServlet {
         }
     }
 
+
+    /**
+     * funzione che gestisce l'operazione di logout
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     private void logout (HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.getSession().invalidate();
         try {
             response.sendRedirect(INDEX_PAGE);
         } catch (IOException ex) {
             logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
+        }
+    }
+
+
+    /**
+     * funzione che gestisce l'operazione di registrazione di un utente
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void registrazione (HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+        try {
+            // preleviamo i dati dalla request
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String nome = request.getParameter("nome");
+            String cognome = request.getParameter("cognome");
+            Date dataNascita = Date.valueOf(request.getParameter("dataNascita"));
+
+            // creiamo un nuovo utente ed impostiamo i dati
+            UtenteBean newUtente = new UtenteBean();
+            newUtente.setEmail(email);
+            newUtente.setPassword(password);
+            newUtente.setNome(nome);
+            newUtente.setCognome(cognome);
+            newUtente.setDataNascita(dataNascita);
+            newUtente.setTipoUtente("Utente");
+
+            HttpSession session = request.getSession(true);
+
+            if(utModel.verificaEmailEsistente(email)) {
+                request.setAttribute("result", "Email già utilizzata, sceglierne un'altra");
+                RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/registrazione.jsp");
+                reqDispatcher.forward(request, response);
+            } else {
+                utModel.doSave(newUtente);
+                session.setAttribute("email", newUtente.getEmail());
+                session.setAttribute("tipo", newUtente.getTipoUtente());
+                response.sendRedirect(INDEX_PAGE);
+            }
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 }

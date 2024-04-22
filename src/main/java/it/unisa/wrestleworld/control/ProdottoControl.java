@@ -32,17 +32,20 @@ public class ProdottoControl extends HttpServlet {
     @Override
     protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            // Liste per prelevare dal database i prodotti ed i prodotti piu venduti
             List<ProdottoBean> prodotti = prodModel.doRetrieveAll();
             List<ProdottoBean> bestSellers = prodModel.doRetrieveBestSellers();
             request.setAttribute("prodotti", prodotti);
             request.setAttribute("bestSellers", bestSellers);
 
+            // prelevo le immagini dei vari prodotti
             List<String> imgProdotti = new ArrayList<>();
             for(ProdottoBean prod : prodotti) {
                 imgProdotti.add(prodModel.doRetrieveAllImages(prod).get(0));
             }
             request.setAttribute("imgProdotti", imgProdotti);
 
+            // prelevo le immagini per i prodotti piu venduti
             List<String> imgBestProd = new ArrayList<>();
             for(ProdottoBean best : bestSellers) {
                 imgBestProd.add(prodModel.doRetrieveAllImages(best).get(0));

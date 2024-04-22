@@ -5,7 +5,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="it.unisa.wrestleworld.model.ProdottoBean" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
 
 <%
     List<ProdottoBean> prodotti = (List<ProdottoBean>) request.getAttribute("prodotti");

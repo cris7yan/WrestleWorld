@@ -4,10 +4,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,7 +49,7 @@ public class UtenteModel implements UtenteDAO {
             ps.setString(2, utente.getNome());
             ps.setString(3, utente.getCognome());
             ps.setString(4, utente.getPassword());
-            ps.setString(5, utente.getDataNascita());
+            ps.setDate(5, utente.getDataNascita());
             ps.setString(6, utente.getTipoUtente());
 
             ps.executeUpdate();
@@ -107,7 +104,7 @@ public class UtenteModel implements UtenteDAO {
                 utente.setPassword(rs.getString("Password"));
                 utente.setNome(rs.getString("Nome"));
                 utente.setCognome(rs.getString("Cognome"));
-                utente.setDataNascita(rs.getString("DataNascita"));
+                utente.setDataNascita(Date.valueOf(rs.getString("DataNascita")));
                 utente.setTipoUtente(rs.getString("Tipo"));
             }
         } catch (SQLException e) {
@@ -157,8 +154,9 @@ public class UtenteModel implements UtenteDAO {
             ps.setString(1, email);
 
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
-                ris = true;
+            while (rs.next()) {
+                if(rs.getString("Email").equalsIgnoreCase(email))
+                    return ris = true;
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());

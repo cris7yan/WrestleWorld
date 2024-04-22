@@ -1,6 +1,7 @@
 package it.unisa.wrestleworld.model;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class UtenteBean implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -8,7 +9,7 @@ public class UtenteBean implements Serializable {
     private String nome;
     private String cognome;
     private String password;
-    private String dataNascita;
+    private Date dataNascita;
     private String tipoUtente;
 
     public UtenteBean () {
@@ -32,7 +33,7 @@ public class UtenteBean implements Serializable {
         return this.password;
     }
 
-    public String getDataNascita () {
+    public Date getDataNascita () {
         return this.dataNascita;
     }
 
@@ -58,7 +59,7 @@ public class UtenteBean implements Serializable {
         this.password = password;
     }
 
-    public void setDataNascita (String data) {
+    public void setDataNascita (Date data) {
         this.dataNascita = data;
     }
 

@@ -23,6 +23,7 @@ public class ProdottoModel implements ProdottoDAO {
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
 
+
     // approccio per ottenere risorse dal database
     static {
         try {
@@ -34,6 +35,7 @@ public class ProdottoModel implements ProdottoDAO {
             logger.log(Level.WARNING, e.getMessage());
         }
     }
+
 
     /**
      * funzione che restituisce tutti i prodotti nel database
@@ -89,6 +91,7 @@ public class ProdottoModel implements ProdottoDAO {
         return prodotti;
     }
 
+
     /**
      * funzione che restituisce i prodotti best sellers
      * @return bestSellers
@@ -140,6 +143,7 @@ public class ProdottoModel implements ProdottoDAO {
         }
         return bestSellers;
     }
+
 
     /**
      * funzione che restituisce tutte le immagini di ogni prodotto

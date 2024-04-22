@@ -28,6 +28,8 @@
 </head>
 <body>
 
+<%@ include file="navbar.jsp"%>
+
     <%
         if(email != null) {
             if(tipo.equals("Admin")) {
@@ -54,16 +56,20 @@
             <input type="password" name="password" class="inputField" id="password" placeholder="Password">
         </div>
 
-        <%
-            if(result != null) {
-        %>
-        <h3><%=result%></h3>
-        <%
-            }
-        %>
-
         <button id="button">Invia</button>
+        <p>
+            Non sei ancora registrato?
+            <a href="registrazione.jsp">Registrati qui!</a>
+        </p>
     </form>
+
+    <%
+        if(result != null) {
+    %>
+    <h3><%=result%></h3>
+    <%
+        }
+    %>
 
 </body>
 </html>
