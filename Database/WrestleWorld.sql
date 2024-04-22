@@ -88,8 +88,7 @@ CREATE TABLE MetodoPagamento (
     ID_Pagamento int AUTO_INCREMENT NOT NULL PRIMARY KEY,
     NumeroCarta varchar(16) NOT NULL,
     Intestatario varchar(50) NOT NULL,
-    Mese_scadenza INT CHECK (Mese_scadenza > 0 AND Mese_scadenza <=12),
-    Anno_scadenza INT CHECK (Anno_scadenza >= 2024 AND Anno_scadenza <= 2030),
+    DataScadenza date NOT NULL,
     EmailUtente varchar(255) NOT NULL,
         FOREIGN KEY (EmailUtente) REFERENCES Utente(Email) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -100,11 +99,7 @@ CREATE TABLE Ordine (
     Data_ordine DATE NOT NULL,
     Totale decimal(10,2) CHECK ((Totale > 0)) NOT NULL,
     EmailUtente varchar(255) NOT NULL,
-        FOREIGN KEY (EmailUtente) REFERENCES Utente(Email) ON DELETE CASCADE ON UPDATE CASCADE,
-    Indirizzo int NOT NULL,
-        FOREIGN KEY (Indirizzo) REFERENCES Indirizzo(ID_Indirizzo),
-    MetodoPagamento int NOT NULL,
-        FOREIGN KEY (MetodoPagamento) REFERENCES MetodoPagamento(ID_Pagamento)
+        FOREIGN KEY (EmailUtente) REFERENCES Utente(Email) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -924,6 +919,34 @@ INSERT INTO Indirizzo (Via, Citta, Provincia, CAP, EmailUtente) VALUES
 
 
 INSERT INTO MetodoPagamento (NumeroCarta, Intestatario, Mese_scadenza, Anno_scadenza, EmailUtente) VALUES
-    ('5489125896547845', 'Gianpaolo Esposito', 12, 2024, 'gianpaoloesposito@gmail.com'),
-    ('5478963214956854', 'Giovanna Lauro', 04, 2025, 'giolauro@gmail.com'),
-    ('5487695821453574', 'Giovanna Lauro', 06, 2024, 'giolauro@gmail.com');
+    ('5489125896547845', 'Gianpaolo Esposito', '2024-12-01', 'gianpaoloesposito@gmail.com'),
+    ('5478963214956854', 'Giovanna Lauro', '2025-04-01', 'giolauro@gmail.com'),
+    ('5487695821453574', 'Giovanna Lauro', '2024-06-01', 'giolauro@gmail.com');
+
+
+INSERT INTO Ordine (Data_ordine, Totale, EmailUtente) VALUES
+    ('2024-01-01', 32.99, 'gianpaoloesposito@gmail.com'),
+    ('2024-01-07', 32.99, 'gianpaoloesposito@gmail.com'),
+    ('2024-01-15', 64.98, 'nandolauro@gmail.com'),
+    ('2024-01-20', 32.99, 'giolauro@gmail.com'),
+    ('2024-01-22', 32.99, 'giolauro@gmail.com'),
+    ('2024-01-25', 98.97, 'giolauro@gmail.com'),
+    ('2024-02-02', 209.95, 'antoesposito@gmail.com'),
+    ('2024-02-14', 131.96, 'teresacasciello@gmail.com');
+
+
+INSERT INTO ComposizioneOrdine (ID_Ordine, ID_Prodotto, Quantita, Prezzo) VALUES
+    (1, 1, 1, 32.99),
+    (2, 2, 1, 32.99),
+    (3, 4, 1, 32.99),
+    (3, 31, 1, 32.99),
+    (4, 10, 1, 32.99),
+    (5, 9, 1,  32.99),
+    (6, 1, 2, 64.98),
+    (6, 43, 1, 32.99),
+    (7, 60, 3, 32.99),
+    (7, 1, 1, 32.99),
+    (7, 13, 1, 77.99),
+    (8, 38, 1, 32.99),
+    (8, 3, 1, 32.99),
+    (8, 5, 2, 32.99);
