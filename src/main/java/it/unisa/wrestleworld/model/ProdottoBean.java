@@ -1,6 +1,7 @@
 package it.unisa.wrestleworld.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ProdottoBean implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -14,6 +15,7 @@ public class ProdottoBean implements Serializable {
     private String modello;
     private float prezzo;
     private boolean disponibilita;
+    private List<String> img;
 
     public ProdottoBean () {
         // Costruttore
@@ -52,6 +54,10 @@ public class ProdottoBean implements Serializable {
         return this.disponibilita;
     }
 
+    public List<String> getImmaginiProdotto () {
+        return this.img;
+    }
+
     // Metodi Set
     public void setIDProdotto (int idProdotto) {
         this.idProdotto = idProdotto;
@@ -83,6 +89,10 @@ public class ProdottoBean implements Serializable {
 
     public void setDisponibilitaProdotto (boolean disp) {
         this.disponibilita = disp;
+    }
+
+    public void setImmaginiProdotto (String img) {
+        this.img.add(img);
     }
 
 }

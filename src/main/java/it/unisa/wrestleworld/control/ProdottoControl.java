@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,14 +26,28 @@ public class ProdottoControl extends HttpServlet {
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
 
     public ProdottoControl () {
-        // Costruttore
+        super();
     }
 
     @Override
     protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<ProdottoBean> prodotti = prodModel.doRetrieveAll();
+            List<ProdottoBean> bestSellers = prodModel.doRetrieveBestSellers();
             request.setAttribute("prodotti", prodotti);
+            request.setAttribute("bestSellers", bestSellers);
+
+            List<String> imgProdotti = new ArrayList<>();
+            for(ProdottoBean prod : prodotti) {
+                imgProdotti.add(prodModel.doRetrieveAllImages(prod).get(0));
+            }
+            request.setAttribute("imgProdotti", imgProdotti);
+
+            List<String> imgBestProd = new ArrayList<>();
+            for(ProdottoBean best : bestSellers) {
+                imgBestProd.add(prodModel.doRetrieveAllImages(best).get(0));
+            }
+            request.setAttribute("imgBestProd", imgBestProd);
 
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/index.jsp");
             reqDispatcher.forward(request, response);

@@ -18,6 +18,8 @@ public class ProdottoModel implements ProdottoDAO {
     private static DataSource dataSource;
 
     private static final String TABLE_PRODOTTO = "Prodotto";
+    private static final String TABLE_COMPOSIZIONE_ORDINE = "ComposizioneOrdine";
+    private static final String TABLE_IMMAGINE = "Immagine";
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
 
@@ -33,6 +35,11 @@ public class ProdottoModel implements ProdottoDAO {
         }
     }
 
+    /**
+     * funzione che restituisce tutti i prodotti nel database
+     * @return prodotti
+     * @throws SQLException
+     */
     public synchronized List<ProdottoBean> doRetrieveAll() throws SQLException {
         List<ProdottoBean> prodotti = new ArrayList<>();
 
@@ -80,5 +87,104 @@ public class ProdottoModel implements ProdottoDAO {
             }
         }
         return prodotti;
+    }
+
+    /**
+     * funzione che restituisce i prodotti best sellers
+     * @return bestSellers
+     * @throws SQLException
+     */
+    public synchronized List<ProdottoBean> doRetrieveBestSellers() throws SQLException {
+        List<ProdottoBean> bestSellers = new ArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT P.ID_Prodotto, P.Nome, P.Descrizione, SUM(Co.Quantita) as Tot FROM " + TABLE_PRODOTTO
+                + " P JOIN " + TABLE_COMPOSIZIONE_ORDINE + " Co ON P.ID_Prodotto = Co.ID_Prodotto "
+                + "GROUP BY P.ID_Prodotto "
+                + "ORDER BY Tot DESC LIMIT 3";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ProdottoBean prod = new ProdottoBean();
+
+                prod.setIDProdotto(rs.getInt("ID_Prodotto"));
+                prod.setNomeProdotto(rs.getString("Nome"));
+                prod.setDescrizioneProdotto(rs.getString("Descrizione"));
+
+                bestSellers.add(prod);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return bestSellers;
+    }
+
+    /**
+     * funzione che restituisce tutte le immagini di ogni prodotto
+     * @param prod
+     * @return imgProd
+     * @throws SQLException
+     */
+    public synchronized List<String> doRetrieveAllImages(ProdottoBean prod) throws SQLException {
+        List<String> imgProd = new ArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT NomeImg FROM " + TABLE_IMMAGINE + " WHERE ID_Prodotto = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, prod.getIDProdotto());
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String img = rs.getString("NomeImg");
+                imgProd.add(img);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return imgProd;
     }
 }

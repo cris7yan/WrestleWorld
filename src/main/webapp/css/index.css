@@ -1,0 +1,43 @@
+/* index.css */
+
+h1 {
+    text-align: center;                     /* Per centrare i titoli */
+}
+
+/* Stile per il container principale dei prodotti */
+.product-container {
+    text-align: center;                     /* Per centrare i prodotti */
+}
+
+/* Stile per ogni singolo prodotto */
+.product {
+    display: inline-block;
+    width: 300px;                           /* Larghezza fissa del prodotto */
+    height: 700px;                          /* Altezza fissa del prodotto */
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: left;
+    overflow: hidden;                       /* Nasconde il contenuto che sfora */
+    vertical-align: top;                    /* Allineamento verticale in alto */
+}
+
+/* Stile per l'immagine del prodotto */
+.product-img {
+    width: 100%;                            /* Immagine occupa tutto lo spazio disponibile */
+    height: 60%;                            /* Altezza fissa dell'immagine (60% del contenitore) */
+    object-fit: contain;                    /* Adatta l'immagine senza distorsioni */
+    margin-bottom: 10px;
+}
+
+/* Stile per il nome del prodotto */
+.product-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Stile per la descrizione del prodotto */
+.product-description {
+    font-style: italic;
+}
