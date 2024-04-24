@@ -1,0 +1,43 @@
+/* Stile per il contenitore principale degli ordini */
+.ordini-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+/* Stile per l'intestazione degli ordini */
+.ordini-container h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Stile per singolo ordine */
+.ordine {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+/* Stile per le informazioni dell'ordine */
+.ordine p {
+    margin: 0;
+    font-weight: bold;
+}
+
+/* Stile per l'ID dell'ordine */
+.ordine .id-ordine {
+    color: #007bff; /* Colore blu per l'ID dell'ordine */
+}
+
+/* Stile per la data dell'ordine */
+.ordine .data-ordine {
+    color: #666; /* Colore grigio per la data dell'ordine */
+}
+
+/* Stile per il prezzo totale dell'ordine */
+.ordine .prezzo-totale {
+    color: #dc3545; /* Colore rosso per il prezzo totale dell'ordine */
+}

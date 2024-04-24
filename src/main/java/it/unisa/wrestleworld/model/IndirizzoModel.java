@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class IndirizzoModel implements IndirizzoDAO {
     private static DataSource dataSource;
-    private static Logger logger = Logger.getLogger(UtenteModel.class.getName());
+    private static Logger logger = Logger.getLogger(IndirizzoModel.class.getName());
     private static final String TABLE_INDIRIZZO = "Indirizzo";
     private static final String TABLE_UTENTE = "Utente";
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";

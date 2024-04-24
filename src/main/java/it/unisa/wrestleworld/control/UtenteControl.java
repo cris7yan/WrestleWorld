@@ -81,7 +81,7 @@ public class UtenteControl extends HttpServlet {
      * @throws IOException
      */
     @Override
-    public void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             doGet(request, response);
         } catch (ServletException ex) {

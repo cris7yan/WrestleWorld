@@ -14,9 +14,11 @@
 
     <h1>Sei nella tua pagina profilo</h1>
 
+    <a href="./modificaDati.jsp">Modifica i tuoi dati</a>
+    <br>
     <a href="./indirizzi.jsp">Visualizza i tuoi indirizzi</a>
     <br>
-    <a href="./modificaDati.jsp">Modifica i tuoi dati</a>
+    <a href="./ordini.jsp">Visualizza i tuoi ordini</a>
 
 </body>
 </html>
