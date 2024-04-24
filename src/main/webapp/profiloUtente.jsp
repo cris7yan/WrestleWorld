@@ -12,7 +12,11 @@
 <body>
 <%@ include file="navbar.jsp"%>
 
-  <h1>Hai effettuato l'accesso</h1>
+    <h1>Sei nella tua pagina profilo</h1>
+
+    <a href="./indirizzi.jsp">Visualizza i tuoi indirizzi</a>
+    <br>
+    <a href="./modificaDati.jsp">Modifica i tuoi dati</a>
 
 </body>
 </html>

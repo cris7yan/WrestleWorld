@@ -72,6 +72,7 @@ CREATE TABLE Indirizzo (
     Citta varchar(50) NOT NULL,
     Provincia varchar(50) NOT NULL,
     CAP int NOT NULL,
+    NomeCompleto varchar(255) NOT NULL,
     EmailUtente varchar(255) NOT NULL,
         FOREIGN KEY (EmailUtente) REFERENCES Utente(Email) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -908,14 +909,14 @@ INSERT INTO Utente (Email, Nome, Cognome, Password, DataNascita, Tipo) VALUES
     ('teresacasciello@gmail.com', 'Teresa', 'Casciello', 'MomPass77', '1966-11-16', 'Utente');
 
 
-INSERT INTO Indirizzo (Via, Citta, Provincia, CAP, EmailUtente) VALUES
-    ('Via Prima Berardinetti 80', 'Scafati', 'Salerno', '84018', 'gianpaoloesposito@gmail.com'),
-    ('Via Arpaia 23', 'Pompei', 'Napoli', '80045', 'gianpaoloesposito@gmail.com'),
-    ('Via Vicinale San Giuliano 43', 'Casalnuovo di Napoli', 'Napoli', '80013', 'giolauro@gmail.com'),
-    ('Via Alessandro Manzoni 42', 'Casalnuovo di Napoli', 'Napoli', '80013', 'giolauro@gmail.com'),
-    ('Via Vicinale San Giuliano 43', 'Casalnuovo di Napoli', 'Napoli', '80013', 'nandolauro@gmail.com'),
-    ('Via Prima Berardinetti 80', 'Scafati', 'Salerno', '84018', 'antoesposito@gmail.com'),
-    ('Via Prima Berardinetti 80', 'Scafati', 'Salerno', '84018', 'teresacasciello@gmail.com');
+INSERT INTO Indirizzo (Via, Citta, Provincia, CAP, NomeCompleto, EmailUtente) VALUES
+    ('Via Prima Berardinetti 80', 'Scafati', 'Salerno', '84018', 'Gianpaolo Esposito', 'gianpaoloesposito@gmail.com'),
+    ('Via Arpaia 23', 'Pompei', 'Napoli', '80045', 'Gianpaolo Esposito', 'gianpaoloesposito@gmail.com'),
+    ('Via Vicinale San Giuliano 43', 'Casalnuovo di Napoli', 'Napoli', '80013', 'Giovanna Lauro', 'giolauro@gmail.com'),
+    ('Via Alessandro Manzoni 42', 'Casalnuovo di Napoli', 'Napoli', '80013', 'Giovanna Lauro', 'giolauro@gmail.com'),
+    ('Via Vicinale San Giuliano 43', 'Casalnuovo di Napoli', 'Napoli', '80013', 'Ferdinando Lauro', 'nandolauro@gmail.com'),
+    ('Via Prima Berardinetti 80', 'Scafati', 'Salerno', '84018', 'Antonio Esposito', 'antoesposito@gmail.com'),
+    ('Via Prima Berardinetti 80', 'Scafati', 'Salerno', '84018', 'Teresa Casciello', 'teresacasciello@gmail.com');
 
 
 INSERT INTO MetodoPagamento (NumeroCarta, Intestatario, Mese_scadenza, Anno_scadenza, EmailUtente) VALUES

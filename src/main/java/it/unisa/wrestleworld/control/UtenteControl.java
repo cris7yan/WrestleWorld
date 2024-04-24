@@ -1,8 +1,6 @@
 package it.unisa.wrestleworld.control;
 
-import it.unisa.wrestleworld.model.UtenteBean;
-import it.unisa.wrestleworld.model.UtenteDAO;
-import it.unisa.wrestleworld.model.UtenteModel;
+import it.unisa.wrestleworld.model.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.Date;
@@ -22,6 +22,7 @@ public class UtenteControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     static UtenteDAO utModel = new UtenteModel();
+    static IndirizzoDAO indirizzoModel = new IndirizzoModel();
     static final Logger logger = Logger.getLogger(UtenteControl.class.getName());
     private static final String MSG_ERROR_LOGINPAGE = "Errore durante il reindirizzamento alla pagina di login";
     private static final String MSG_ERROR_INDEXPAGE = "Errore durante il reindirizzamento alla pagina principale";
@@ -57,6 +58,12 @@ public class UtenteControl extends HttpServlet {
                     logout(request, response);
                 } else if(action.equalsIgnoreCase("registrazione")) {
                     registrazione(request, response);
+                } else if (action.equalsIgnoreCase("modificaDati")) {
+                    modificaDatiPersonali(request, response);
+                } else if (action.equalsIgnoreCase("visualizzaIndirizzi")) {
+                    visualizzaIndirizzi(request, response);
+                } else if (action.equalsIgnoreCase("rimuoviIndirizzo")) {
+                    eliminaIndirizzo(request, response);
                 }
             }
         } catch (SQLException e) {
@@ -179,6 +186,82 @@ public class UtenteControl extends HttpServlet {
                 response.sendRedirect(INDEX_PAGE);
             }
         } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+
+    /**
+     * funzione che gestisce l'operazione della modifica dei dati di un utente
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws IOException
+     */
+    private void modificaDatiPersonali (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        try {
+            HttpSession session = request.getSession();
+            String email = (String) session.getAttribute(EMAIL_PARAM);
+
+            String nome = request.getParameter("nome");
+            String cognome = request.getParameter("cognome");
+            Date data = Date.valueOf(request.getParameter("dataNascita"));
+
+            utModel.doUpdateData(nome, cognome, data, email);
+            response.sendRedirect("./profiloUtente.jsp");
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+
+    /**
+     * funzione che gestisce la visualizzazione degli indirizzi per ogni utente
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws IOException
+     */
+    private void visualizzaIndirizzi (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        try {
+            HttpSession session = request.getSession();
+            String email = (String) session.getAttribute(EMAIL_PARAM);
+
+            List<Integer> idList = indirizzoModel.doRetrieveAllID(email);       // lista di tutti gli ID degli indirizzi di un utente
+
+            List<IndirizzoBean> allIndirizzi = new ArrayList<>();       // lista di tutti gli indirizzi di un utente
+            for (int ind : idList) {
+                allIndirizzi.add(indirizzoModel.doRetrieveByID(ind));     // aggiungiamo in questa lista tutti gli indirizzi relativi agli id
+            }
+
+            request.setAttribute("indirizzi", allIndirizzi);
+            RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/indirizzi.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+
+    /**
+     * funzione che gestisce l'operazione di aggiunta di un nuovo indirizzo
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws IOException
+     */
+    private void eliminaIndirizzo (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        try {
+            int idIndirizzo = Integer.parseInt(request.getParameter("ID_Indirizzo"));
+            indirizzoModel.doDelete(idIndirizzo);
+            response.sendRedirect("./indirizzi.jsp");
+        } catch (IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());

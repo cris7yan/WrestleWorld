@@ -9,9 +9,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UtenteModel implements UtenteDAO {
-    private static final String TABLE_UTENTE = "Utente";
     private static DataSource dataSource;
     private static Logger logger = Logger.getLogger(UtenteModel.class.getName());
+    private static final String TABLE_UTENTE = "Utente";
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
 
@@ -131,6 +131,62 @@ public class UtenteModel implements UtenteDAO {
         }
     }
 
+
+    /**
+     * funzione che si occupa di ricercare un utente all'interno del database mediante l'email
+     * @param email
+     * @return l'utente corrispondente all'email passata come parametro
+     * @throws SQLException
+     */
+    public synchronized UtenteBean doRetrieveByEmail (String email) throws SQLException {
+        UtenteBean utente = new UtenteBean();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT * FROM " + TABLE_UTENTE + " WHERE Email = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, email);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                utente.setEmail(rs.getString("Email"));
+                utente.setPassword(rs.getString("Password"));
+                utente.setNome(rs.getString("Nome"));
+                utente.setCognome(rs.getString("Cognome"));
+                utente.setDataNascita(Date.valueOf(rs.getString("DataNascita")));
+                utente.setTipoUtente(rs.getString("Tipo"));
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        if(utente.getEmail() == null) {
+            return null;
+        } else {
+            return utente;
+        }
+    }
+
     /**
      * funzione che verifica se un email è già presente nel database
      * @param email
@@ -175,4 +231,130 @@ public class UtenteModel implements UtenteDAO {
         }
         return false;
     }
+
+
+    /**
+     * funzione che gestisce la modifica dei dati personali di un utente
+     * @param utenteBean
+     * @throws SQLException
+     */
+    public synchronized void doUpdateData (String nome, String cognome, Date data, String email) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "UPDATE " + TABLE_UTENTE + " SET Nome = ?, Cognome = ?, DataNascita = ? WHERE Email = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, nome);
+            ps.setString(2, cognome);
+            ps.setDate(3, data);
+            ps.setString(4, email);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
+
+    /**
+     * funzione che gestisce la modifica dell'email di un utente
+     * @param email email dell'utente da modificare
+     * @param newEmail la nuova email che deve essere salvata
+     * @throws SQLException
+     */
+    public synchronized void doUpdateEmail (String email, String newEmail) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "UPDATE " + TABLE_UTENTE + " SET Email = ? WHERE Email = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, newEmail);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
+
+    /**
+     * funzione che gestisce la modifica della password di un utente
+     * @param email email dell'utente da modificare
+     * @param newPassword la nuova password che deve essere salvata
+     * @throws SQLException
+     */
+    public synchronized void doUpdatePassword (String email, String newPassword) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "UPDATE " + TABLE_UTENTE + " SET Password = ? WHERE Email = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
 }

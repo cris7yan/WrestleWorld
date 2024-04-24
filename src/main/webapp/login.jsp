@@ -57,7 +57,7 @@
         </div>
 
         <button id="button">Invia</button>
-        <p>
+        <p class="registrazione-link">
             Non sei ancora registrato?
             <a href="registrazione.jsp">Registrati qui!</a>
         </p>

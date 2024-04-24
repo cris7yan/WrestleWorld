@@ -2,55 +2,76 @@
 
 /* Stile generale del form di login */
 .form_login {
-    max-width: 300px;                                   /* Imposta la larghezza massima del form */
-    margin: 50px auto;                                  /* Centra il form nella pagina */
-    padding: 20px;                                      /* Aggiunge spazio intorno al form */
-    background-color: #f0f0f0;                          /* Colore di sfondo del form */
-    border-radius: 10px;                                /* Aggiunge angoli arrotondati al form */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);            /* Aggiunge una leggera ombra al form */
+    max-width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Stile dell'intestazione del form */
 .heading {
-    text-align: center;                                 /* Centra il testo */
-    font-size: 24px;                                    /* Imposta la dimensione del carattere */
-    margin-bottom: 20px;                                /* Aggiunge spazio sotto l'intestazione */
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
 }
 
 /* Stile del contenitore dell'icona */
 .inputContainer {
-    position: relative;                                 /* Imposta la posizione relativa per consentire il posizionamento dell'icona */
-    margin-bottom: 20px;                                /* Aggiunge spazio sotto il contenitore dell'icona */
+    position: relative;
+    margin-bottom: 20px;
 }
 
 /* Stile dell'icona */
 .inputIcon {
-    position: absolute;                                 /* Imposta la posizione assoluta per l'icona */
-    top: 50%;                                           /* Posiziona l'icona verticalmente al centro */
-    transform: translateY(-50%);                        /* Regola la posizione verticale dell'icona */
-    left: 10px;                                         /* Posiziona l'icona 10px dalla sinistra */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10px;
+    fill: #2e2e2e; /* Colore dell'icona */
 }
 
 /* Stile del campo di input */
 .inputField {
-    width: calc(100% - 40px);                           /* Imposta la larghezza del campo di input */
-    padding: 10px 10px 10px 40px;                       /* Aggiunge spazio interno al campo di input */
-    border-radius: 5px;                                 /* Aggiunge angoli arrotondati al campo di input */
-    border: 1px solid #ccc;                             /* Aggiunge una sottile linea grigia attorno al campo di input */
+    width: calc(100% - 40px);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
 }
 
 /* Stile del pulsante di invio */
 #button {
-    width: 100%;                                        /* Imposta la larghezza del pulsante al 100% del suo contenitore */
-    padding: 10px;                                      /* Aggiunge spazio interno al pulsante */
-    background-color: #007bff;                          /* Colore di sfondo del pulsante */
-    color: white;                                       /* Colore del testo del pulsante */
-    border: none;                                       /* Rimuove il bordo del pulsante */
-    border-radius: 5px;                                 /* Aggiunge angoli arrotondati al pulsante */
-    cursor: pointer;                                    /* Cambia il cursore al passaggio del mouse sopra il pulsante */
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 /* Stile del pulsante di invio al passaggio del mouse */
 #button:hover {
-    background-color: #0056b3;                          /* Cambia il colore di sfondo del pulsante al passaggio del mouse */
+    background-color: #0056b3;
+}
+
+/* Stile del link di registrazione */
+.registrazione-link {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.registrazione-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.registrazione-link a:hover {
+    text-decoration: underline;
 }
