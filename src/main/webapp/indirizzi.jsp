@@ -20,10 +20,13 @@
 <head>
     <meta charset="ISO-8859-1">
     <link href="css/indirizzi.css" type="text/css" rel="stylesheet">
+    <link href="css/modificaDati.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Indirizzi</title>
 </head>
 <body>
 <%@ include file="navbar.jsp"%>
+
+<div class="form-container">
 
     <div class="indirizzi-container">
         <h1>Indirizzi personali</h1>
@@ -49,14 +52,51 @@
         </div>
 
         <%
-            }
+                    }
 
-            }
+                }
 
             }
         %>
-
     </div>
+
+    <form action="UtenteControl?action=aggiungiIndirizzo" method="post" class="form">
+        <div class="form-title">
+            <span>Nuovo indirizzo</span>
+        </div>
+
+        <div class="input-container">
+            <input class="input-nomeCompleto" name="nomeCompleto" type="text" placeholder="Nome e Cognome">
+            <span> </span>
+        </div>
+
+        <div class="input-container">
+            <input class="input-via" name="via" type="text" placeholder="Via">
+            <span> </span>
+        </div>
+
+        <div class="input-container">
+            <input class="input-citta" name="citta" type="text" placeholder="Città">
+            <span> </span>
+        </div>
+
+        <div class="input-container">
+            <input class="input-provincia" name="provincia" type="text" placeholder="Provincia">
+            <span> </span>
+        </div>
+
+        <div class="input-container">
+            <input class="input-cap" name="cap" type="text" placeholder="CAP">
+            <span> </span>
+        </div>
+
+        <button type="submit" class="submitButton">
+            <span class="sign text">Conferma</span>
+        </button>
+
+    </form>
+
+</div>
 
 </body>
 </html>

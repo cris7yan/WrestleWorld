@@ -2,33 +2,48 @@
 
 /* Stile generale della navbar */
 nav {
-    background-color: red;                  /* Cambia "rosso" con il colore desiderato */
-    padding: 10px;                          /* Aggiunge spazio intorno ai contenuti della navbar */
-    display: flex;                          /* Permette di allineare gli elementi della navbar orizzontalmente */
-    justify-content: space-between;         /* Allinea gli elementi all'inizio e alla fine della navbar */
-    align-items: center;                    /* Centra verticalmente gli elementi nella navbar */
+    background-color: white;
+    padding: 10px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Stile del contenitore degli elementi della navbar */
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* Stile del logo */
+.logo {
+    margin-right: auto;
+}
+
 .logo img {
-    height: 50px;                           /* Imposta l'altezza del logo */
-    width: auto;                            /* Imposta la larghezza del logo in modo che si adatti proporzionalmente all'altezza */
+    height: 50px;
+    width: auto;
 }
 
 /* Stile degli elementi della navbar */
 .profilo, .logout {
-    margin: 0 10px;                         /* Aggiunge spazio tra gli elementi della navbar */
+    margin-left: 10px;
 }
 
 /* Stile dei link */
 .profilo a, .logout a {
-    color: white;                           /* Cambia il colore del testo dei link */
-    text-decoration: none;                  /* Rimuove la sottolineatura dai link */
-    font-weight: bold;                      /* Imposta il grassetto per i link */
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 /* Stile degli SVG */
 .profilo svg, .logout svg {
-    height: 30px;                           /* Imposta l'altezza degli SVG */
-    width: auto;                            /* Imposta la larghezza degli SVG in modo che si adatti proporzionalmente all'altezza */
+    height: 40px;
+    width: auto;
 }

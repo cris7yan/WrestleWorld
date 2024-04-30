@@ -64,6 +64,8 @@ public class UtenteControl extends HttpServlet {
                     visualizzaIndirizzi(request, response);
                 } else if (action.equalsIgnoreCase("rimuoviIndirizzo")) {
                     eliminaIndirizzo(request, response);
+                } else if (action.equalsIgnoreCase("aggiungiIndirizzo")) {
+                    aggiungiIndirizzo(request, response);
                 }
             }
         } catch (SQLException e) {
@@ -250,7 +252,46 @@ public class UtenteControl extends HttpServlet {
 
 
     /**
-     * funzione che gestisce l'operazione di aggiunta di un nuovo indirizzo
+     * funzione che gestisce il salvataggio di un nuovo indirizzo
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws IOException
+     */
+    private void aggiungiIndirizzo (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        try {
+            HttpSession session = request.getSession();
+            String email = (String) session.getAttribute(EMAIL_PARAM);
+
+            UtenteBean utente = new UtenteBean();
+            IndirizzoBean indirizzo = new IndirizzoBean();
+
+            String via = request.getParameter("via");
+            String citta = request.getParameter("citta");
+            String provincia = request.getParameter("provincia");
+            String cap = request.getParameter("cap");
+            String nomeCompleto = request.getParameter("nomeCompleto");
+
+            indirizzo.setViaIndirizzo(via);
+            indirizzo.setCittaIndirizzo(citta);
+            indirizzo.setProvinciaIndirizzo(provincia);
+            indirizzo.setCAPIndirizzo(cap);
+            indirizzo.setNomeCompletoIndirizzo(nomeCompleto);
+
+            utente = utModel.doRetrieveByEmail(email);
+
+            indirizzoModel.doSave(indirizzo, utente);
+            response.sendRedirect("./indirizzi.jsp");
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+
+    /**
+     * funzione che gestisce l'operazione di eliminazione di un indirizzo
      * @param request
      * @param response
      * @throws SQLException
