@@ -18,6 +18,9 @@ public class IndirizzoModel implements IndirizzoDAO {
     private static Logger logger = Logger.getLogger(IndirizzoModel.class.getName());
     private static final String TABLE_INDIRIZZO = "Indirizzo";
     private static final String TABLE_UTENTE = "Utente";
+
+    private static final String ID_INDIRIZZO_PARAM = "ID_Indirizzo";
+
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
 
@@ -107,7 +110,7 @@ public class IndirizzoModel implements IndirizzoDAO {
             while (rs.next()) {
                 UtenteModel model = new UtenteModel();
 
-                indirizzo.setIdIndirizzo(rs.getInt("ID_Indirizzo"));
+                indirizzo.setIdIndirizzo(rs.getInt(ID_INDIRIZZO_PARAM));
                 indirizzo.setViaIndirizzo(rs.getString("Via"));
                 indirizzo.setCittaIndirizzo(rs.getString("Citta"));
                 indirizzo.setProvinciaIndirizzo(rs.getString("Provincia"));
@@ -162,7 +165,7 @@ public class IndirizzoModel implements IndirizzoDAO {
             while (rs.next()) {
                 IndirizzoBean indirizzo = new IndirizzoBean();
 
-                indirizzo.setIdIndirizzo(rs.getInt("ID_Indirizzo"));
+                indirizzo.setIdIndirizzo(rs.getInt(ID_INDIRIZZO_PARAM));
                 indirizzo.setViaIndirizzo(rs.getString("Via"));
                 indirizzo.setCittaIndirizzo(rs.getString("Citta"));
                 indirizzo.setProvinciaIndirizzo(rs.getString("Provincia"));
@@ -216,7 +219,7 @@ public class IndirizzoModel implements IndirizzoDAO {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("ID_Indirizzo");
+                int id = rs.getInt(ID_INDIRIZZO_PARAM);
                 idIndirizzi.add(id);
             }
         } catch (SQLException e) {

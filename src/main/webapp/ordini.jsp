@@ -22,17 +22,25 @@
     <link href="css/ordini.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Ordini</title>
 </head>
+<style>
+    /* Aggiunta per evitare sovrapposizione con la navbar */
+    body {
+        margin-top: 70px; /* Altezza della navbar + margine */
+        padding-top: 20px; /* Spaziatura sopra il contenuto del body */
+    }
+</style>
 <body>
 <%@ include file="navbar.jsp"%>
 
+<div>
     <div class="ordini-container">
         <h1>I tuoi ordini</h1>
 
         <%
-          if(ordini != null) {
-            Iterator<?> ordIt = ordini.iterator();
-            while (ordIt.hasNext()) {
-              OrdineBean ordine = (OrdineBean) ordIt.next();
+            if(ordini != null) {
+                Iterator<?> ordIt = ordini.iterator();
+                while (ordIt.hasNext()) {
+                    OrdineBean ordine = (OrdineBean) ordIt.next();
         %>
 
         <%
@@ -46,14 +54,15 @@
         </div>
 
         <%
-            }
+                    }
 
-            }
+                }
 
             }
         %>
 
     </div>
+</div>
 
 </body>
 </html>

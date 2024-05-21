@@ -1,0 +1,27 @@
+/* Stile per il contenitore principale */
+#main-container {
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Stile per il titolo */
+#main-container h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Stile per i link */
+#main-container a {
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 5px;
+    display: flex;
+}
+
+#main-container a:hover {
+    text-decoration: underline;
+}

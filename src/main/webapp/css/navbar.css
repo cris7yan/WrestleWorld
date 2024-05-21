@@ -1,13 +1,15 @@
 /* navbar.css */
 
 /* Stile generale della navbar */
-nav {
-    background-color: white;
-    padding: 10px;
-    width: 100%;
+.nav {
     position: fixed;
     top: 0;
-    z-index: 1000;
+    left: 0;
+    width: 100%;
+    background-color: #333; /* Colore di sfondo della navbar */
+    color: #fff; /* Colore del testo nella navbar */
+    padding: 10px 20px; /* Spaziatura interna della navbar */
+    z-index: 1000; /* Assicura che la navbar sia sopra agli altri elementi */
 }
 
 /* Stile del contenitore degli elementi della navbar */
@@ -31,19 +33,22 @@ nav {
 }
 
 /* Stile degli elementi della navbar */
-.profilo, .logout {
+.profilo,
+.logout {
     margin-left: 10px;
 }
 
 /* Stile dei link */
-.profilo a, .logout a {
+.profilo a,
+.logout a {
     color: black;
     text-decoration: none;
     font-weight: bold;
 }
 
 /* Stile degli SVG */
-.profilo svg, .logout svg {
+.profilo svg,
+.logout svg {
     height: 40px;
     width: auto;
 }

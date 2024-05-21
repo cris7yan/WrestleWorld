@@ -19,10 +19,17 @@
     <link rel="stylesheet" type="text/css" href="css/registrazione.css">
     <title>WrestleWorld | Registrazione</title>
 </head>
+<style>
+    /* Aggiunta per evitare sovrapposizione con la navbar */
+    body {
+        margin-top: 70px; /* Altezza della navbar + margine */
+        padding-top: 20px; /* Spaziatura sopra il contenuto del body */
+    }
+</style>
 <body>
-
 <%@ include file="navbar.jsp"%>
 
+<div>
     <div class="form-container">
 
         <form action="UtenteControl?action=registrazione" method="post" class="form">
@@ -66,6 +73,7 @@
         </form>
 
     </div>
+</div>
 
     <%
         if(result != null) {

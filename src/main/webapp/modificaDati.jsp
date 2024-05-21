@@ -11,9 +11,17 @@
     <link href="css/modificaDati.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Indirizzi</title>
 </head>
+<style>
+    /* Aggiunta per evitare sovrapposizione con la navbar */
+    body {
+        margin-top: 70px; /* Altezza della navbar + margine */
+        padding-top: 20px; /* Spaziatura sopra il contenuto del body */
+    }
+</style>
 <body>
 <%@ include file="navbar.jsp"%>
 
+<div>
     <form action="UtenteControl?action=modificaDati" method="post" class="form">
 
         <div class="form-title">
@@ -43,6 +51,7 @@
         </button>
 
     </form>
+</div>
 
 </body>
 </html>

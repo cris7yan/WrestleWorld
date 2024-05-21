@@ -11,7 +11,14 @@ import java.util.logging.Logger;
 public class UtenteModel implements UtenteDAO {
     private static DataSource dataSource;
     private static Logger logger = Logger.getLogger(UtenteModel.class.getName());
+
     private static final String TABLE_UTENTE = "Utente";
+
+    private static final String EMAIL_PARAM = "Email";
+
+    private static final String SELECT_ALL_FROM = "SELECT * FROM ";
+    private static final String UPDATE = "UPDATE ";
+
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
 
@@ -87,7 +94,7 @@ public class UtenteModel implements UtenteDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT * FROM " + TABLE_UTENTE + " WHERE Email = ? AND Password = ?";
+        String query = SELECT_ALL_FROM + TABLE_UTENTE + " WHERE Email = ? AND Password = ?";
 
         try {
             conn = dataSource.getConnection();
@@ -98,7 +105,7 @@ public class UtenteModel implements UtenteDAO {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                utente.setEmail(rs.getString("Email"));
+                utente.setEmail(rs.getString(EMAIL_PARAM));
                 utente.setPassword(rs.getString("Password"));
                 utente.setNome(rs.getString("Nome"));
                 utente.setCognome(rs.getString("Cognome"));
@@ -144,7 +151,7 @@ public class UtenteModel implements UtenteDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT * FROM " + TABLE_UTENTE + " WHERE Email = ?";
+        String query = SELECT_ALL_FROM + TABLE_UTENTE + " WHERE Email = ?";
 
         try {
             conn = dataSource.getConnection();
@@ -154,7 +161,7 @@ public class UtenteModel implements UtenteDAO {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                utente.setEmail(rs.getString("Email"));
+                utente.setEmail(rs.getString(EMAIL_PARAM));
                 utente.setPassword(rs.getString("Password"));
                 utente.setNome(rs.getString("Nome"));
                 utente.setCognome(rs.getString("Cognome"));
@@ -197,7 +204,7 @@ public class UtenteModel implements UtenteDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT * FROM " + TABLE_UTENTE + " WHERE Email = ?";
+        String query = SELECT_ALL_FROM + TABLE_UTENTE + " WHERE Email = ?";
 
         try {
             conn = dataSource.getConnection();
@@ -207,7 +214,7 @@ public class UtenteModel implements UtenteDAO {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                if(rs.getString("Email").equalsIgnoreCase(email))
+                if(rs.getString(EMAIL_PARAM).equalsIgnoreCase(email))
                     return true;
             }
         } catch (SQLException e) {
@@ -242,7 +249,7 @@ public class UtenteModel implements UtenteDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "UPDATE " + TABLE_UTENTE + " SET Nome = ?, Cognome = ?, DataNascita = ? WHERE Email = ?";
+        String query = UPDATE + TABLE_UTENTE + " SET Nome = ?, Cognome = ?, DataNascita = ? WHERE Email = ?";
 
         try {
             conn = dataSource.getConnection();
@@ -286,7 +293,7 @@ public class UtenteModel implements UtenteDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "UPDATE " + TABLE_UTENTE + " SET Email = ? WHERE Email = ?";
+        String query = UPDATE + TABLE_UTENTE + " SET Email = ? WHERE Email = ?";
 
         try {
             conn = dataSource.getConnection();
@@ -327,7 +334,7 @@ public class UtenteModel implements UtenteDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "UPDATE " + TABLE_UTENTE + " SET Password = ? WHERE Email = ?";
+        String query = UPDATE + TABLE_UTENTE + " SET Password = ? WHERE Email = ?";
 
         try {
             conn = dataSource.getConnection();

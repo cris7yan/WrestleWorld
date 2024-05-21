@@ -23,6 +23,13 @@
     <link href="css/modificaDati.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Indirizzi</title>
 </head>
+<style>
+    /* Aggiunta per evitare sovrapposizione con la navbar */
+    body {
+        margin-top: 70px; /* Altezza della navbar + margine */
+        padding-top: 10px; /* Spaziatura sopra il contenuto del body */
+    }
+</style>
 <body>
 <%@ include file="navbar.jsp"%>
 

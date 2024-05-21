@@ -26,10 +26,17 @@
     <link href="css/login.css" rel="stylesheet" type="text/css">
     <title>WrestleWorld | Login</title>
 </head>
+<style>
+    /* Aggiunta per evitare sovrapposizione con la navbar */
+    body {
+        margin-top: 70px; /* Altezza della navbar + margine */
+        padding-top: 20px; /* Spaziatura sopra il contenuto del body */
+    }
+</style>
 <body>
-
 <%@ include file="navbar.jsp"%>
 
+<div>
     <%
         if(email != null) {
             if(tipo.equals("Admin")) {
@@ -70,6 +77,7 @@
     <%
         }
     %>
+</div>
 
 </body>
 </html>
