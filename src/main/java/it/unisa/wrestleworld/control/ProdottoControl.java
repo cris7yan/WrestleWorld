@@ -31,32 +31,17 @@ public class ProdottoControl extends HttpServlet {
 
     @Override
     protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // preleviamo l'azione dalla request
+        String action = request.getParameter("action");
+
         try {
-            // Liste per prelevare dal database i prodotti ed i prodotti piu venduti
-            List<ProdottoBean> prodotti = prodModel.doRetrieveAll();
-            List<ProdottoBean> bestSellers = prodModel.doRetrieveBestSellers();
-            request.setAttribute("prodotti", prodotti);
-            request.setAttribute("bestSellers", bestSellers);
-
-            // prelevo le immagini dei vari prodotti
-            List<String> imgProdotti = new ArrayList<>();
-            for(ProdottoBean prod : prodotti) {
-                imgProdotti.add(prodModel.doRetrieveAllImages(prod).get(0));
+            if(action != null) {
+                if(action.equalsIgnoreCase("visualizzaHomePage")) {
+                    visualizzaHomePage(request, response);
+                } else if (action.equalsIgnoreCase("visualizzaCatalogo")) {
+                    visualizzaCatalogo(request, response);
+                }
             }
-            request.setAttribute("imgProdotti", imgProdotti);
-
-            // prelevo le immagini per i prodotti piu venduti
-            List<String> imgBestProd = new ArrayList<>();
-            for(ProdottoBean best : bestSellers) {
-                imgBestProd.add(prodModel.doRetrieveAllImages(best).get(0));
-            }
-            request.setAttribute("imgBestProd", imgBestProd);
-
-            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/index.jsp");
-            reqDispatcher.forward(request, response);
-
-        } catch (SQLException e) {
-            logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
@@ -70,6 +55,66 @@ public class ProdottoControl extends HttpServlet {
             logger.log(Level.SEVERE, MSG_ERROR_DOPOST, ex);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, MSG_ERROR_DOPOST, ex);
+        }
+    }
+
+
+    /**
+     * funzione che permette la visualizzazione della homepage
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void visualizzaHomePage (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // Liste per prelevare dal database i prodotti ed i prodotti piu venduti
+            List<ProdottoBean> bestSellers = prodModel.doRetrieveBestSellers();
+            request.setAttribute("bestSellers", bestSellers);
+
+            // prelevo le immagini per i prodotti piu venduti
+            List<String> imgBestProd = new ArrayList<>();
+            for (ProdottoBean best : bestSellers) {
+                imgBestProd.add(prodModel.doRetrieveAllImages(best).get(0));
+            }
+            request.setAttribute("imgBestProd", imgBestProd);
+
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/index.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        }
+    }
+
+
+    /**
+     * funzione che gestisce la visualizzazione dei prodotti nel catalogo
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void visualizzaCatalogo (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // Liste per prelevare dal database i prodotti ed i prodotti piu venduti
+            List<ProdottoBean> prodotti = prodModel.doRetrieveAll();
+            request.setAttribute("prodotti", prodotti);
+
+            // prelevo le immagini dei vari prodotti
+            List<String> imgProdotti = new ArrayList<>();
+            for(ProdottoBean prod : prodotti) {
+                imgProdotti.add(prodModel.doRetrieveAllImages(prod).get(0));
+            }
+            request.setAttribute("imgProdotti", imgProdotti);
+
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/catalogo.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
     }
 
