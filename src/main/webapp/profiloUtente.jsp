@@ -28,6 +28,8 @@
     <a href="./indirizzi.jsp">Visualizza i tuoi indirizzi</a>
     <br>
     <a href="./ordini.jsp">Visualizza i tuoi ordini</a>
+    <br>
+    <a href="./metodiPagamento.jsp">Visualizza i tuoi metodi di pagamento</a>
 </div>
 
 </body>
