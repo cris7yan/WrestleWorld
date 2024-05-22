@@ -21,8 +21,10 @@ import java.util.logging.Logger;
 @WebServlet("/OrdineControl")
 public class OrdineControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    static OrdineDAO ordineModel = new OrdineModel();
     static final Logger logger = Logger.getLogger(OrdineControl.class.getName());
+
+    static OrdineDAO ordineModel = new OrdineModel();
+
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
 

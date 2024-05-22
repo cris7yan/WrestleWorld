@@ -50,11 +50,16 @@
             if(prod != null) {
           %>
 
-          <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
+          <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
+              <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
+          </a>
           <div class="product-details">
-            <p class="product-name"> <%= prod.getNomeProdotto() %> <br> </p>
-            <p class="product-description"> <i><%= prod.getDescrizioneProdotto() %> <br> </p>
-            <br><br>
+              <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
+                  <p class="product-name"> <%= prod.getNomeProdotto() %> <br> </p>
+              </a>
+              <p class="product-price"> <i><%= prod.getPrezzoProdotto() %></i>&euro; <br> </p>
+              <p class="product-description"> <i><%= prod.getDescrizioneProdotto() %> <br> </p>
+              <br><br>
           </div>
 
           <%

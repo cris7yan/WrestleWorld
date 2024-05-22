@@ -103,7 +103,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT P.ID_Prodotto, P.Nome, P.Descrizione, SUM(Co.Quantita) as Tot FROM " + TABLE_PRODOTTO
+        String query = "SELECT P.ID_Prodotto, P.Nome, P.Descrizione, P.Prezzo, SUM(Co.Quantita) as Tot FROM " + TABLE_PRODOTTO
                 + " P JOIN " + TABLE_COMPOSIZIONE_ORDINE + " Co ON P.ID_Prodotto = Co.ID_Prodotto "
                 + "GROUP BY P.ID_Prodotto "
                 + "ORDER BY Tot DESC LIMIT 3";
@@ -119,6 +119,7 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setIDProdotto(rs.getInt("ID_Prodotto"));
                 prod.setNomeProdotto(rs.getString("Nome"));
                 prod.setDescrizioneProdotto(rs.getString("Descrizione"));
+                prod.setPrezzoProdotto(rs.getFloat("Prezzo"));
 
                 bestSellers.add(prod);
             }
@@ -190,5 +191,58 @@ public class ProdottoModel implements ProdottoDAO {
             }
         }
         return imgProd;
+    }
+
+
+    /**
+     * funzione che restituisce un prodotto in base al suo ID
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public synchronized ProdottoBean doRetrieveByID (int id) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        ProdottoBean prod = new ProdottoBean();
+
+        String query = "SELECT * FROM " + TABLE_PRODOTTO + " WHERE ID_Prodotto = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                prod.setIDProdotto(rs.getInt("ID_Prodotto"));
+                prod.setNomeProdotto(rs.getString("Nome"));
+                prod.setDescrizioneProdotto(rs.getString("Descrizione"));
+                prod.setPrezzoProdotto(rs.getFloat("Prezzo"));
+                prod.setMarcaProdotto(rs.getString("Marca"));
+                prod.setModelloProdotto(rs.getString("Modello"));
+                prod.setMaterialeProdotto(rs.getString("Materiale"));
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return prod;
     }
 }

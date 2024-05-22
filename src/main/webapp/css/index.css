@@ -33,11 +33,27 @@ h1 {
 
 /* Stile per il nome del prodotto */
 .product-name {
+    font-size: 10px;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+/* Stile per i link nel nome del prodotto */
+.product-name a {
+    text-decoration: none; /* Rimuove la sottolineatura */
+}
+
+.product-name a:hover {
+    text-decoration: underline; /* Aggiunge la sottolineatura al passaggio del mouse */
 }
 
 /* Stile per la descrizione del prodotto */
 .product-description {
     font-style: italic;
+}
+
+/* Stile per il prezzo del prodotto */
+.product-price {
+    font-weight: bold;
+    margin-bottom: 5px;
 }

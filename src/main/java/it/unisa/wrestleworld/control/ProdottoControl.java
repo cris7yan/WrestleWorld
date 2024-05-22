@@ -19,9 +19,10 @@ import java.util.logging.Logger;
 @WebServlet("/ProdottoControl")
 public class ProdottoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    static final Logger logger = Logger.getLogger(ProdottoControl.class.getName());
 
     private static ProdottoModel prodModel = new ProdottoModel();
-    static final Logger logger = Logger.getLogger(ProdottoControl.class.getName());
+
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
 
@@ -29,6 +30,14 @@ public class ProdottoControl extends HttpServlet {
         super();
     }
 
+
+    /**
+     * funzione che gestisce l'operazione doGet
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // preleviamo l'azione dalla request
@@ -40,6 +49,8 @@ public class ProdottoControl extends HttpServlet {
                     visualizzaHomePage(request, response);
                 } else if (action.equalsIgnoreCase("visualizzaCatalogo")) {
                     visualizzaCatalogo(request, response);
+                } else if (action.equalsIgnoreCase("visualizzaDettagliProdotto")) {
+                    visualizzaDettagliProdotto(request, response);
                 }
             }
         } catch (ServletException | IOException e) {
@@ -47,6 +58,14 @@ public class ProdottoControl extends HttpServlet {
         }
     }
 
+
+    /**
+     * funzione che gestisce l'operazione di doPost
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -110,6 +129,33 @@ public class ProdottoControl extends HttpServlet {
             request.setAttribute("imgProdotti", imgProdotti);
 
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/catalogo.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        }
+    }
+
+
+    /**
+     * funzione che gestisce la visualizzazione dei dettagli di un prodotto
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void visualizzaDettagliProdotto (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int idProd = Integer.parseInt(request.getParameter("IDProd"));
+            Object prod = prodModel.doRetrieveByID(idProd);
+
+            List<String> imgProd = new ArrayList<>();
+            imgProd = prodModel.doRetrieveAllImages((ProdottoBean) prod);
+
+            request.setAttribute("prodotto", prod);
+            request.setAttribute("imgProd", imgProd);
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/dettagliProdotto.jsp");
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());

@@ -1,0 +1,78 @@
+/* paginaProdotto.css */
+
+/* Stile generale per la pagina prodotto */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.product-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Stile per il contenitore delle immagini del prodotto */
+.product-img {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+/* Stile per l'immagine del prodotto */
+.product-img img {
+    width: 300px; /* Imposta la larghezza desiderata */
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Stile per i dettagli del prodotto */
+.product-details {
+    flex: 1;
+    padding: 20px;
+}
+
+/* Stile per il nome del prodotto */
+.product-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Stile per la descrizione del prodotto */
+.product-description {
+    font-style: italic;
+    color: #666;
+    margin-bottom: 10px;
+    max-height: 4.5em; /* Limita l'altezza per mostrare solo 3 righe */
+    overflow: hidden; /* Nasconde il testo in eccesso */
+    line-height: 1.5em; /* Altezza della linea per la descrizione */
+}
+
+/* Stile per il prezzo del prodotto */
+.product-price {
+    font-size: 20px;
+    color: #e74c3c;
+    margin-bottom: 10px;
+}
+
+/* Stile per le altre informazioni del prodotto */
+.product-marca,
+.product-materiale,
+.product-modello {
+    color: #333;
+    margin-bottom: 5px;
+}
