@@ -2,6 +2,7 @@ package it.unisa.wrestleworld.control;
 
 import it.unisa.wrestleworld.model.ProdottoBean;
 import it.unisa.wrestleworld.model.ProdottoModel;
+import it.unisa.wrestleworld.util.Carrello;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,6 +23,7 @@ public class ProdottoControl extends HttpServlet {
     static final Logger logger = Logger.getLogger(ProdottoControl.class.getName());
 
     private static ProdottoModel prodModel = new ProdottoModel();
+    private static Carrello carrello = new Carrello();
 
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
@@ -51,6 +53,8 @@ public class ProdottoControl extends HttpServlet {
                     visualizzaCatalogo(request, response);
                 } else if (action.equalsIgnoreCase("visualizzaDettagliProdotto")) {
                     visualizzaDettagliProdotto(request, response);
+                } else if (action.equalsIgnoreCase("aggiungiAlCarrello")) {
+                    aggiungiProdottoCarrello(request, response);
                 }
             }
         } catch (ServletException | IOException e) {
@@ -156,6 +160,31 @@ public class ProdottoControl extends HttpServlet {
             request.setAttribute("prodotto", prod);
             request.setAttribute("imgProd", imgProd);
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/dettagliProdotto.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        }
+    }
+
+
+    /**
+     * funzione che gestisce l'operazione di aggiunta di un prodotto al carrello
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void aggiungiProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int idProd = Integer.parseInt(request.getParameter("IDProd"));
+            if(prodModel.checkProductAvailability(idProd)) {
+                carrello.addProdottoCarrello(prodModel.doRetrieveByID(idProd));
+            }
+            List<ProdottoBean> cart = carrello.getCarrello();
+            request.getSession().setAttribute("carrello", carrello);
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());

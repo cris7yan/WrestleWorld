@@ -245,4 +245,51 @@ public class ProdottoModel implements ProdottoDAO {
         }
         return prod;
     }
+
+
+    /**
+     * funzione che controlla se un prodotto è disponibile
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public synchronized boolean checkProductAvailability (int id) throws SQLException {
+        boolean disp = false;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        String query = "SELECT Disponibilita FROM " + TABLE_PRODOTTO + " WHERE ID_Prodotto = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                disp = rs.getBoolean("Disponibilita");
+                if(disp == true) {
+                    return disp;
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return disp;
+    }
+
 }

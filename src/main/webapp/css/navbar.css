@@ -34,13 +34,15 @@
 
 /* Stile degli elementi della navbar */
 .profilo,
-.logout {
+.logout,
+.carrello {
     margin-left: 10px;
 }
 
 /* Stile dei link */
 .profilo a,
-.logout a {
+.logout a,
+.carrello a {
     color: black;
     text-decoration: none;
     font-weight: bold;
@@ -48,7 +50,8 @@
 
 /* Stile degli SVG */
 .profilo svg,
-.logout svg {
+.logout svg,
+.carrello svg {
     height: 40px;
     width: auto;
 }
