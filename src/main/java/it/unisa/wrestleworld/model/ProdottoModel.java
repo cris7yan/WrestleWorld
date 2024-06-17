@@ -25,6 +25,8 @@ public class ProdottoModel implements ProdottoDAO {
     private static final String DESCRIZIONE_PARAM = "Descrizione";
     private static final String PREZZO_PARAM = "Prezzo";
 
+    private static final String WHERE_IDPROD = " WHERE ID_Prodotto = ?";
+
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
 
@@ -163,7 +165,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT NomeImg FROM " + TABLE_IMMAGINE + " WHERE ID_Prodotto = ?";
+        String query = "SELECT NomeImg FROM " + TABLE_IMMAGINE + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();
@@ -211,7 +213,7 @@ public class ProdottoModel implements ProdottoDAO {
 
         ProdottoBean prod = new ProdottoBean();
 
-        String query = "SELECT * FROM " + TABLE_PRODOTTO + " WHERE ID_Prodotto = ?";
+        String query = "SELECT * FROM " + TABLE_PRODOTTO + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();
@@ -262,7 +264,7 @@ public class ProdottoModel implements ProdottoDAO {
         boolean disp = false;
         Connection conn = null;
         PreparedStatement ps = null;
-        String query = "SELECT Disponibilita FROM " + TABLE_PRODOTTO + " WHERE ID_Prodotto = ?";
+        String query = "SELECT Disponibilita FROM " + TABLE_PRODOTTO + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();

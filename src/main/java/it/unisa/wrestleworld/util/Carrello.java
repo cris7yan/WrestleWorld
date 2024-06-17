@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Carrello implements Serializable {
-    List<ProdottoBean> carrelloUtente;
+    private List<ProdottoBean> carrelloUtente;
 
     public Carrello() {
         carrelloUtente = new ArrayList<>();
