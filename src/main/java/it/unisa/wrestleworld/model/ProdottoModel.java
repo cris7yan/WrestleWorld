@@ -20,6 +20,11 @@ public class ProdottoModel implements ProdottoDAO {
     private static final String TABLE_PRODOTTO = "Prodotto";
     private static final String TABLE_COMPOSIZIONE_ORDINE = "ComposizioneOrdine";
     private static final String TABLE_IMMAGINE = "Immagine";
+
+    private static final String IDPROD_PARAM = "ID_Prodotto";
+    private static final String DESCRIZIONE_PARAM = "Descrizione";
+    private static final String PREZZO_PARAM = "Prezzo";
+
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
 
@@ -58,13 +63,13 @@ public class ProdottoModel implements ProdottoDAO {
             while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean();
 
-                prod.setIDProdotto(rs.getInt("ID_Prodotto"));
+                prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
                 prod.setNomeProdotto(rs.getString("Nome"));
-                prod.setDescrizioneProdotto(rs.getString("Descrizione"));
+                prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
                 prod.setMaterialeProdotto(rs.getString("Materiale"));
                 prod.setMarcaProdotto(rs.getString("Marca"));
                 prod.setModelloProdotto(rs.getString("Modello"));
-                prod.setPrezzoProdotto(rs.getFloat("Prezzo"));
+                prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
                 prod.setDisponibilitaProdotto(rs.getBoolean("Disponibilita"));
 
                 prodotti.add(prod);
@@ -116,10 +121,10 @@ public class ProdottoModel implements ProdottoDAO {
             while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean();
 
-                prod.setIDProdotto(rs.getInt("ID_Prodotto"));
+                prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
                 prod.setNomeProdotto(rs.getString("Nome"));
-                prod.setDescrizioneProdotto(rs.getString("Descrizione"));
-                prod.setPrezzoProdotto(rs.getFloat("Prezzo"));
+                prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
+                prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
 
                 bestSellers.add(prod);
             }
@@ -216,10 +221,10 @@ public class ProdottoModel implements ProdottoDAO {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                prod.setIDProdotto(rs.getInt("ID_Prodotto"));
+                prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
                 prod.setNomeProdotto(rs.getString("Nome"));
-                prod.setDescrizioneProdotto(rs.getString("Descrizione"));
-                prod.setPrezzoProdotto(rs.getFloat("Prezzo"));
+                prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
+                prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
                 prod.setMarcaProdotto(rs.getString("Marca"));
                 prod.setModelloProdotto(rs.getString("Modello"));
                 prod.setMaterialeProdotto(rs.getString("Materiale"));
@@ -266,7 +271,7 @@ public class ProdottoModel implements ProdottoDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 disp = rs.getBoolean("Disponibilita");
-                if(disp == true) {
+                if(disp) {
                     return disp;
                 }
             }

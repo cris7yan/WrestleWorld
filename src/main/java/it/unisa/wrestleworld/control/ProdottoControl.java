@@ -184,6 +184,7 @@ public class ProdottoControl extends HttpServlet {
             }
             List<ProdottoBean> cart = carrello.getCarrello();
             request.getSession().setAttribute("carrello", carrello);
+            request.setAttribute("carrello", cart);
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {

@@ -1,33 +1,35 @@
 package it.unisa.wrestleworld.util;
 
 import it.unisa.wrestleworld.model.ProdottoBean;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Carrello {
-    List<ProdottoBean> carrello;
+public class Carrello implements Serializable {
+    List<ProdottoBean> carrelloUtente;
 
     public Carrello() {
-        carrello = new ArrayList<>();
+        carrelloUtente = new ArrayList<>();
     }
 
     public Carrello(List<ProdottoBean> carrello) {
-        this.carrello = carrello;
+        this.carrelloUtente = carrello;
     }
 
     public List<ProdottoBean> getCarrello() {
-        return carrello;
+        return carrelloUtente;
     }
 
     public void setCarrello(List<ProdottoBean> carrello) {
-        this.carrello = carrello;
+        this.carrelloUtente = carrello;
     }
 
     public void addProdottoCarrello(ProdottoBean prodotto) {
-        carrello.add(prodotto);
+        carrelloUtente.add(prodotto);
     }
 
     public void removeProdottoCarrello(ProdottoBean prodotto) {
-        carrello.remove(prodotto);
+        carrelloUtente.remove(prodotto);
     }
 }
