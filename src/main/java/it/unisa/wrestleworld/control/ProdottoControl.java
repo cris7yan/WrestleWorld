@@ -23,7 +23,10 @@ public class ProdottoControl extends HttpServlet {
     static final Logger logger = Logger.getLogger(ProdottoControl.class.getName());
 
     private static ProdottoModel prodModel = new ProdottoModel();
-    private static Carrello carrello = new Carrello();
+    private static Carrello carrelloBean = new Carrello();
+
+    private static final String CARRELLO_ATTRIBUTE = "carrello";
+    private static final String ID_PROD_ATTRIBUTE = "IDProd";
 
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
@@ -46,11 +49,11 @@ public class ProdottoControl extends HttpServlet {
         String action = request.getParameter("action");
 
         // gestione carrello di un utente
-        Carrello carrello = (Carrello) request.getSession().getAttribute("carrello");   // preleviamo il carrello dalla sessione
-        if(carrello == null) {
+        Carrello carrelloUtente = (Carrello) request.getSession().getAttribute(CARRELLO_ATTRIBUTE);   // preleviamo il carrello dalla sessione
+        if(carrelloUtente == null) {
             // Se non esiste, ne crea uno nuovo e lo memorizza nella sessione
-            carrello = new Carrello();
-            request.getSession().setAttribute("carrello", carrello);
+            carrelloUtente = new Carrello();
+            request.getSession().setAttribute(CARRELLO_ATTRIBUTE, carrelloUtente);
         }
 
         try {
@@ -161,7 +164,7 @@ public class ProdottoControl extends HttpServlet {
      */
     private void visualizzaDettagliProdotto (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            int idProd = Integer.parseInt(request.getParameter("IDProd"));
+            int idProd = Integer.parseInt(request.getParameter(ID_PROD_ATTRIBUTE));
             Object prod = prodModel.doRetrieveByID(idProd);
 
             List<String> imgProd = new ArrayList<>();
@@ -188,13 +191,13 @@ public class ProdottoControl extends HttpServlet {
      */
     private void aggiungiProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            int idProd = Integer.parseInt(request.getParameter("IDProd"));
+            int idProd = Integer.parseInt(request.getParameter(ID_PROD_ATTRIBUTE));
             if(prodModel.checkProductAvailability(idProd)) {
-                carrello.addProdottoCarrello(prodModel.doRetrieveByID(idProd));
+                carrelloBean.addProdottoCarrello(prodModel.doRetrieveByID(idProd));
             }
-            List<ProdottoBean> cart = carrello.getCarrello();
-            request.getSession().setAttribute("carrello", carrello);
-            request.setAttribute("carrello", cart);
+            List<ProdottoBean> cart = carrelloBean.getCarrello();
+            request.getSession().setAttribute(CARRELLO_ATTRIBUTE, carrelloBean);
+            request.setAttribute(CARRELLO_ATTRIBUTE, cart);
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
@@ -214,9 +217,9 @@ public class ProdottoControl extends HttpServlet {
      */
     private void rimuoviProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            int idProd = Integer.parseInt(request.getParameter("IDProd"));
-            carrello.removeProdottoCarrello(idProd);
-            request.getSession().setAttribute("carrello", carrello);
+            int idProd = Integer.parseInt(request.getParameter(ID_PROD_ATTRIBUTE));
+            carrelloBean.removeProdottoCarrello(idProd);
+            request.getSession().setAttribute(CARRELLO_ATTRIBUTE, carrelloBean);
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {

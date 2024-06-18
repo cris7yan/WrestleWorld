@@ -31,7 +31,7 @@ public class Carrello implements Serializable {
 
     public void removeProdottoCarrello(int idProd) {
         for(ProdottoBean prod : carrelloUtente) {
-            if(((ProdottoBean) prod).getIDProdotto() == idProd) {
+            if(prod.getIDProdotto() == idProd) {
                 this.carrelloUtente.remove(prod);
                 break;
             }
