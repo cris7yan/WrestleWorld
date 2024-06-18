@@ -29,7 +29,16 @@ public class Carrello implements Serializable {
         carrelloUtente.add(prodotto);
     }
 
-    public void removeProdottoCarrello(ProdottoBean prodotto) {
-        carrelloUtente.remove(prodotto);
+    public void removeProdottoCarrello(int idProd) {
+        for(ProdottoBean prod : carrelloUtente) {
+            if(((ProdottoBean) prod).getIDProdotto() == idProd) {
+                this.carrelloUtente.remove(prod);
+                break;
+            }
+        }
+    }
+
+    public void svuotaCarrello () {
+        carrelloUtente.clear();
     }
 }

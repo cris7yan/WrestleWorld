@@ -30,6 +30,7 @@
         <div class="product-details">
             <p class="product-name"> <%=((ProdottoBean) prod).getNomeProdotto()%>  <br></p>
             <p class="product-price"><%=((ProdottoBean) prod).getPrezzoProdotto()%>&euro; <br></p>
+            <a href="ProdottoControl?action=rimuoviDalCarrello&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">Rimuovi dal carrello</a>
             <br><br>
         </div>
     <%

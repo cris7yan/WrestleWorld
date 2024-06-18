@@ -45,6 +45,14 @@ public class ProdottoControl extends HttpServlet {
         // preleviamo l'azione dalla request
         String action = request.getParameter("action");
 
+        // gestione carrello di un utente
+        Carrello carrello = (Carrello) request.getSession().getAttribute("carrello");   // preleviamo il carrello dalla sessione
+        if(carrello == null) {
+            // Se non esiste, ne crea uno nuovo e lo memorizza nella sessione
+            carrello = new Carrello();
+            request.getSession().setAttribute("carrello", carrello);
+        }
+
         try {
             if(action != null) {
                 if(action.equalsIgnoreCase("visualizzaHomePage")) {
@@ -55,6 +63,8 @@ public class ProdottoControl extends HttpServlet {
                     visualizzaDettagliProdotto(request, response);
                 } else if (action.equalsIgnoreCase("aggiungiAlCarrello")) {
                     aggiungiProdottoCarrello(request, response);
+                } else if (action.equalsIgnoreCase("rimuoviDalCarrello")) {
+                    rimuoviProdottoCarrello(request, response);
                 }
             }
         } catch (ServletException | IOException e) {
@@ -189,6 +199,26 @@ public class ProdottoControl extends HttpServlet {
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        }
+    }
+
+
+    /**
+     * funzione che gestisce la rimozione di un prodotto dal carrello
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void rimuoviProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int idProd = Integer.parseInt(request.getParameter("IDProd"));
+            carrello.removeProdottoCarrello(idProd);
+            request.getSession().setAttribute("carrello", carrello);
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
+            reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
