@@ -33,6 +33,9 @@ public class UtenteControl extends HttpServlet {
 
     private static final String EMAIL_PARAM = "email";
     private static final String PASSWORD_PARAM = "password";
+    private static final String NOME_PARAM = "nome";
+    private static final String COGNOME_PARAM = "cognome";
+    private static final String DATA_NASCITA_PARAM = "dataNascita";
 
     private static final String INDEX_PAGE = "./index.jsp";
 
@@ -59,23 +62,32 @@ public class UtenteControl extends HttpServlet {
             if (action != null) {
                 if (action.equalsIgnoreCase("login")) {
                     login(request, response);
-                } else if (action.equalsIgnoreCase("logout")) {
+                }
+                else if (action.equalsIgnoreCase("logout")) {
                     logout(request, response);
-                } else if (action.equalsIgnoreCase("registrazione")) {
+                }
+                else if (action.equalsIgnoreCase("registrazione")) {
                     registrazione(request, response);
-                } else if (action.equalsIgnoreCase("modificaDati")) {
+                }
+                else if (action.equalsIgnoreCase("modificaDati")) {
                     modificaDatiPersonali(request, response);
-                } else if (action.equalsIgnoreCase("visualizzaIndirizzi")) {
+                }
+                else if (action.equalsIgnoreCase("visualizzaIndirizzi")) {
                     visualizzaIndirizzi(request, response);
-                } else if (action.equalsIgnoreCase("rimuoviIndirizzo")) {
+                }
+                else if (action.equalsIgnoreCase("rimuoviIndirizzo")) {
                     eliminaIndirizzo(request, response);
-                } else if (action.equalsIgnoreCase("aggiungiIndirizzo")) {
+                }
+                else if (action.equalsIgnoreCase("aggiungiIndirizzo")) {
                     aggiungiIndirizzo(request, response);
-                } else if (action.equalsIgnoreCase("visualizzaMetodiPagamento")) {
+                }
+                else if (action.equalsIgnoreCase("visualizzaMetodiPagamento")) {
                     visualizzaMetodiPagamento(request, response);
-                } else if (action.equalsIgnoreCase("rimuoviMetodoPagamento")) {
+                }
+                else if (action.equalsIgnoreCase("rimuoviMetodoPagamento")) {
                     eliminaMetodoPagamento(request, response);
-                } else if (action.equalsIgnoreCase("aggiungiMetodoPagamento")) {
+                }
+                else if (action.equalsIgnoreCase("aggiungiMetodoPagamento")) {
                     aggiungiMetodoPagamento(request, response);
                 }
             }
@@ -134,9 +146,9 @@ public class UtenteControl extends HttpServlet {
                     reqDispatcher.forward(request, response);
                 } else {
                     session.setAttribute(EMAIL_PARAM, utente.getEmail());
-                    session.setAttribute("nome", utente.getNome());
-                    session.setAttribute("cognome", utente.getCognome());
-                    session.setAttribute("dataNascita", utente.getDataNascita());
+                    session.setAttribute(NOME_PARAM, utente.getNome());
+                    session.setAttribute(COGNOME_PARAM, utente.getCognome());
+                    session.setAttribute(DATA_NASCITA_PARAM, utente.getDataNascita());
                     session.setAttribute("tipo", utente.getTipoUtente());
                     response.sendRedirect(INDEX_PAGE);
                 }
@@ -180,9 +192,9 @@ public class UtenteControl extends HttpServlet {
             // preleviamo i dati dalla request
             String email = request.getParameter(EMAIL_PARAM);
             String password = request.getParameter(PASSWORD_PARAM);
-            String nome = request.getParameter("nome");
-            String cognome = request.getParameter("cognome");
-            Date dataNascita = Date.valueOf(request.getParameter("dataNascita"));
+            String nome = request.getParameter(NOME_PARAM);
+            String cognome = request.getParameter(COGNOME_PARAM);
+            Date dataNascita = Date.valueOf(request.getParameter(DATA_NASCITA_PARAM));
 
             // creiamo un nuovo utente ed impostiamo i dati
             UtenteBean newUtente = new UtenteBean();
@@ -226,18 +238,18 @@ public class UtenteControl extends HttpServlet {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute(EMAIL_PARAM);
 
-            String nome = request.getParameter("nome");
-            String cognome = request.getParameter("cognome");
-            Date data = Date.valueOf(request.getParameter("dataNascita"));
+            String nome = request.getParameter(NOME_PARAM);
+            String cognome = request.getParameter(COGNOME_PARAM);
+            Date data = Date.valueOf(request.getParameter(DATA_NASCITA_PARAM));
 
             utModel.doUpdateData(nome, cognome, data, email);   // Aggiorna i dati nel database
 
             UtenteBean updatedUtente = utModel.doRetrieveByEmail(email);    // Recupera i dati aggiornati dal database
 
             // Aggiorna i dati nella sessione
-            session.setAttribute("nome", updatedUtente.getNome());
-            session.setAttribute("cognome", updatedUtente.getCognome());
-            session.setAttribute("dataNascita", updatedUtente.getDataNascita());
+            session.setAttribute(NOME_PARAM, updatedUtente.getNome());
+            session.setAttribute(COGNOME_PARAM, updatedUtente.getCognome());
+            session.setAttribute(DATA_NASCITA_PARAM, updatedUtente.getDataNascita());
 
             // Reindirizza alla pagina del profilo
             response.sendRedirect("./profiloUtente.jsp");
