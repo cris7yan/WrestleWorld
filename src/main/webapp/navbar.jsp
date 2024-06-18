@@ -3,10 +3,14 @@
   User: cristyanesposito
 --%>
 <%@ page import="it.unisa.wrestleworld.util.Carrello" %>
+<%@ page import="java.util.Date" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
 
 <%!
     String emailUtente = "";
+    String nome = "";
+    String cognome = "";
+    Date dataNascita = null;
     Carrello carrello = null;
 %>
 
@@ -14,6 +18,9 @@
     synchronized (session) {
         session = request.getSession();
         emailUtente = (String) session.getAttribute("email");
+        nome = (String) session.getAttribute("nome");
+        cognome = (String) session.getAttribute("cognome");
+        dataNascita = (Date) session.getAttribute("dataNascita");
         carrello = (Carrello) session.getAttribute("carrello");
     }
 %>
@@ -27,7 +34,6 @@
 </head>
 <body>
     <nav>
-
         <div class="navbar-content">
             <div class="logo">
                 <a href="./index.jsp"> <img src="img/logo/WrestleWorldTitle.png" alt="Logo"></a>
@@ -64,7 +70,6 @@
                 </a>
             </div>
         </div>
-
     </nav>
 </body>
 </html>

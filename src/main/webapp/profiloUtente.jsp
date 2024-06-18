@@ -23,6 +23,12 @@
 <div id="main-container">
     <h1>Sei nella tua pagina profilo</h1>
 
+    <div class="dati-container">
+        <p><span class="label">Email:</span> <span class="value"><%=emailUtente%></span></p>
+        <p><span class="label">Nome:</span> <span class="value"><%=nome%></span></p>
+        <p><span class="label">Cognome:</span> <span class="value"><%=cognome%></span></p>
+        <p><span class="label">Data di nascita:</span> <span class="value"><%=dataNascita%></span></p>
+    </div>
     <a href="./modificaDati.jsp">Modifica i tuoi dati</a>
     <br>
     <a href="./indirizzi.jsp">Visualizza i tuoi indirizzi</a>

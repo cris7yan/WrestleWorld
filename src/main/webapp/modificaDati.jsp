@@ -32,17 +32,17 @@
         </div>
 
         <div class="input-container">
-            <input name="nome" type="text" placeholder="Nome" class="input-nome">
+            <input name="nome" type="text" placeholder="Nome" class="input-nome" value="<%=nome%>">
             <span> </span>
         </div>
 
         <div class="input-container">
-            <input name="cognome" type="text" placeholder="Cognome" class="input-cognome">
+            <input name="cognome" type="text" placeholder="Cognome" class="input-cognome" value="<%=cognome%>">
             <span> </span>
         </div>
 
         <div class="input-container">
-            <input name="dataNascita" type="date" placeholder="Data di Nascita" class="input-dataNascita">
+            <input name="dataNascita" type="date" placeholder="Data di Nascita" class="input-dataNascita" value="<%=dataNascita%>">
             <span> </span>
         </div>
 

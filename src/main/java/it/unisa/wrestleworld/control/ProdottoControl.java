@@ -60,13 +60,17 @@ public class ProdottoControl extends HttpServlet {
             if(action != null) {
                 if(action.equalsIgnoreCase("visualizzaHomePage")) {
                     visualizzaHomePage(request, response);
-                } else if (action.equalsIgnoreCase("visualizzaCatalogo")) {
+                }
+                else if (action.equalsIgnoreCase("visualizzaCatalogo")) {
                     visualizzaCatalogo(request, response);
-                } else if (action.equalsIgnoreCase("visualizzaDettagliProdotto")) {
+                }
+                else if (action.equalsIgnoreCase("visualizzaDettagliProdotto")) {
                     visualizzaDettagliProdotto(request, response);
-                } else if (action.equalsIgnoreCase("aggiungiAlCarrello")) {
+                }
+                else if (action.equalsIgnoreCase("aggiungiAlCarrello")) {
                     aggiungiProdottoCarrello(request, response);
-                } else if (action.equalsIgnoreCase("rimuoviDalCarrello")) {
+                }
+                else if (action.equalsIgnoreCase("rimuoviDalCarrello")) {
                     rimuoviProdottoCarrello(request, response);
                 }
             }

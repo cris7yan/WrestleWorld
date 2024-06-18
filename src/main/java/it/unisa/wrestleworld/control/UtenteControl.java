@@ -37,30 +37,31 @@ public class UtenteControl extends HttpServlet {
     private static final String INDEX_PAGE = "./index.jsp";
 
 
-    public UtenteControl () {
+    public UtenteControl() {
         super();
     }
 
 
     /**
      * funzione che gestisce l'operazione doGet
+     *
      * @param request
      * @param response
      * @throws ServletException
      * @throws IOException
      */
     @Override
-    public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // preleviamo l'azione dalla request
         String action = request.getParameter("action");
 
         try {
-            if(action != null) {
-                if(action.equalsIgnoreCase("login")) {
+            if (action != null) {
+                if (action.equalsIgnoreCase("login")) {
                     login(request, response);
                 } else if (action.equalsIgnoreCase("logout")) {
                     logout(request, response);
-                } else if(action.equalsIgnoreCase("registrazione")) {
+                } else if (action.equalsIgnoreCase("registrazione")) {
                     registrazione(request, response);
                 } else if (action.equalsIgnoreCase("modificaDati")) {
                     modificaDatiPersonali(request, response);
@@ -87,13 +88,14 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di doPost
+     *
      * @param request
      * @param response
      * @throws ServletException
      * @throws IOException
      */
     @Override
-    protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             doGet(request, response);
         } catch (ServletException ex) {
@@ -106,12 +108,13 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di login di un utente
+     *
      * @param request
      * @param response
      * @throws ServletException
      * @throws IOException
      */
-    private void login (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             UtenteBean utente = new UtenteBean();
 
@@ -131,6 +134,9 @@ public class UtenteControl extends HttpServlet {
                     reqDispatcher.forward(request, response);
                 } else {
                     session.setAttribute(EMAIL_PARAM, utente.getEmail());
+                    session.setAttribute("nome", utente.getNome());
+                    session.setAttribute("cognome", utente.getCognome());
+                    session.setAttribute("dataNascita", utente.getDataNascita());
                     session.setAttribute("tipo", utente.getTipoUtente());
                     response.sendRedirect(INDEX_PAGE);
                 }
@@ -145,11 +151,12 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di logout
+     *
      * @param request
      * @param response
      * @throws IOException
      */
-    private void logout (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.getSession().invalidate();
         try {
             response.sendRedirect(INDEX_PAGE);
@@ -161,13 +168,14 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di registrazione di un utente
+     *
      * @param request
      * @param response
      * @throws SQLException
      * @throws ServletException
      * @throws IOException
      */
-    private void registrazione (HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+    private void registrazione(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         try {
             // preleviamo i dati dalla request
             String email = request.getParameter(EMAIL_PARAM);
@@ -187,7 +195,7 @@ public class UtenteControl extends HttpServlet {
 
             HttpSession session = request.getSession(true);
 
-            if(utModel.verificaEmailEsistente(email)) {
+            if (utModel.verificaEmailEsistente(email)) {
                 request.setAttribute("result", "Email già utilizzata, sceglierne un'altra");
                 RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/registrazione.jsp");
                 reqDispatcher.forward(request, response);
@@ -207,12 +215,13 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione della modifica dei dati di un utente
+     *
      * @param request
      * @param response
      * @throws SQLException
      * @throws IOException
      */
-    private void modificaDatiPersonali (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void modificaDatiPersonali(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         try {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute(EMAIL_PARAM);
@@ -221,7 +230,16 @@ public class UtenteControl extends HttpServlet {
             String cognome = request.getParameter("cognome");
             Date data = Date.valueOf(request.getParameter("dataNascita"));
 
-            utModel.doUpdateData(nome, cognome, data, email);
+            utModel.doUpdateData(nome, cognome, data, email);   // Aggiorna i dati nel database
+
+            UtenteBean updatedUtente = utModel.doRetrieveByEmail(email);    // Recupera i dati aggiornati dal database
+
+            // Aggiorna i dati nella sessione
+            session.setAttribute("nome", updatedUtente.getNome());
+            session.setAttribute("cognome", updatedUtente.getCognome());
+            session.setAttribute("dataNascita", updatedUtente.getDataNascita());
+
+            // Reindirizza alla pagina del profilo
             response.sendRedirect("./profiloUtente.jsp");
         } catch (IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
@@ -233,12 +251,13 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce la visualizzazione degli indirizzi per ogni utente
+     *
      * @param request
      * @param response
      * @throws SQLException
      * @throws IOException
      */
-    private void visualizzaIndirizzi (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void visualizzaIndirizzi(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         try {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute(EMAIL_PARAM);
@@ -263,12 +282,13 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce il salvataggio di un nuovo indirizzo
+     *
      * @param request
      * @param response
      * @throws SQLException
      * @throws IOException
      */
-    private void aggiungiIndirizzo (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void aggiungiIndirizzo(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         try {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute(EMAIL_PARAM);
@@ -302,12 +322,13 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di eliminazione di un indirizzo
+     *
      * @param request
      * @param response
      * @throws SQLException
      * @throws IOException
      */
-    private void eliminaIndirizzo (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void eliminaIndirizzo(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         try {
             int idIndirizzo = Integer.parseInt(request.getParameter("ID_Indirizzo"));
             indirizzoModel.doDelete(idIndirizzo);
@@ -322,12 +343,13 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce la visualizzazione degli indirizzi per ogni utente
+     *
      * @param request
      * @param response
      * @throws SQLException
      * @throws IOException
      */
-    private void visualizzaMetodiPagamento (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void visualizzaMetodiPagamento(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         try {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute(EMAIL_PARAM);
@@ -352,12 +374,13 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce il salvataggio di un nuovo indirizzo
+     *
      * @param request
      * @param response
      * @throws SQLException
      * @throws IOException
      */
-    private void aggiungiMetodoPagamento (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void aggiungiMetodoPagamento(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         try {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute(EMAIL_PARAM);
@@ -387,12 +410,13 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di eliminazione di un indirizzo
+     *
      * @param request
      * @param response
      * @throws SQLException
      * @throws IOException
      */
-    private void eliminaMetodoPagamento (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void eliminaMetodoPagamento(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         try {
             int idMetodo = Integer.parseInt(request.getParameter("ID_Pagamento"));
             metodoPagamentoModel.doDelete(idMetodo);
@@ -403,4 +427,5 @@ public class UtenteControl extends HttpServlet {
             logger.log(Level.WARNING, e.getMessage());
         }
     }
+
 }
