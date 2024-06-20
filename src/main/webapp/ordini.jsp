@@ -5,7 +5,7 @@
 <%@ page import="it.unisa.wrestleworld.model.OrdineBean" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page contentType="text/html;charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 
 <%
     List<OrdineBean> ordini = (List<OrdineBean>) request.getAttribute("ordini");
@@ -18,7 +18,7 @@
 <!DOCTYPE html>
 <html lang="it" xml:lang="it">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <link href="css/ordini.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Ordini</title>
 </head>

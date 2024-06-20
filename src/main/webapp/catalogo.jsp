@@ -5,7 +5,7 @@
 <%@ page import="it.unisa.wrestleworld.model.ProdottoBean" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page contentType="text/html;charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 
 <%
     List<ProdottoBean> prodotti = (List<ProdottoBean>) request.getAttribute("prodotti");
@@ -19,7 +19,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="ISO-8859-1">
+  <meta charset="UTF-8">
   <title>WrestleWorld | Catalogo</title>
   <link href="css/index.css" rel="stylesheet" type="text/css">
 </head>

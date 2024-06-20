@@ -4,13 +4,14 @@
 --%>
 <%@ page import="it.unisa.wrestleworld.util.Carrello" %>
 <%@ page import="java.util.Date" %>
-<%@ page contentType="text/html;charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 
 <%!
     String emailUtente = "";
     String nome = "";
     String cognome = "";
     Date dataNascita = null;
+    String tipoUtente = "";
     Carrello carrello = null;
 %>
 
@@ -21,6 +22,7 @@
         nome = (String) session.getAttribute("nome");
         cognome = (String) session.getAttribute("cognome");
         dataNascita = (Date) session.getAttribute("dataNascita");
+        tipoUtente = (String) session.getAttribute("tipo");
         carrello = (Carrello) session.getAttribute("carrello");
     }
 %>
@@ -28,48 +30,78 @@
 <!DOCTYPE html>
 <html lang="it" xml:lang="it">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <link href="css/navbar.css" rel="stylesheet" type="text/css">
     <title>WrestleWorld</title>
 </head>
 <body>
-    <nav>
-        <div class="navbar-content">
-            <div class="logo">
-                <a href="./index.jsp"> <img src="img/logo/WrestleWorldTitle.png" alt="Logo"></a>
-            </div>
+
+<section id="header">
+    <a href="./index.jsp"><img src="img/logo/WrestleWorldTitleremove.png" class="logo" alt="Error logo"></a>
+
+    <div>
+        <ul id="navbar">
+
+            <!-- Barra di ricerca -->
+            <form>
+                <div class="search-box">
+                    <input class="search-input" type="search" placeholder="Cerca il tuo prodotto">
+                    <button type="submit" class="search-button">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path opacity="0.1" fill-rule="evenodd" clip-rule="evenodd" d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21ZM11.5 7.75C9.42893 7.75 7.75 9.42893 7.75 11.5C7.75 13.5711 9.42893 15.25 11.5 15.25C13.5711 15.25 15.25 13.5711 15.25 11.5C15.25 9.42893 13.5711 7.75 11.5 7.75Z" fill="#323232"></path>
+                                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#323232" stroke-width="2"></path>
+                                <path d="M14 14L16 16" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M15 11.5C15 13.433 13.433 15 11.5 15C9.567 15 8 13.433 8 11.5C8 9.567 9.567 8 11.5 8C13.433 8 15 9.567 15 11.5Z" stroke="#323232" stroke-width="2"></path>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <li>
+                <a class="active" href="./catalogo.jsp">CATALOGO</a>
+            </li>
+
+            <li id="userLogin">
+                <a class="active" href="./login.jsp">My Account</a>
+            </li>
 
             <%
                 if(emailUtente == null) {
             %>
-                <div class="profilo">
-                    <a href="login.jsp">
-                        <svg viewBox="0 0 32 32" enable-background="new 0 0 32 32" id="Stock_cut" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <desc></desc> <g> <circle cx="16" cy="16" fill="none" r="15" stroke="#000000" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></circle> <path d="M26,27L26,27 c0-5.523-4.477-10-10-10h0c-5.523,0-10,4.477-10,10v0" fill="none" stroke="#000000" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path> <circle cx="16" cy="11" fill="none" r="6" stroke="#000000" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></circle> </g> </g></svg>
-                    </a>
-                </div>
-            <% } else {
-
+            <li>
+                <a href="./login.jsp"><img src="img/sitoweb/cart.png" alt="Icon Error"></a>
+            </li>
+            <%
+            }
+            else {
+                if(tipoUtente.equals("Admin")) {
             %>
-                <div class="profilo">
-                    <a href="profiloUtente.jsp">
-                        <svg viewBox="0 0 32 32" enable-background="new 0 0 32 32" id="Stock_cut" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <desc></desc> <g> <circle cx="16" cy="16" fill="none" r="15" stroke="#000000" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></circle> <path d="M26,27L26,27 c0-5.523-4.477-10-10-10h0c-5.523,0-10,4.477-10,10v0" fill="none" stroke="#000000" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></path> <circle cx="16" cy="11" fill="none" r="6" stroke="#000000" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"></circle> </g> </g></svg>
-                    </a>
-                </div>
-                <div class="logout">
-                    <a href="UtenteControl?action=logout">
-                        <svg height="200px" width="200px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path style="fill:#FF9F99;" d="M256,499.2c64.956,0,126.029-25.293,171.964-71.228c94.814-94.822,94.814-249.114,0-343.936 C382.029,38.101,320.956,12.8,256,12.8S129.971,38.101,84.036,84.036c-94.814,94.822-94.814,249.114,0,343.936 C129.971,473.899,191.044,499.2,256,499.2z"></path> <path style="fill:#573A32;" d="M256,0C114.62,0,0,114.62,0,256s114.62,256,256,256c141.389,0,256-114.62,256-256S397.389,0,256,0z M256,486.4C128.956,486.4,25.6,383.044,25.6,256c0-58.923,22.426-112.58,58.94-153.361L409.361,427.46 C368.58,463.974,314.923,486.4,256,486.4z M427.46,409.361L102.639,84.54C143.428,48.026,197.077,25.6,256,25.6 c127.044,0,230.4,103.356,230.4,230.4C486.4,314.923,463.983,368.58,427.46,409.361z"></path> </g></svg>
-                    </a>
-                </div>
+            <li>
+                <a href="./admin.jsp">UTENTI</a>
+            </li>
+            <%
+            }
+            else {
+            %>
+            <li>
+                <a href="./carrello.jsp"><img src="img/sitoweb/cart.png" alt="Icon Error"></a>
+            </li>
             <%
                 }
             %>
+            <li>
+                <a href="UtenteControl?action=logout"><img src="img/sitoweb/logout.png" alt="Icon Error"></a>
+            </li>
+            <%
+                }
+            %>
+        </ul>
+    </div>
+</section>
 
-            <div class="carrello">
-                <a href="carrello.jsp">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                </a>
-            </div>
-        </div>
-    </nav>
 </body>
 </html>

@@ -2,7 +2,7 @@
   Created by IntelliJ IDEA.
   User: cristyanesposito
 --%>
-<%@ page contentType="text/html;charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 
 <%!
     String result = "";
@@ -15,7 +15,7 @@
 <!DOCTYPE html>
 <html lang="it" xml:lang="it">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="css/registrazione.css">
     <title>WrestleWorld | Registrazione</title>
 </head>

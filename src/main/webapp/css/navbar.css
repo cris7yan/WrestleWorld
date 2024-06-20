@@ -1,57 +1,258 @@
-/* navbar.css */
-
-/* Stile generale della navbar */
-.nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #333; /* Colore di sfondo della navbar */
-    color: #fff; /* Colore del testo nella navbar */
-    padding: 10px 20px; /* Spaziatura interna della navbar */
-    z-index: 1000; /* Assicura che la navbar sia sopra agli altri elementi */
+html, body {
+    height: 100%;
 }
 
-/* Stile del contenitore degli elementi della navbar */
-.navbar-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f1f2f4;
 }
 
-/* Stile del logo */
+p {
+    font-size: 14px;
+    font-family: "Avenir Next";
+    margin: 15px 0 20px 0;
+}
+
+#header {
+    display: flex; /* Utilizza il layout flexbox per distribuire gli elementi */
+    align-items: center;    /* Centra verticalmente gli elementi figli */
+    justify-content: space-between;    /* Distribuisce gli elementi figli con spazio uniforme tra di loro */
+    padding: 20px 110px;    /* Aggiunge padding interno: 20px sopra e sotto, 80px a sinistra e destra */
+    background: lightgray;
+    /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);*/    /* Aggiunge un'ombra al box con un offset verticale di 5px, blur di 15px e colore nero trasparente */
+    z-index: 999;    /* Imposta la priorità di sovrapposizione dell'elemento per essere in cima alla maggior parte degli altri elementi */
+    position: sticky;    /* Imposta il posizionamento dell'elemento come "sticky", mantenendolo fisso quando l'utente scorre la pagina */
+    top: 0;    /* Fissa l'elemento alla parte superiore della pagina */
+    left: 0;    /* Fissa l'elemento al lato sinistro della pagina */
+}
+
+#header img {
+    max-height: 40px;
+}
+
 .logo {
-    margin-right: auto;
+    align-content: normal;
+    margin-right: 50px;
+    transform: scale(1.5);
 }
 
-.logo img {
-    height: 50px;
-    width: auto;
+#navbar {
+    max-height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Stile degli elementi della navbar */
-.profilo,
-.logout,
-.carrello {
-    margin-left: 10px;
+#navbar li {
+    list-style: none;
+    padding: 0 20px;
+    position: relative;
 }
 
-/* Stile dei link */
-.profilo a,
-.logout a,
-.carrello a {
-    color: black;
+#navbar li a{
     text-decoration: none;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Avenir Next";
+    color: #f1f2f4;
+    transition: 0.3s ease;
 }
 
-/* Stile degli SVG */
-.profilo svg,
-.logout svg,
-.carrello svg {
-    height: 40px;
-    width: auto;
+#navbar li a:hover,
+#navbar li a.active{
+    color: red;
+}
+
+#navbar li a.active::after,
+#navbar li a:hover::after{
+    width: 30%;
+    height: 2px;
+    background: darkred;
+    position: absolute;
+    bottom: -4px;
+    left: 20px;
+}
+
+.search-box {
+    display: flex;
+    width: 450px;
+    height: 45px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: #f1f2f4;
+    border-radius: 50px;
+    position: absolute;
+    left: 45%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.search-button {
+    color: white;
+    position: absolute;
+    right: 8px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--gradient-2);
+    border: 0;
+    display: inline-block;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+}
+
+.search-button:hover {
+    color: #fff;
+    background-color: #1A1A1A;
+    box-shadow: rgba(0, 0, 0, 0.5) 0 10px 20px;
+    transform: translateY(-3px);
+}
+
+.search-button:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
+
+.search-input {
+    border: none;
+    background: none;
+    outline: none;
+    color: black;
+    font-weight: bold;
+    font-family: "Avenir Next";
+    font-size: 15px;
+    padding: 24px 46px 24px 26px;
+    width: 500px;
+}
+
+#userLogin {
+    position: relative;
+}
+
+
+@media screen and (max-width: 1500px) {
+    .search-box {
+        width: 400px;
+    }
+
+    .search-input {
+        padding: 16px;
+        font-size: 12px;
+        width: 350px;
+    }
+
+    .search-button {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .search-box {
+        left: 50%;
+        width: 250px;
+    }
+
+    .search-input {
+        padding: 16px;
+        font-size: 12px;
+        width: 200px;
+    }
+
+    .search-button {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    #header {
+        padding: 20px 40px;
+    }
+
+    .search-box {
+        left: 50%;
+        width: 200px;
+    }
+
+    .search-input {
+        padding: 16px;
+        font-size: 12px;
+        width: 175px;
+    }
+
+    .search-button {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #header {
+        padding: 20px 45px;
+    }
+
+    .search-box {
+        left: 45%;
+        width: 200px;
+    }
+
+    .search-input {
+        padding: 16px;
+        font-size: 12px;
+        width: 175px;
+    }
+
+    .search-button {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    #header {
+        padding: 20px 50px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    #navbar li {
+        padding-right: 0;
+    }
+
+    .search-box {
+        display: none;
+    }
+
+    .search-input {
+        display: none;
+    }
+
+    .search-button {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #header {
+        padding: 20px 70px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .active {
+        display: none;
+    }
+
+    .search-box {
+        display: none;
+    }
+
+    .search-input {
+        display: none;
+    }
+
+    .search-button {
+        display: none;
+    }
 }

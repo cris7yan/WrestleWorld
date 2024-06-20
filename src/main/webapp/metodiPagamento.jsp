@@ -6,7 +6,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page contentType="text/html;charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 
 <%
     List<MetodoPagamentoBean> metodi = (List<MetodoPagamentoBean>) request.getAttribute("metodiPagamento");
@@ -19,7 +19,7 @@
 <!DOCTYPE html>
 <html lang="it" xml:lang="it">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <link href="css/metodiPagamento.css" type="text/css" rel="stylesheet">
     <link href="css/modificaDati.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Metodi di Pagamento</title>

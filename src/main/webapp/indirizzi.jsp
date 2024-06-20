@@ -5,7 +5,7 @@
 <%@ page import="it.unisa.wrestleworld.model.IndirizzoBean" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page contentType="text/html;charset=ISO-8859-1" pageEncoding="ISO-8859-1" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 
 <%
     List<IndirizzoBean> indirizzi = (List<IndirizzoBean>) request.getAttribute("indirizzi");
@@ -18,7 +18,7 @@
 <!DOCTYPE html>
 <html lang="it" xml:lang="it">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <link href="css/indirizzi.css" type="text/css" rel="stylesheet">
     <link href="css/modificaDati.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Indirizzi</title>
@@ -51,7 +51,7 @@
 
         <div class="indirizzo">
             Via: <%= indirizzo.getViaIndirizzo() %> <br>
-            Città: <%= indirizzo.getCittaIndirizzo() %> <br>
+            CittÃ : <%= indirizzo.getCittaIndirizzo() %> <br>
             Provincia: <%= indirizzo.getProvinciaIndirizzo() %> <br>
             CAP: <%= indirizzo.getCAPIndirizzo() %> <br>
             Nome: <%= indirizzo.getNomeCompletoIndirizzo() %> <br><br>
@@ -83,7 +83,7 @@
         </div>
 
         <div class="input-container">
-            <input class="input-citta" name="citta" type="text" placeholder="Città">
+            <input class="input-citta" name="citta" type="text" placeholder="CittÃ ">
             <span> </span>
         </div>
 
