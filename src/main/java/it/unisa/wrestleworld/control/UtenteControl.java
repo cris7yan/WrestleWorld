@@ -208,8 +208,8 @@ public class UtenteControl extends HttpServlet {
             HttpSession session = request.getSession(true);
 
             if (utModel.verificaEmailEsistente(email)) {
-                request.setAttribute("result", "Email già utilizzata, sceglierne un'altra");
-                RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/registrazione.jsp");
+                request.setAttribute("result", "Questa e-mail risulta già essere utilizzata, scegline un'altra");
+                RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
                 reqDispatcher.forward(request, response);
             } else {
                 utModel.doSave(newUtente);

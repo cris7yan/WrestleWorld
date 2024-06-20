@@ -11,7 +11,7 @@
 .chiSiamo, .chiSiamo p,
 .contatti,
 .pay {
-    font-family: "Avenir Next";
+    font-family: "Avenir Next", Avenir, sans-serif;
     color: black;
 }
 
@@ -68,7 +68,7 @@
 }
 
 .form-newsletter p {
-    font-family: "Avenir Next";
+    font-family: "Avenir Next", Avenir, sans-serif;
     color: black;
     font-weight: bold;
 }
@@ -94,9 +94,9 @@
 }
 
 .invito {
-    align: center;
+    text-align: center;
     font-size: 22px;
     line-height: 30px;
-    font-family: Avenir Next;
+    font-family: "Avenir Next", Avenir, sans-serif;
     color: black
 }
