@@ -36,10 +36,10 @@
 </head>
 <body>
 
-<section id="header">
+<header id="header" class="fixed-header">
     <a href="./index.jsp"><img src="img/logo/WrestleWorldTitleremove.png" class="logo" alt="Error logo"></a>
 
-    <div>
+    <nav>
         <ul id="navbar">
 
             <!-- Barra di ricerca -->
@@ -62,7 +62,7 @@
             </form>
 
             <li>
-                <a class="active" href="./catalogo.jsp">CATALOGO</a>
+                <a class="active" href="./catalogo.jsp">Catalogo</a>
             </li>
 
             <li id="userLogin">
@@ -100,8 +100,49 @@
                 }
             %>
         </ul>
-    </div>
-</section>
+    </nav>
+
+</header>
+
+<nav class="dropdownmenu fixed-nav">
+    <ul>
+        <li><a href="#">Superstar</a></li>
+
+        <li><a href="#">Title Belts</a></li>
+
+        <!-- <li><a href="#">T-Shirts</a></li> -->
+
+        <li><a href="#">Abbigliamento</a>
+            <ul id="submenu">
+                <li><a href="#">T-Shirts</a></li>
+                <li><a href="#">Felpe con cappuccio e Felpe</a></li>
+                <li><a href="#">Pantaloncini</a></li>
+                <li><a href="#">Canotte</a></li>
+                <li><a href="#">Giacche</a></li>
+                <li><a href="#">Cappelli</a></li>
+            </ul>
+        </li>
+
+        <li><a href="#">Accessori</a>
+            <ul id="submenu">
+                <li><a href="#">Cover Phone</a></li>
+                <li><a href="#">Zaini e borse</a></li>
+                <li><a href="#">Orologi</a></li>
+            </ul>
+        </li>
+
+        <li><a href="#">Collezionabili</a>
+            <ul id="submenu">
+                <li><a href="#">Figure</a></li>
+                <li><a href="#">Firmati</a></li>
+                <li><a href="#">Foto</a></li>
+                <li><a href="#">Memorabilia</a></li>
+            </ul>
+        </li>
+
+        <li><a href="#">Premium Live Event</a></li>
+    </ul>
+</nav>
 
 </body>
 </html>

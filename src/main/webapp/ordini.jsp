@@ -22,13 +22,6 @@
     <link href="css/ordini.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Ordini</title>
 </head>
-<style>
-    /* Aggiunta per evitare sovrapposizione con la navbar */
-    body {
-        margin-top: 70px; /* Altezza della navbar + margine */
-        padding-top: 20px; /* Spaziatura sopra il contenuto del body */
-    }
-</style>
 <body>
 <%@ include file="navbar.jsp"%>
 
@@ -64,5 +57,6 @@
     </div>
 </div>
 
+<%@ include file="footer.jsp"%>
 </body>
 </html>

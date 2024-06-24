@@ -23,13 +23,6 @@
   <title>WrestleWorld | Catalogo</title>
   <link href="css/index.css" rel="stylesheet" type="text/css">
 </head>
-<style>
-  /* Aggiunta per evitare sovrapposizione con la navbar */
-  body {
-    margin-top: 70px; /* Altezza della navbar + margine */
-    padding-top: 5px; /* Spaziatura sopra il contenuto del body */
-  }
-</style>
 <body>
 <%@ include file="navbar.jsp"%>
 
@@ -73,5 +66,6 @@
         %>
     </div>
 
+<%@ include file="footer.jsp"%>
 </body>
 </html>

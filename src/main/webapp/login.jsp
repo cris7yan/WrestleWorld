@@ -41,10 +41,11 @@
         }
     %>
 
-    <br><br><br><br><br><br>
-    <h2>Accedi al tuo profilo</h2>
-    <h6>oppure</h6>
-    <h2>Registrati se non ne hai uno</h2>
+    <div class="title-container">
+        <h2>Accedi </h2>
+        <h6>oppure </h6>
+        <h2>Registrati</h2>
+    </div>
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form action="UtenteControl?action=registrazione" method="post">
@@ -84,7 +85,7 @@
             </div>
         </div>
     </div>
-    <br><br><br><br>
+    <br><br>
 
     <span>
         <p><a href="index.jsp">Home</a></p>

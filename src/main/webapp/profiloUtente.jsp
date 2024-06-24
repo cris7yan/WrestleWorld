@@ -10,13 +10,6 @@
     <link href="css/profiloUtente.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Profilo Utente</title>
 </head>
-<style>
-    /* Aggiunta per evitare sovrapposizione con la navbar */
-    body {
-        margin-top: 70px; /* Altezza della navbar + margine */
-        padding-top: 20px; /* Spaziatura sopra il contenuto del body */
-    }
-</style>
 <body>
 <%@ include file="navbar.jsp"%>
 
@@ -38,5 +31,6 @@
     <a href="./metodiPagamento.jsp">Visualizza i tuoi metodi di pagamento</a>
 </div>
 
+<%@ include file="footer.jsp"%>
 </body>
 </html>
