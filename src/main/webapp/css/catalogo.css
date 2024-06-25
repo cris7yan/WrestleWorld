@@ -1,0 +1,113 @@
+
+h1 {
+    text-align: center;                     /* Per centrare i titoli */
+    font-family: 'Avenir Next', sans-serif; /* Imposta il font */
+}
+
+/* Stile per il container principale dei prodotti */
+.product-container {
+    text-align: center;                     /* Per centrare i prodotti */
+    font-family: 'Avenir Next', sans-serif; /* Imposta il font */
+}
+
+/* Stile per ogni singolo prodotto */
+.product {
+    display: inline-block;
+    width: 250px;                           /* Larghezza fissa del prodotto */
+    height: 450px;                          /* Altezza fissa del prodotto */
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid transparent;          /* Bordo trasparente */
+    border-radius: 15px;                    /* Arrotonda i bordi */
+    background: linear-gradient(white, white) padding-box, /* Sfondo bianco */
+    linear-gradient(45deg, yellow, red) border-box; /* Gradiente per il bordo */
+    text-align: left;
+    overflow: hidden;                       /* Nasconde il contenuto che sfora */
+    vertical-align: top;                    /* Allineamento verticale in alto */
+    font-family: 'Avenir Next', sans-serif; /* Imposta il font */
+    position: relative;
+}
+
+/* Stile per l'immagine del prodotto */
+.product-img {
+    width: 100%;                            /* Immagine occupa tutto lo spazio disponibile */
+    height: 60%;                            /* Altezza fissa dell'immagine (60% del contenitore) */
+    object-fit: contain;                    /* Adatta l'immagine senza distorsioni */
+    margin-bottom: 10px;
+}
+
+.name-and-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Stile per il nome del prodotto */
+.product-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0;
+    width: 85%;
+}
+
+/* Stile per i link nel nome del prodotto */
+.product-name a {
+    text-decoration: none;
+    color: black; /* Assicurati che il colore del testo sia nero */
+}
+
+.product-name a:hover {
+    text-decoration: none; /* Rimuove la sottolineatura al passaggio del mouse */
+    color: red; /* Cambia il colore del testo al passaggio del mouse */
+}
+
+/* Stile per il prezzo del prodotto */
+.product-price {
+    font-family: 'Avenir Next', sans-serif;
+    font-size: 18px;                        /* Aumenta la dimensione del testo del prezzo */
+    font-weight: 600;
+    color: black;
+    position: absolute;                     /* Posizione assoluta per il prezzo */
+    top: 350px;                              /* Distanza dal top */
+    right: 10px;                            /* Distanza dalla destra */
+}
+
+/* Stile per il bottone del prodotto */
+.product-container .button {
+    position: absolute;
+    bottom: 10px; /* Distanza dal fondo */
+    width: calc(100% - 20px); /* Larghezza leggermente inferiore alla card */
+    height: 40px; /* Altezza del bottone */
+    border-radius: 15px; /* Arrotondamento dei bordi */
+    overflow: hidden;
+    border: 2px solid yellow, red; /* Colore del bordo simile al gradiente del prodotto */
+}
+
+.product-container .button .button-layer {
+    position: absolute;
+    height: 100%;
+    width: 300%;
+    left: -100%;
+    background-image: linear-gradient(135deg, yellow, red, yellow, red, yellow, red, yellow);
+    transition: all 0.4s ease;
+    border-radius: 15px; /* Arrotondamento dei bordi */
+}
+
+.product-container .button:hover .button-layer {
+    left: 0;
+}
+
+.product-container .button button {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background: none;
+    outline: none;
+    border: none;
+    font-size: 16px; /* Riduci leggermente la dimensione del testo */
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #fff;
+    padding: 10px; /* Padding interno per spaziatura */
+}

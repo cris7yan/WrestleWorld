@@ -21,12 +21,12 @@
 <head>
   <meta charset="UTF-8">
   <title>WrestleWorld | Catalogo</title>
-  <link href="css/index.css" rel="stylesheet" type="text/css">
+  <link href="css/catalogo.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <%@ include file="navbar.jsp"%>
 
-    <h1>PRODOTTI</h1>
+    <h1>WrestleWorld Catalogo</h1>
 
     <div class="product-container">
         <%
@@ -39,31 +39,43 @@
         %>
 
         <div class="product">
-          <%
-            if(prod != null) {
-          %>
+            <%
+                if(prod != null) {
+            %>
 
-          <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
-              <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
-          </a>
-          <div class="product-details">
-              <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
-                  <p class="product-name"> <%= prod.getNomeProdotto() %> <br> </p>
-              </a>
-              <p class="product-price"> <i><%= prod.getPrezzoProdotto() %></i>&euro; <br> </p>
-              <p class="product-description"> <i><%= prod.getDescrizioneProdotto() %> <br> </p>
-              <br><br>
-          </div>
+            <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
+                <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
+            </a>
+            <div class="product-details">
+                <div class="name-and-price">
 
-          <%
-            }
-          %>
+                    <span class="product-name">
+                        <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
+                            <%= prod.getNomeProdotto() %>
+                        </a>
+                    </span>
+                </div>
+
+                <div class="price">
+                    <span class="product-price"><b><%= prod.getPrezzoProdotto() %></b>&euro;</span>
+                </div>
+
+                <div class="button">
+                    <div class="button-layer"></div>
+                    <button>Aggiungi al carrello</button>
+                </div>
+
+                <%
+                    }
+                %>
+            </div>
+
         </div>
 
-        <%
-            }
-          }
-        %>
+            <%
+                    }
+                }
+            %>
     </div>
 
 <%@ include file="footer.jsp"%>

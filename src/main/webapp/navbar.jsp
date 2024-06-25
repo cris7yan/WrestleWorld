@@ -110,7 +110,7 @@
 
         <li><a href="#">Title Belts</a></li>
 
-        <!-- <li><a href="#">T-Shirts</a></li> -->
+        <li><a href="#">T-Shirts</a></li>
 
         <li><a href="#">Abbigliamento</a>
             <ul id="submenu">
