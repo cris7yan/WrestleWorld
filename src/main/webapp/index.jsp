@@ -40,6 +40,10 @@
 <body>
 <%@ include file="navbar.jsp"%>
 
+    <!-- Poster promo -->
+
+    <!-- Pulsanti promo -->
+
     <h1>WrestleWorld Migliori Prodotti</h1>
 
     <div class="product-container">
@@ -99,6 +103,8 @@
         %>
 
     </div>
+
+    <!-- WrestleWorld Prodotti top 10 prodotti in sconto -->
 
 <%@ include file="footer.jsp"%>
 </body>

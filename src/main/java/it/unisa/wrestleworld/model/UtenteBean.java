@@ -5,6 +5,7 @@ import java.sql.Date;
 
 public class UtenteBean implements Serializable {
     private static final long serialVersionUID = 1L;
+
     private String email;
     private String nome;
     private String cognome;

@@ -106,7 +106,7 @@
 
 <nav class="dropdownmenu fixed-nav">
     <ul>
-        <li><a href="#">Superstar</a></li>
+        <li><a href="CategoriaControl?action=visualizzaSuperstar">Superstar</a></li>
 
         <li><a href="#">Title Belts</a>
             <ul id="submenu">
@@ -146,7 +146,7 @@
             </ul>
         </li>
 
-        <li><a href="#">Premium Live Event</a></li>
+        <li><a href="CategoriaControl?action=visualizzaPremiumLiveEvent#ple-section">Premium Live Event</a></li>
     </ul>
 </nav>
 
