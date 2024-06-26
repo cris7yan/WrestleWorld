@@ -16,7 +16,9 @@ import java.util.logging.Logger;
 public class OrdineModel implements OrdineDAO {
     private static DataSource dataSource;
     private static Logger logger = Logger.getLogger(OrdineModel.class.getName());
+
     private static final String TABLE_ORDINE = "Ordine";
+
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
 

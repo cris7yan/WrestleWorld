@@ -39,7 +39,7 @@
 <header id="header" class="fixed-header">
     <a href="./index.jsp"><img src="img/logo/WrestleWorldTitleremove.png" class="logo" alt="Error logo"></a>
 
-    <nav>
+    <div>
         <ul id="navbar">
 
             <!-- Barra di ricerca -->
@@ -100,11 +100,11 @@
                 }
             %>
         </ul>
-    </nav>
+    </div>
 
 </header>
 
-<nav class="dropdownmenu fixed-nav">
+<div class="dropdownmenu fixed-nav">
     <ul>
         <li><a href="CategoriaControl?action=visualizzaSuperstar">Superstar</a></li>
 
@@ -148,7 +148,7 @@
 
         <li><a href="CategoriaControl?action=visualizzaPremiumLiveEvent#ple-section">Premium Live Event</a></li>
     </ul>
-</nav>
+</div>
 
 </body>
 </html>

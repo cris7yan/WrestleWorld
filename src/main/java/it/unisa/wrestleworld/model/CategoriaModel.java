@@ -18,6 +18,11 @@ public class CategoriaModel implements CategoriaDAO {
     private static DataSource dataSource;
 
     private static final String TABLE_CATEGORIA = "Categoria";
+    private static final String TIPO_CATEGORIA_ATTRIBUTE = "TipoCategoria";
+    private static final String NOME_CATEGORIA_ATTRIBUTE = "NomeCategoria";
+    private static final String NOME_IMG_ATTRIBUTE ="NomeImgCategoria";
+
+    private static final String SELECT_ALL = "SELECT * FROM ";
 
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
@@ -47,7 +52,7 @@ public class CategoriaModel implements CategoriaDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT * FROM " + TABLE_CATEGORIA;
+        String query = SELECT_ALL + TABLE_CATEGORIA;
 
         try {
             conn = dataSource.getConnection();
@@ -57,9 +62,9 @@ public class CategoriaModel implements CategoriaDAO {
             while (rs.next()) {
                 CategoriaBean cat = new CategoriaBean();
 
-                cat.setTipo(rs.getString("TipoCategoria"));
-                cat.setNome(rs.getString("NomeCategoria"));
-                cat.setImg(rs.getString("NomeImgCategoria"));
+                cat.setTipo(rs.getString(TIPO_CATEGORIA_ATTRIBUTE));
+                cat.setNome(rs.getString(NOME_CATEGORIA_ATTRIBUTE));
+                cat.setImg(rs.getString(NOME_IMG_ATTRIBUTE));
 
                 categorie.add(cat);
             }
@@ -98,7 +103,7 @@ public class CategoriaModel implements CategoriaDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT * FROM " + TABLE_CATEGORIA + " WHERE TipoCategoria = 'Superstar'";
+        String query = SELECT_ALL + TABLE_CATEGORIA + " WHERE TipoCategoria = 'Superstar'";
 
         try {
             conn = dataSource.getConnection();
@@ -108,9 +113,9 @@ public class CategoriaModel implements CategoriaDAO {
             while (rs.next()) {
                 CategoriaBean cat = new CategoriaBean();
 
-                cat.setTipo(rs.getString("TipoCategoria"));
-                cat.setNome(rs.getString("NomeCategoria"));
-                cat.setImg(rs.getString("NomeImgCategoria"));
+                cat.setTipo(rs.getString(TIPO_CATEGORIA_ATTRIBUTE));
+                cat.setNome(rs.getString(NOME_CATEGORIA_ATTRIBUTE));
+                cat.setImg(rs.getString(NOME_IMG_ATTRIBUTE));
 
                 superstar.add(cat);
             }
@@ -148,7 +153,7 @@ public class CategoriaModel implements CategoriaDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT * FROM " + TABLE_CATEGORIA + " WHERE TipoCategoria = 'Premium Live Event'";
+        String query = SELECT_ALL + TABLE_CATEGORIA + " WHERE TipoCategoria = 'Premium Live Event'";
 
         try {
             conn = dataSource.getConnection();
@@ -158,9 +163,9 @@ public class CategoriaModel implements CategoriaDAO {
             while (rs.next()) {
                 CategoriaBean cat = new CategoriaBean();
 
-                cat.setTipo(rs.getString("TipoCategoria"));
-                cat.setNome(rs.getString("NomeCategoria"));
-                cat.setImg(rs.getString("NomeImgCategoria"));
+                cat.setTipo(rs.getString(TIPO_CATEGORIA_ATTRIBUTE));
+                cat.setNome(rs.getString(NOME_CATEGORIA_ATTRIBUTE));
+                cat.setImg(rs.getString(NOME_IMG_ATTRIBUTE));
 
                 ple.add(cat);
             }

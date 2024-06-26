@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +21,11 @@ public class CategoriaControl extends HttpServlet {
     static final Logger logger = Logger.getLogger(CategoriaControl.class.getName());
 
     private static CategoriaModel catModel = new CategoriaModel();
+
+    private static final String SUPERSTAR_ATTRIBUTE = "superstar";
+    private static final String PLE_ATTRIBUTE = "ple";
+
+    private static final String CATEGORIE_PAGE = "/categorie.jsp";
 
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
@@ -82,10 +86,10 @@ public class CategoriaControl extends HttpServlet {
         try {
             List<CategoriaBean> superstar = catModel.doRetrieveAllSuperstar();
             List<CategoriaBean> ple = catModel.doRetrieveAllPLE(); // Aggiungi questa linea
-            request.setAttribute("superstar", superstar);
-            request.setAttribute("ple", ple); // Aggiungi questa linea
+            request.setAttribute(SUPERSTAR_ATTRIBUTE, superstar);
+            request.setAttribute(PLE_ATTRIBUTE, ple); // Aggiungi questa linea
 
-            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/categorie.jsp");
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher(CATEGORIE_PAGE);
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
@@ -98,10 +102,10 @@ public class CategoriaControl extends HttpServlet {
         try {
             List<CategoriaBean> ple = catModel.doRetrieveAllPLE();
             List<CategoriaBean> superstar = catModel.doRetrieveAllSuperstar(); // Aggiungi questa linea
-            request.setAttribute("ple", ple);
-            request.setAttribute("superstar", superstar); // Aggiungi questa linea
+            request.setAttribute(PLE_ATTRIBUTE, ple);
+            request.setAttribute(SUPERSTAR_ATTRIBUTE, superstar); // Aggiungi questa linea
 
-            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/categorie.jsp");
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher(CATEGORIE_PAGE);
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
@@ -115,10 +119,10 @@ public class CategoriaControl extends HttpServlet {
         try {
             List<CategoriaBean> ple = catModel.doRetrieveAllPLE();
             List<CategoriaBean> superstar = catModel.doRetrieveAllSuperstar();
-            request.setAttribute("ple", ple);
-            request.setAttribute("superstar", superstar);
+            request.setAttribute(PLE_ATTRIBUTE, ple);
+            request.setAttribute(SUPERSTAR_ATTRIBUTE, superstar);
 
-            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/categorie.jsp");
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher(CATEGORIE_PAGE);
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
