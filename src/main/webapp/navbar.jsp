@@ -108,7 +108,13 @@
     <ul>
         <li><a href="#">Superstar</a></li>
 
-        <li><a href="#">Title Belts</a></li>
+        <li><a href="#">Title Belts</a>
+            <ul id="submenu">
+                <li><a href="#">Title Belts</a></li>
+                <li><a href="#">Side Plates</a></li>
+            </ul>
+        </li>
+
 
         <li><a href="#">T-Shirts</a></li>
 

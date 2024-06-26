@@ -5,6 +5,7 @@
 <%@ page import="it.unisa.wrestleworld.model.ProdottoBean" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
+<%@ page import="java.math.BigDecimal" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 
 <%
@@ -30,25 +31,34 @@
 
     <div class="product-container">
         <%
-          if(prodotti != null && !prodotti.isEmpty()) {
-            Iterator<?> prodIt = prodotti.iterator();
-            Iterator<?> imgIt = imgProdotti.iterator();
-            while(prodIt.hasNext()) {
-              ProdottoBean prod = (ProdottoBean) prodIt.next();
-              String img = (String) imgIt.next();
+            if (prodotti != null && !prodotti.isEmpty()) {
+                Iterator<?> prodIt = prodotti.iterator();
+                Iterator<?> imgIt = imgProdotti.iterator();
+                while (prodIt.hasNext()) {
+                    ProdottoBean prod = (ProdottoBean) prodIt.next();
+                    String img = (String) imgIt.next();
+
+                    if (prod != null) {
+                        BigDecimal prezzo = new BigDecimal(prod.getPrezzoProdotto());
+                        int euro = prezzo.intValue();
+                        int centesimi = prezzo.remainder(BigDecimal.ONE).movePointRight(2).intValue();
         %>
 
         <div class="product">
-            <%
-                if(prod != null) {
-            %>
 
             <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
                 <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
             </a>
-            <div class="product-details">
-                <div class="name-and-price">
 
+            <div class="product-details">
+
+                <div class="price">
+                    <span class="product-price">
+                        <span class="euro"><%= euro %></span><span class="decimal">,<%= String.format("%02d", centesimi) %></span>&euro;
+                    </span>
+                </div>
+
+                <div class="name">
                     <span class="product-name">
                         <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
                             <%= prod.getNomeProdotto() %>
@@ -56,13 +66,11 @@
                     </span>
                 </div>
 
-                <div class="price">
-                    <span class="product-price"><b><%= prod.getPrezzoProdotto() %></b>&euro;</span>
-                </div>
-
                 <div class="button">
                     <div class="button-layer"></div>
-                    <button>Aggiungi al carrello</button>
+                    <button>
+                        <a href="ProdottoControl?action=aggiungiAlCarrello&IDProd=<%= ((ProdottoBean) prod).getIDProdotto() %>">Aggiungi al carrello</a>
+                    </button>
                 </div>
 
                 <%

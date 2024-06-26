@@ -20,7 +20,7 @@ h1 {
     border: 2px solid transparent;          /* Bordo trasparente */
     border-radius: 15px;                    /* Arrotonda i bordi */
     background: linear-gradient(white, white) padding-box, /* Sfondo bianco */
-    linear-gradient(45deg, yellow, red) border-box; /* Gradiente per il bordo */
+                linear-gradient(45deg, yellow, red) border-box; /* Gradiente per il bordo */
     text-align: left;
     overflow: hidden;                       /* Nasconde il contenuto che sfora */
     vertical-align: top;                    /* Allineamento verticale in alto */
@@ -36,7 +36,7 @@ h1 {
     margin-bottom: 10px;
 }
 
-.name-and-price {
+.name {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -65,12 +65,20 @@ h1 {
 /* Stile per il prezzo del prodotto */
 .product-price {
     font-family: 'Avenir Next', sans-serif;
-    font-size: 18px;                        /* Aumenta la dimensione del testo del prezzo */
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: normal;
     color: black;
-    position: absolute;                     /* Posizione assoluta per il prezzo */
-    top: 350px;                              /* Distanza dal top */
-    right: 10px;                            /* Distanza dalla destra */
+    position: relative;
+}
+
+.product-price .euro {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.product-price .decimal {
+    font-size: 12px;
+    font-weight: normal;
 }
 
 /* Stile per il bottone del prodotto */
@@ -81,7 +89,8 @@ h1 {
     height: 40px; /* Altezza del bottone */
     border-radius: 15px; /* Arrotondamento dei bordi */
     overflow: hidden;
-    border: 2px solid yellow, red; /* Colore del bordo simile al gradiente del prodotto */
+    border: 2px solid yellow, red;
+    text-align: center;
 }
 
 .product-container .button .button-layer {
@@ -110,4 +119,15 @@ h1 {
     letter-spacing: 1px;
     color: #fff;
     padding: 10px; /* Padding interno per spaziatura */
+    cursor: pointer;
+}
+
+.product-container .button button a {
+    text-decoration: none; /* Rimuove la sottolineatura */
+    color: #fff; /* Assicura che il testo sia sempre bianco */
+}
+
+.product-container .button button:hover {
+    text-decoration: none; /* Rimuove la sottolineatura al passaggio del mouse */
+    color: #fff; /* Assicura che il testo sia sempre bianco */
 }
