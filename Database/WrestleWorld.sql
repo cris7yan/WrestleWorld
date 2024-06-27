@@ -16,7 +16,8 @@ CREATE TABLE Prodotto (
 
 CREATE TABLE Categoria (
     TipoCategoria varchar(100) NOT NULL,
-    NomeCategoria varchar(150) NOT NULL PRIMARY KEY
+    NomeCategoria varchar(150) NOT NULL PRIMARY KEY,
+    NomeImgCategoria varchar(150)
 );
 
 CREATE TABLE Appartenenza (
@@ -117,43 +118,43 @@ CREATE TABLE ComposizioneOrdine (
 
 -- Populate Database
 
-INSERT INTO Categoria (TipoCategoria, NomeCategoria) VALUES
-    ('Sesso', 'Uomo'),
-    ('Sesso', 'Donna'),
-    ('Sesso', 'Unisex'),
-    ('Superstar', 'Bray Wyatt'),
-    ('Superstar', 'Brock Lesnar'),
-    ('Superstar', 'CM Punk'),
-    ('Superstar', 'Cody Rhodes'),
-    ('Superstar', 'Drew McIntyre'),
-    ('Superstar', 'Jey Uso'),
-    ('Superstar', 'John Cena'),
-    ('Superstar', 'Logan Paul'),
-    ('Superstar', 'Randy Orton'),
-    ('Superstar', 'Roman Reigns'),
-    ('Superstar', 'Seth "Freakin" Rollins'),
-    ('Superstar', 'The Bloodline'),
-    ('Superstar', 'The Rock'),
-    ('Superstar', 'The Undertaker'),
-    ('Superstar', 'Triple H'),
-    ('Premium Live Event', 'WrestleMania'),
-    ('Premium Live Event', 'Royal Rumble'),
-    ('Premium Live Event', 'SummerSlam'),
-    ('Title Belts', 'Title Belts Replica'),
-    ('Title Belts', 'Side Plates'),
-    ('Abbigliamento', 'Cappelli'),
-    ('Abbigliamento', 'Felpe con cappuccio e Felpe'),
-    ('Abbigliamento', 'T-Shirt'),
-    ('Abbigliamento', 'Giacche'),
-    ('Abbigliamento', 'Pantaloncini'),
-    ('Abbigliamento', 'Canotte'),
-    ('Accessori', 'Orologi'),
-    ('Accessori', 'Zaini e borse'),
-    ('Accessori', 'Cover Phone'),
-    ('Oggetti da collezione', 'Memorabilia'),
-    ('Oggetti da collezione', 'Foto'),
-    ('Oggetti da collezione', 'Figure'),
-    ('Oggetti da collezione', 'Firmato');
+INSERT INTO Categoria (TipoCategoria, NomeCategoria, NomeImgCategoria) VALUES
+    ('Sesso', 'Uomo', NULL),
+    ('Sesso', 'Donna', NULL),
+    ('Sesso', 'Unisex', NULL),
+    ('Superstar', 'Bray Wyatt', 'BrayWyatt.png'),
+    ('Superstar', 'Brock Lesnar', 'BrocLesnar.png'),
+    ('Superstar', 'CM Punk', 'CMPunk.png'),
+    ('Superstar', 'Cody Rhodes', 'CodyRhodes.png'),
+    ('Superstar', 'Drew McIntyre', 'DrewMcIntyre.png'),
+    ('Superstar', 'Jey Uso', 'JeyUso.png'),
+    ('Superstar', 'John Cena', 'JohnCena.png'),
+    ('Superstar', 'Logan Paul', 'LoganPaul.png'),
+    ('Superstar', 'Randy Orton', 'RandyOrton.png'),
+    ('Superstar', 'Roman Reigns', 'RomanReigns.png'),
+    ('Superstar', 'Seth "Freakin" Rollins', 'SethRollins.png'),
+    ('Superstar', 'The Bloodline', 'TheBloodline.jpg'),
+    ('Superstar', 'The Rock', 'TheRock.png'),
+    ('Superstar', 'The Undertaker', 'Undertaker.png'),
+    ('Superstar', 'Triple H', 'TripleH.png'),
+    ('Premium Live Event', 'WrestleMania', 'WrestleMania.png'),
+    ('Premium Live Event', 'Royal Rumble', 'RoyalRumble.png'),
+    ('Premium Live Event', 'SummerSlam', 'SummerSlam.png'),
+    ('Title Belts', 'Title Belts Replica', NULL),
+    ('Title Belts', 'Side Plates', NULL),
+    ('Abbigliamento', 'Cappelli', NULL),
+    ('Abbigliamento', 'Felpe con cappuccio e Felpe', NULL),
+    ('Abbigliamento', 'T-Shirt', NULL),
+    ('Abbigliamento', 'Giacche', NULL),
+    ('Abbigliamento', 'Pantaloncini', NULL),
+    ('Abbigliamento', 'Canotte', NULL),
+    ('Accessori', 'Orologi', NULL),
+    ('Accessori', 'Zaini e borse', NULL),
+    ('Accessori', 'Cover Phone', NULL),
+    ('Oggetti da collezione', 'Memorabilia', NULL),
+    ('Oggetti da collezione', 'Foto', NULL),
+    ('Oggetti da collezione', 'Figure', NULL),
+    ('Oggetti da collezione', 'Firmato', NULL);
 
 
 INSERT INTO Prodotto (Nome, Descrizione, Materiale, Marca, Modello, Prezzo, Disponibilita) VALUES
@@ -906,7 +907,8 @@ INSERT INTO Utente (Email, Nome, Cognome, Password, DataNascita, Tipo) VALUES
     ('giolauro@gmail.com', 'Giovanna', 'Lauro', 'gioPassMania90', '2002-04-23', 'Utente'),
     ('nandolauro@gmail.com', 'Nandino', 'Lauro', 'NandinoPass88', '2003-09-15', 'Utente'),
     ('antoesposito@gmail.com', 'Antonio', 'Esposito', 'DadPass8890', '1966-03-30', 'Utente'),
-    ('teresacasciello@gmail.com', 'Teresa', 'Casciello', 'MomPass77', '1966-11-16', 'Utente');
+    ('teresacasciello@gmail.com', 'Teresa', 'Casciello', 'MomPass77', '1966-11-16', 'Utente'),
+    ('giovannicasciello@gmail.com', 'Giovanni', 'Casciello', 'GioCasc20@', '2000-01-20', 'Utente');
 
 
 INSERT INTO Indirizzo (Via, Citta, Provincia, CAP, NomeCompleto, EmailUtente) VALUES
