@@ -57,22 +57,29 @@ public class ProdottoControl extends HttpServlet {
         }
 
         try {
-            if(action != null) {
-                if(action.equalsIgnoreCase("visualizzaHomePage")) {
-                    visualizzaHomePage(request, response);
+            if (action != null) {
+                switch (action) {
+                    case "visualizzaHomePage":
+                        visualizzaHomePage(request, response);
+                        break;
+                    case "visualizzaCatalogo":
+                        visualizzaCatalogo(request, response);
+                        break;
+                    case "visualizzaDettagliProdotto":
+                        visualizzaDettagliProdotto(request, response);
+                        break;
+                    case "aggiungiAlCarrello":
+                        aggiungiProdottoCarrello(request, response);
+                        break;
+                    case "rimuoviDalCarrello":
+                        rimuoviProdottoCarrello(request, response);
+                        break;
+                    default:
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+                        break;
                 }
-                else if (action.equalsIgnoreCase("visualizzaCatalogo")) {
-                    visualizzaCatalogo(request, response);
-                }
-                else if (action.equalsIgnoreCase("visualizzaDettagliProdotto")) {
-                    visualizzaDettagliProdotto(request, response);
-                }
-                else if (action.equalsIgnoreCase("aggiungiAlCarrello")) {
-                    aggiungiProdottoCarrello(request, response);
-                }
-                else if (action.equalsIgnoreCase("rimuoviDalCarrello")) {
-                    rimuoviProdottoCarrello(request, response);
-                }
+            } else {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione mancante");
             }
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);

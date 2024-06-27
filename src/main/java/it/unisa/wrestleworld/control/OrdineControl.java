@@ -46,14 +46,20 @@ public class OrdineControl extends HttpServlet {
 
         try {
             if (action != null) {
-                if(action.equalsIgnoreCase("visualizzaOrdini")) {
-                    visualizzaOrdini(request, response);
+                switch (action) {
+                    case "visualizzaOrdini":
+                        visualizzaOrdini(request, response);
+                        break;
+                    default:
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+                        break;
                 }
+            } else {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione mancante");
             }
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
-
     }
 
     /**

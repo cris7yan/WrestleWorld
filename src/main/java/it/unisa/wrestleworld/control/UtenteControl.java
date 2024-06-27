@@ -54,48 +54,55 @@ public class UtenteControl extends HttpServlet {
      * @throws IOException
      */
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // preleviamo l'azione dalla request
         String action = request.getParameter("action");
 
         try {
             if (action != null) {
-                if (action.equalsIgnoreCase("login")) {
-                    login(request, response);
+                switch (action) {
+                    case "login":
+                        login(request, response);
+                        break;
+                    case "logout":
+                        logout(request, response);
+                        break;
+                    case "registrazione":
+                        registrazione(request, response);
+                        break;
+                    case "verificaEmail":
+                        verificaEmail(request, response);
+                        break;
+                    case "verificaUtenteRegistrato":
+                        verificaUtenteRegistrato(request, response);
+                        break;
+                    case "modificaDati":
+                        modificaDatiPersonali(request, response);
+                        break;
+                    case "visualizzaIndirizzi":
+                        visualizzaIndirizzi(request, response);
+                        break;
+                    case "rimuoviIndirizzo":
+                        eliminaIndirizzo(request, response);
+                        break;
+                    case "aggiungiIndirizzo":
+                        aggiungiIndirizzo(request, response);
+                        break;
+                    case "visualizzaMetodiPagamento":
+                        visualizzaMetodiPagamento(request, response);
+                        break;
+                    case "rimuoviMetodoPagamento":
+                        eliminaMetodoPagamento(request, response);
+                        break;
+                    case "aggiungiMetodoPagamento":
+                        aggiungiMetodoPagamento(request, response);
+                        break;
+                    default:
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+                        break;
                 }
-                else if (action.equalsIgnoreCase("logout")) {
-                    logout(request, response);
-                }
-                else if (action.equalsIgnoreCase("registrazione")) {
-                    registrazione(request, response);
-                }
-                else if (action.equalsIgnoreCase("verificaEmail")) {
-                    verificaEmail(request, response);
-                }
-                else if (action.equalsIgnoreCase("verificaUtenteRegistrato")) {
-                    verificaUtenteRegistrato(request, response);
-                }
-                else if (action.equalsIgnoreCase("modificaDati")) {
-                    modificaDatiPersonali(request, response);
-                }
-                else if (action.equalsIgnoreCase("visualizzaIndirizzi")) {
-                    visualizzaIndirizzi(request, response);
-                }
-                else if (action.equalsIgnoreCase("rimuoviIndirizzo")) {
-                    eliminaIndirizzo(request, response);
-                }
-                else if (action.equalsIgnoreCase("aggiungiIndirizzo")) {
-                    aggiungiIndirizzo(request, response);
-                }
-                else if (action.equalsIgnoreCase("visualizzaMetodiPagamento")) {
-                    visualizzaMetodiPagamento(request, response);
-                }
-                else if (action.equalsIgnoreCase("rimuoviMetodoPagamento")) {
-                    eliminaMetodoPagamento(request, response);
-                }
-                else if (action.equalsIgnoreCase("aggiungiMetodoPagamento")) {
-                    aggiungiMetodoPagamento(request, response);
-                }
+            } else {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione mancante");
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
@@ -188,7 +195,7 @@ public class UtenteControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void registrazione(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+    private void registrazione(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         try {
             // preleviamo i dati dalla request
             String email = request.getParameter(EMAIL_PARAM);
@@ -239,7 +246,7 @@ public class UtenteControl extends HttpServlet {
      */
     private void verificaEmail (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String email = request.getParameter("email");
+            String email = request.getParameter(EMAIL_PARAM);
             boolean exist = utModel.verificaEmailEsistente(email);
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");
@@ -268,8 +275,8 @@ public class UtenteControl extends HttpServlet {
      */
     private void verificaUtenteRegistrato (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
+            String email = request.getParameter(EMAIL_PARAM);
+            String password = request.getParameter(PASSWORD_PARAM);
             UtenteBean utente = utModel.doRetrieveByEmailPassword(email, password);
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");

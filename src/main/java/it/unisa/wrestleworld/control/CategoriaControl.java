@@ -48,14 +48,20 @@ public class CategoriaControl extends HttpServlet {
         String action = request.getParameter("action");
 
         try {
-            if(action.equals("visualizzaSuperstar")) {
-                visualizzaSuperstar(request, response);
-            }
-            else if(action.equals("visualizzaPremiumLiveEvent")) {
-                visualizzaPremiumLiveEvent(request, response);
-            }
-            else {
-                visualizzaCategorie(request, response);
+            if (action != null) {
+                switch (action) {
+                    case "visualizzaSuperstar":
+                        visualizzaSuperstar(request, response);
+                        break;
+                    case "visualizzaPremiumLiveEvent":
+                        visualizzaPremiumLiveEvent(request, response);
+                        break;
+                    default:
+                        visualizzaCategorie(request, response);
+                        break;
+                }
+            } else {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione mancante");
             }
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
