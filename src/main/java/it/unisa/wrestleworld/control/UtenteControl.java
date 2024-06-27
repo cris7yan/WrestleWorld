@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
@@ -47,7 +48,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione doGet
-     *
      * @param request
      * @param response
      * @throws ServletException
@@ -68,6 +68,12 @@ public class UtenteControl extends HttpServlet {
                 }
                 else if (action.equalsIgnoreCase("registrazione")) {
                     registrazione(request, response);
+                }
+                else if (action.equalsIgnoreCase("verificaEmail")) {
+                    verificaEmail(request, response);
+                }
+                else if (action.equalsIgnoreCase("verificaUtenteRegistrato")) {
+                    verificaUtenteRegistrato(request, response);
                 }
                 else if (action.equalsIgnoreCase("modificaDati")) {
                     modificaDatiPersonali(request, response);
@@ -100,7 +106,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di doPost
-     *
      * @param request
      * @param response
      * @throws ServletException
@@ -120,7 +125,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di login di un utente
-     *
      * @param request
      * @param response
      * @throws ServletException
@@ -141,7 +145,6 @@ public class UtenteControl extends HttpServlet {
             } else {
                 utente = utModel.doRetrieveByEmailPassword(email, password);
                 if (utente == null) {
-                    request.setAttribute("result", "Credenziali errate");
                     RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
                     reqDispatcher.forward(request, response);
                 } else {
@@ -163,7 +166,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di logout
-     *
      * @param request
      * @param response
      * @throws IOException
@@ -180,7 +182,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di registrazione di un utente
-     *
      * @param request
      * @param response
      * @throws SQLException
@@ -208,16 +209,21 @@ public class UtenteControl extends HttpServlet {
             HttpSession session = request.getSession(true);
 
             if (utModel.verificaEmailEsistente(email)) {
-                request.setAttribute("result", "Questa e-mail risulta già essere utilizzata, scegline un'altra");
-                RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
-                reqDispatcher.forward(request, response);
+                response.sendRedirect("login.jsp?error=registration"); // Redirect con parametro di errore
             } else {
                 utModel.doSave(newUtente);
                 session.setAttribute(EMAIL_PARAM, newUtente.getEmail());
                 session.setAttribute("tipo", newUtente.getTipoUtente());
                 response.sendRedirect(INDEX_PAGE);
             }
-        } catch (ServletException | IOException e) {
+
+            UtenteBean utente = utModel.doRetrieveByEmail(email);    // Recupera i dati aggiunti dal database
+
+            // Aggiunge i dati nella sessione
+            session.setAttribute(NOME_PARAM, utente.getNome());
+            session.setAttribute(COGNOME_PARAM, utente.getCognome());
+            session.setAttribute(DATA_NASCITA_PARAM, utente.getDataNascita());
+        } catch (IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
@@ -226,8 +232,67 @@ public class UtenteControl extends HttpServlet {
 
 
     /**
+     * funzione che gestisce l'operazione di verifica di un email presente nel database
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    private void verificaEmail (HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String email = request.getParameter("email");
+            boolean exist = utModel.verificaEmailEsistente(email);
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            if (exist) {
+                out.print("Email verificata");
+            } else {
+                out.print("Email non trovata");
+            }
+            out.flush();
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+
+    /**
+     * funzione che gestisce la verifica se i dati inseriti nel form login sono presenti nel database
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void verificaUtenteRegistrato (HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            UtenteBean utente = utModel.doRetrieveByEmailPassword(email, password);
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            if(utente == null) {
+                PrintWriter out = response.getWriter();
+                out.print("Utente non esistente");
+                out.flush();
+            } else {
+                PrintWriter out = response.getWriter();
+                out.print("Utente verificato");
+                out.flush();
+            }
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+
+    }
+
+
+    /**
      * funzione che gestisce l'operazione della modifica dei dati di un utente
-     *
      * @param request
      * @param response
      * @throws SQLException
@@ -263,7 +328,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce la visualizzazione degli indirizzi per ogni utente
-     *
      * @param request
      * @param response
      * @throws SQLException
@@ -294,7 +358,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce il salvataggio di un nuovo indirizzo
-     *
      * @param request
      * @param response
      * @throws SQLException
@@ -334,7 +397,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di eliminazione di un indirizzo
-     *
      * @param request
      * @param response
      * @throws SQLException
@@ -355,7 +417,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce la visualizzazione degli indirizzi per ogni utente
-     *
      * @param request
      * @param response
      * @throws SQLException
@@ -386,7 +447,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce il salvataggio di un nuovo indirizzo
-     *
      * @param request
      * @param response
      * @throws SQLException
@@ -422,7 +482,6 @@ public class UtenteControl extends HttpServlet {
 
     /**
      * funzione che gestisce l'operazione di eliminazione di un indirizzo
-     *
      * @param request
      * @param response
      * @throws SQLException
