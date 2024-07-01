@@ -29,8 +29,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="css/login.css" rel="stylesheet" type="text/css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title>WrestleWorld | Login</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS" crossorigin="anonymous"></script><title>WrestleWorld | Login</title>
 </head>
 <body>
 
