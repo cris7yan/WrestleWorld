@@ -18,6 +18,9 @@ public class OrdineModel implements OrdineDAO {
     private static Logger logger = Logger.getLogger(OrdineModel.class.getName());
 
     private static final String TABLE_ORDINE = "Ordine";
+    private static final String TABLE_COMPOSIZIONE_ORDINE = "ComposizioneOrdine";
+
+    static final ProdottoDAO prodModel = new ProdottoModel();
 
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
@@ -86,4 +89,52 @@ public class OrdineModel implements OrdineDAO {
         }
         return ordini;
     }
+
+
+    /**
+     * funzione che ritorna la lista di prodotti di un determinato ordine
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public synchronized List<ProdottoBean> doRetrieveOrdineByID (int id) throws SQLException {
+        List<ProdottoBean> listaProdottiOrdine = new ArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT ID_Ordine FROM " + TABLE_COMPOSIZIONE_ORDINE + " WHERE ID_Ordine = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                listaProdottiOrdine.add(prodModel.doRetrieveByID(rs.getInt("ID_Ordine")));
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return listaProdottiOrdine;
+    }
+
 }

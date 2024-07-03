@@ -3,6 +3,7 @@ package it.unisa.wrestleworld.control;
 import it.unisa.wrestleworld.model.OrdineBean;
 import it.unisa.wrestleworld.model.OrdineDAO;
 import it.unisa.wrestleworld.model.OrdineModel;
+import it.unisa.wrestleworld.model.ProdottoBean;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -50,6 +51,9 @@ public class OrdineControl extends HttpServlet {
                     case "visualizzaOrdini":
                         visualizzaOrdini(request, response);
                         break;
+                    case "visualizzaDettagliOrdine":
+                        visualizzaDettagliOrdini(request, response);
+                        break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
                         break;
@@ -61,6 +65,7 @@ public class OrdineControl extends HttpServlet {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
     }
+
 
     /**
      * funzione che gestisce l'operazione di doPost
@@ -105,4 +110,28 @@ public class OrdineControl extends HttpServlet {
             logger.log(Level.WARNING, e.getMessage());
         }
     }
+
+
+    /**
+     * funzione che gestisce la visualizzazione dei dettagli di un ordine
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void visualizzaDettagliOrdini (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int id = Integer.parseInt(request.getParameter("idOrdine"));
+            List<ProdottoBean> prodottiOrdine = new ArrayList<>(ordineModel.doRetrieveOrdineByID(id));
+
+            request.setAttribute("prodottiOrdine", prodottiOrdine);
+            RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/dettagliOrdine.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
 }

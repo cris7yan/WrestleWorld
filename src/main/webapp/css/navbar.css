@@ -290,7 +290,7 @@ li:hover ul#submenu {
 
 @media screen and (max-width: 1100px) {
     .search-box {
-        left: 45%;
+        left: 42%;
         width: 275px;
     }
 
@@ -312,7 +312,7 @@ li:hover ul#submenu {
 
 @media screen and (max-width: 1000px) {
     .search-box {
-        left: 45%;
+        left: 40%;
         width: 225px;
     }
 
@@ -334,7 +334,7 @@ li:hover ul#submenu {
 
 @media screen and (max-width: 950px) {
     .search-box {
-        left: 45%;
+        left: 40%;
         width: 200px;
     }
 
