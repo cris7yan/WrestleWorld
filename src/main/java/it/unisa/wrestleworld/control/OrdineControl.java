@@ -78,10 +78,8 @@ public class OrdineControl extends HttpServlet {
     protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             doGet(request, response);
-        } catch (ServletException ex) {
-            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, ex);
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, ex);
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
     }
 
