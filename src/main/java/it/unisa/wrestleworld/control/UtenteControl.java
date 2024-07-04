@@ -27,7 +27,6 @@ public class UtenteControl extends HttpServlet {
     static IndirizzoDAO indirizzoModel = new IndirizzoModel();
     static MetodoPagamentoDAO metodoPagamentoModel = new MetodoPagamentoModel();
 
-    private static final String MSG_ERROR_LOGINPAGE = "Errore durante il reindirizzamento alla pagina di login";
     private static final String MSG_ERROR_INDEXPAGE = "Errore durante il reindirizzamento alla pagina principale";
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
@@ -123,7 +122,7 @@ public class UtenteControl extends HttpServlet {
         try {
             doGet(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, e);
         }
     }
 
@@ -137,8 +136,6 @@ public class UtenteControl extends HttpServlet {
      */
     private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            UtenteBean utente = new UtenteBean();
-
             // preleviamo dalla request i valori di email e password
             String email = request.getParameter(EMAIL_PARAM);
             String password = request.getParameter(PASSWORD_PARAM);
@@ -148,7 +145,7 @@ public class UtenteControl extends HttpServlet {
             if (email == null || password == null) {
                 response.sendRedirect(INDEX_PAGE);
             } else {
-                utente = utModel.doRetrieveByEmailPassword(email, password);
+                UtenteBean utente = utModel.doRetrieveByEmailPassword(email, password);
                 if (utente == null) {
                     RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
                     reqDispatcher.forward(request, response);
@@ -373,7 +370,6 @@ public class UtenteControl extends HttpServlet {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute(EMAIL_PARAM);
 
-            UtenteBean utente = new UtenteBean();
             IndirizzoBean indirizzo = new IndirizzoBean();
 
             String via = request.getParameter("via");
@@ -388,7 +384,7 @@ public class UtenteControl extends HttpServlet {
             indirizzo.setCAPIndirizzo(cap);
             indirizzo.setNomeCompletoIndirizzo(nomeCompleto);
 
-            utente = utModel.doRetrieveByEmail(email);
+            UtenteBean utente = utModel.doRetrieveByEmail(email);
 
             indirizzoModel.doSave(indirizzo, utente);
             response.sendRedirect("./indirizzi.jsp");

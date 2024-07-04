@@ -81,7 +81,7 @@ public class CategoriaControl extends HttpServlet {
         try {
             doGet(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, e);
         }
     }
 

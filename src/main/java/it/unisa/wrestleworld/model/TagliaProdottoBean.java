@@ -10,7 +10,9 @@ public class TagliaProdottoBean implements Serializable {
     private String taglia;
     private int quantita;
 
-    public TagliaProdottoBean () { }
+    public TagliaProdottoBean () {
+        // Costruttore
+    }
 
     // Metodi Get
     public int getIdTagliaProdotto() {

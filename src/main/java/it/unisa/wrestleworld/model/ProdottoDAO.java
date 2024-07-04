@@ -10,7 +10,5 @@ public interface ProdottoDAO {
     List<String> doRetrieveAllImages(ProdottoBean prod) throws SQLException;
     ProdottoBean doRetrieveByID (int id) throws SQLException;
     boolean checkProductAvailability (int id) throws SQLException;
-    //boolean checkProductAvailabilityBySize (int id, String taglia) throws SQLException;
-    //List<ProdottoBean> doRetrieveAllByTaglia(String taglia) throws SQLException;
 
 }

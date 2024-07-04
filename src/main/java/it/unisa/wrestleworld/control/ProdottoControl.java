@@ -99,7 +99,7 @@ public class ProdottoControl extends HttpServlet {
         try {
             doGet(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, e);
         }
     }
 
@@ -176,8 +176,7 @@ public class ProdottoControl extends HttpServlet {
             int idProd = Integer.parseInt(request.getParameter(ID_PROD_ATTRIBUTE));
             Object prod = prodModel.doRetrieveByID(idProd);
 
-            List<String> imgProd = new ArrayList<>();
-            imgProd = prodModel.doRetrieveAllImages((ProdottoBean) prod);
+            List<String> imgProd = prodModel.doRetrieveAllImages((ProdottoBean) prod);
 
             request.setAttribute("prodotto", prod);
             request.setAttribute("imgProd", imgProd);

@@ -79,7 +79,7 @@ public class OrdineControl extends HttpServlet {
         try {
             doGet(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, e);
         }
     }
 
@@ -95,9 +95,7 @@ public class OrdineControl extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute("email");
-            List<OrdineBean> ordini = new ArrayList<>();
-
-            ordini = ordineModel.doRetrieveAllByEmail(email);
+            List<OrdineBean> ordini = ordineModel.doRetrieveAllByEmail(email);
 
             request.setAttribute("ordini", ordini);
             RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/ordini.jsp");
