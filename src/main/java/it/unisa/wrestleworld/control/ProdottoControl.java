@@ -29,6 +29,7 @@ public class ProdottoControl extends HttpServlet {
 
     private static final String CARRELLO_ATTRIBUTE = "carrello";
     private static final String ID_PROD_ATTRIBUTE = "IDProd";
+    private static final String RICERCA_ATTRIBUTE = "ricerca";
 
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
@@ -253,7 +254,7 @@ public class ProdottoControl extends HttpServlet {
      */
     private void ricerca (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String nome = request.getParameter("ricerca");
+            String nome = request.getParameter(RICERCA_ATTRIBUTE);
 
             ProdottoBean prodotto = prodModel.doRetrieveByName(nome);
 
@@ -285,7 +286,7 @@ public class ProdottoControl extends HttpServlet {
      */
     private void suggerimentiProdottiRicerca (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String ricerca = request.getParameter("ricerca");
+            String ricerca = request.getParameter(RICERCA_ATTRIBUTE);
             List<String> suggerimenti = new ArrayList<>();
             suggerimenti.addAll(prodModel.doRetrieveBySuggest(ricerca));
 

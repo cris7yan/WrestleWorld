@@ -22,9 +22,14 @@ public class ProdottoModel implements ProdottoDAO {
     private static final String TABLE_IMMAGINE = "Immagine";
 
     private static final String IDPROD_PARAM = "ID_Prodotto";
+    private static final String NOME_PARAM = "Nome";
     private static final String DESCRIZIONE_PARAM = "Descrizione";
     private static final String PREZZO_PARAM = "Prezzo";
+    private static final String MATERIALE_PARAM = "Materiale";
+    private static final String MARCA_PARAM = "Marca";
+    private static final String MODELLO_PARAM = "Modello";
 
+    private static final String SELECT_ALL_FROM = "SELECT * FROM ";
     private static final String WHERE_IDPROD = " WHERE ID_Prodotto = ?";
 
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
@@ -55,7 +60,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT * FROM " + TABLE_PRODOTTO;
+        String query = SELECT_ALL_FROM + TABLE_PRODOTTO;
 
         try {
             conn = dataSource.getConnection();
@@ -66,11 +71,11 @@ public class ProdottoModel implements ProdottoDAO {
                 ProdottoBean prod = new ProdottoBean();
 
                 prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
-                prod.setNomeProdotto(rs.getString("Nome"));
+                prod.setNomeProdotto(rs.getString(NOME_PARAM));
                 prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
-                prod.setMaterialeProdotto(rs.getString("Materiale"));
-                prod.setMarcaProdotto(rs.getString("Marca"));
-                prod.setModelloProdotto(rs.getString("Modello"));
+                prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
+                prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
+                prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
                 prod.setDisponibilitaProdotto(rs.getBoolean("Disponibilita"));
 
@@ -124,7 +129,7 @@ public class ProdottoModel implements ProdottoDAO {
                 ProdottoBean prod = new ProdottoBean();
 
                 prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
-                prod.setNomeProdotto(rs.getString("Nome"));
+                prod.setNomeProdotto(rs.getString(NOME_PARAM));
                 prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
 
@@ -213,7 +218,7 @@ public class ProdottoModel implements ProdottoDAO {
 
         ProdottoBean prod = new ProdottoBean();
 
-        String query = "SELECT * FROM " + TABLE_PRODOTTO + WHERE_IDPROD;
+        String query = SELECT_ALL_FROM + TABLE_PRODOTTO + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();
@@ -224,12 +229,12 @@ public class ProdottoModel implements ProdottoDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
-                prod.setNomeProdotto(rs.getString("Nome"));
+                prod.setNomeProdotto(rs.getString(NOME_PARAM));
                 prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
-                prod.setMarcaProdotto(rs.getString("Marca"));
-                prod.setModelloProdotto(rs.getString("Modello"));
-                prod.setMaterialeProdotto(rs.getString("Materiale"));
+                prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
+                prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
+                prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
@@ -312,7 +317,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT * FROM " + TABLE_PRODOTTO + " WHERE Nome LIKE ? AND Disponibilita = 1";
+        String query = SELECT_ALL_FROM + TABLE_PRODOTTO + " WHERE Nome LIKE ? AND Disponibilita = 1";
 
         try {
             conn = dataSource.getConnection();
@@ -323,12 +328,12 @@ public class ProdottoModel implements ProdottoDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
-                prod.setNomeProdotto(rs.getString("Nome"));
+                prod.setNomeProdotto(rs.getString(NOME_PARAM));
                 prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
-                prod.setMarcaProdotto(rs.getString("Marca"));
-                prod.setModelloProdotto(rs.getString("Modello"));
-                prod.setMaterialeProdotto(rs.getString("Materiale"));
+                prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
+                prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
+                prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
@@ -376,7 +381,7 @@ public class ProdottoModel implements ProdottoDAO {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                suggerimenti.add(rs.getString("Nome"));
+                suggerimenti.add(rs.getString(NOME_PARAM));
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
