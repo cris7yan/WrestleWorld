@@ -458,7 +458,6 @@ public class UtenteControl extends HttpServlet {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute(EMAIL_PARAM);
 
-            UtenteBean utente = new UtenteBean();
             MetodoPagamentoBean metodo = new MetodoPagamentoBean();
 
             String numeroCarta = request.getParameter("numeroCarta");
@@ -469,7 +468,7 @@ public class UtenteControl extends HttpServlet {
             metodo.setIntestatario(intestatario);
             metodo.setDataScadenza(dataScadenza);
 
-            utente = utModel.doRetrieveByEmail(email);
+            UtenteBean utente = utModel.doRetrieveByEmail(email);
 
             metodoPagamentoModel.doSave(metodo, utente);
             response.sendRedirect("./metodiPagamento.jsp");
