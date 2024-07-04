@@ -299,4 +299,105 @@ public class ProdottoModel implements ProdottoDAO {
         return disp;
     }
 
+
+    /**
+     * funzione che restituisce un prodotto in base al nome, o a parte del nome
+     * @param nome
+     * @return
+     * @throws SQLException
+     */
+    public synchronized ProdottoBean doRetrieveByName (String nome) throws SQLException {
+        ProdottoBean prod = new ProdottoBean();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT * FROM " + TABLE_PRODOTTO + " WHERE Nome LIKE ? AND Disponibilita = 1";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, nome);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
+                prod.setNomeProdotto(rs.getString("Nome"));
+                prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
+                prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
+                prod.setMarcaProdotto(rs.getString("Marca"));
+                prod.setModelloProdotto(rs.getString("Modello"));
+                prod.setMaterialeProdotto(rs.getString("Materiale"));
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return prod;
+    }
+
+
+    /**
+     * funzione che restituisce un insieme di nomi di prodotti in base al suggerimento per la ricerca
+     * @param suggest suggerimento per la ricerca
+     * @return
+     * @throws SQLException
+     */
+    public synchronized List<String> doRetrieveBySuggest (String suggest) throws SQLException {
+        List<String> suggerimenti = new ArrayList<>();
+        suggest = "%"+suggest+"%";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT Nome FROM " + TABLE_PRODOTTO + " WHERE Nome LIKE ? AND Disponibilita = 1";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, suggest);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                suggerimenti.add(rs.getString("Nome"));
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return suggerimenti;
+    }
+
 }

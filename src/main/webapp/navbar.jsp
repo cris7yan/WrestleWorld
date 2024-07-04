@@ -32,6 +32,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="css/navbar.css" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS" crossorigin="anonymous"></script>
     <title>WrestleWorld</title>
 </head>
 <body>
@@ -43,9 +44,10 @@
         <ul id="navbar">
 
             <!-- Barra di ricerca -->
-            <form>
+            <form action="ProdottoControl?action=ricerca" method="post">
                 <div class="search-box">
-                    <input class="search-input" type="search" placeholder="Cerca il tuo prodotto">
+                    <input class="search-input" type="search" name="ricerca" placeholder="Cerca il tuo prodotto" list="suggerimentiProdotti">
+                    <div id="suggerimentiProdotti" class="suggerimentiProdotti"></div>
                     <button type="submit" class="search-button">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -149,6 +151,62 @@
         <li><a href="CategoriaControl?action=visualizzaPremiumLiveEvent#ple-section">Premium Live Event</a></li>
     </ul>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+        var lastSuggestions = [];   // memorizza gli ultimi suggerimenti ricevuti dalla chiamata AJAX
+
+        $('.search-input').keyup(function () {
+            var ricerca = $(this).val();    // Recupera il valore dell'input di ricerca
+            if (ricerca !== '') {
+                $.ajax({
+                    url: 'ProdottoControl?action=suggerimentiRicerca',
+                    method: 'POST',
+                    data: { ricerca: ricerca },
+                    dataType: 'json',
+                    success: function (response) {
+                        lastSuggestions = response.suggerimenti;    // Memorizza i suggerimenti ricevuti
+
+                        // Costruisce l'HTML per visualizzare i suggerimenti
+                        var sugg = '';
+                        for (var i = 0; i < lastSuggestions.length; i++) {
+                            sugg += '<div>' + lastSuggestions[i] + '</div>';
+                        }
+                        $('#suggerimentiProdotti').html(sugg).show();   // Inserisce gli elementi dei suggerimenti nell'elemento con id 'suggerimentiProdotti' e li mostra
+
+                        $('#suggerimentiProdotti div').click(function () {
+                            $('.search-input').val($(this).text());     // Imposta il valore dell'input di ricerca con il testo del suggerimento cliccato
+                            $('#suggerimentiProdotti').hide();      // Nasconde l'elenco dei suggerimenti
+                        });
+                    }
+                });
+            } else {
+                // Se l'input di ricerca è vuoto, nasconde l'elenco dei suggerimenti e resetta lastSuggestions
+                $('#suggerimentiProdotti').html('').hide();
+                lastSuggestions = [];
+            }
+        });
+
+        // Gestisce il click al di fuori della casella di ricerca per nascondere l'elenco dei suggerimenti
+        $(document).click(function (event) {
+            if (!$(event.target).closest('.search-box').length) {
+                $('#suggerimentiProdotti').hide();
+            }
+        });
+
+        // Controlla l'invio del form per verificare se il termine di ricerca è valido
+        $('form').submit(function (event) {
+            var ricerca = $('.search-input').val();
+
+            // Verifica se il valore di ricerca non è presente negli ultimi suggerimenti ricevuti
+            if (lastSuggestions.indexOf(ricerca) === -1) {
+                alert('Nessun prodotto trovato con il parametro di ricerca inserito.');
+                event.preventDefault();     // Impedisce l'invio del form
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

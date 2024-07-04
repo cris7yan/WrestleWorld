@@ -4,6 +4,7 @@ import it.unisa.wrestleworld.model.ProdottoBean;
 import it.unisa.wrestleworld.model.ProdottoModel;
 import it.unisa.wrestleworld.util.Carrello;
 
+import com.google.gson.Gson;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +75,12 @@ public class ProdottoControl extends HttpServlet {
                         break;
                     case "rimuoviDalCarrello":
                         rimuoviProdottoCarrello(request, response);
+                        break;
+                    case "suggerimentiRicerca":
+                        suggerimentiProdottiRicerca(request, response);
+                        break;
+                    case "ricerca":
+                        ricerca(request, response);
                         break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
@@ -235,4 +243,62 @@ public class ProdottoControl extends HttpServlet {
         }
     }
 
+
+    /**
+     * funzione che gestisce l'operazione di ricerca
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void ricerca (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String nome = request.getParameter("ricerca");
+
+            ProdottoBean prodotto = prodModel.doRetrieveByName(nome);
+
+            if(prodotto != null) {
+                List<String> imgProd = prodModel.doRetrieveAllImages(prodotto);
+
+                request.setAttribute("prodotto", prodotto);
+                request.setAttribute("imgProd", imgProd);
+                RequestDispatcher reqDispatcher = request.getRequestDispatcher("/dettagliProdotto.jsp");
+                reqDispatcher.forward(request, response);
+            } else {
+                request.setAttribute("errorMessage", "Prodotto non trovato");
+                RequestDispatcher reqDispatcher = request.getRequestDispatcher("/index.jsp");
+                reqDispatcher.forward(request, response);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        }
+    }
+
+
+    /**
+     * funzione che gestisce la ricerca tramite suggerimento dei prodotti
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    private void suggerimentiProdottiRicerca (HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String ricerca = request.getParameter("ricerca");
+            List<String> suggerimenti = new ArrayList<>();
+            suggerimenti.addAll(prodModel.doRetrieveBySuggest(ricerca));
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            PrintWriter out = response.getWriter();
+            out.print("{\"suggerimenti\": " + new Gson().toJson(suggerimenti) + "}");
+            out.flush();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        }
+    }
 }

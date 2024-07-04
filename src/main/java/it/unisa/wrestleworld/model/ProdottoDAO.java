@@ -10,5 +10,6 @@ public interface ProdottoDAO {
     List<String> doRetrieveAllImages(ProdottoBean prod) throws SQLException;
     ProdottoBean doRetrieveByID (int id) throws SQLException;
     boolean checkProductAvailability (int id) throws SQLException;
-
+    ProdottoBean doRetrieveByName (String nome) throws SQLException;
+    List<String> doRetrieveBySuggest (String suggest) throws SQLException;
 }
