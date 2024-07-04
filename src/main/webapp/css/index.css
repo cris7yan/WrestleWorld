@@ -131,3 +131,42 @@ h1 {
     color: #fff; /* Assicura che il testo sia sempre bianco */
 }
 
+.slider-wrapper {
+    position: relative;
+    width: 70%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.slider {
+    display: flex;
+    transition: transform 1.0s ease-in-out;
+}
+
+.slider img {
+    min-width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.slider-nav-btn {
+    background-color: transparent;
+    color: white;
+    border: white;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.footer {
+    margin-top: 50px;
+}

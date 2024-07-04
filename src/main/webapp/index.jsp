@@ -34,13 +34,28 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>WrestleWorld | HomePage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/index.css" rel="stylesheet" type="text/css">
+    <title>WrestleWorld | HomePage</title>
 </head>
 <body>
 <%@ include file="navbar.jsp"%>
 
     <!-- Poster promo -->
+    <section id="carousel">
+        <div class="slider-wrapper">
+            <div class="slider">
+                <img src="img/sitoweb/posterReigns.jpeg" alt="First Slide">
+                <img src="img/sitoweb/posterBloodLine.jpeg" alt="Second Slide">
+                <img src="img/sitoweb/posterTheRock.jpeg" alt="Third Slide">
+            </div>
+            <div class="slider-nav">
+                <button class="slider-nav-btn" onclick="prevSlide()">&#10094;</button>
+                <button class="slider-nav-btn" onclick="nextSlide()">&#10095;</button>
+            </div>
+        </div>
+    </section>
+    <script src="js/index.js"></script>
 
     <!-- Pulsanti promo -->
 
@@ -101,11 +116,10 @@
                 }
             }
         %>
-
     </div>
 
     <!-- WrestleWorld Prodotti top 10 prodotti in sconto -->
 
-<%@ include file="footer.jsp"%>
+<%@ include file="footer.jsp" %>
 </body>
 </html>
