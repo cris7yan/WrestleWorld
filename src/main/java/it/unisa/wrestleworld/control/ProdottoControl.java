@@ -27,9 +27,9 @@ public class ProdottoControl extends HttpServlet {
     private static ProdottoModel prodModel = new ProdottoModel();
     private static Carrello carrelloBean = new Carrello();
 
-    private static final String CARRELLO_ATTRIBUTE = "carrello";
-    private static final String ID_PROD_ATTRIBUTE = "IDProd";
-    private static final String RICERCA_ATTRIBUTE = "ricerca";
+    private static final String CARRELLO_PARAM = "carrello";
+    private static final String ID_PROD_PARAM = "IDProd";
+    private static final String RICERCA_PARAM = "ricerca";
 
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
@@ -52,11 +52,11 @@ public class ProdottoControl extends HttpServlet {
         String action = request.getParameter("action");
 
         // gestione carrello di un utente
-        Carrello carrelloUtente = (Carrello) request.getSession().getAttribute(CARRELLO_ATTRIBUTE);   // preleviamo il carrello dalla sessione
+        Carrello carrelloUtente = (Carrello) request.getSession().getAttribute(CARRELLO_PARAM);   // preleviamo il carrello dalla sessione
         if(carrelloUtente == null) {
             // Se non esiste, ne crea uno nuovo e lo memorizza nella sessione
             carrelloUtente = new Carrello();
-            request.getSession().setAttribute(CARRELLO_ATTRIBUTE, carrelloUtente);
+            request.getSession().setAttribute(CARRELLO_PARAM, carrelloUtente);
         }
 
         try {
@@ -85,6 +85,7 @@ public class ProdottoControl extends HttpServlet {
                         break;
                     case "visualizzaProdottiCategoria":
                         visualizzaProdottiCategoria(request, response);
+                        break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
                         break;
@@ -184,7 +185,7 @@ public class ProdottoControl extends HttpServlet {
      */
     private void visualizzaDettagliProdotto (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            int idProd = Integer.parseInt(request.getParameter(ID_PROD_ATTRIBUTE));
+            int idProd = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
             Object prod = prodModel.doRetrieveByID(idProd);
 
             List<String> imgProd = prodModel.doRetrieveAllImages((ProdottoBean) prod);
@@ -210,13 +211,13 @@ public class ProdottoControl extends HttpServlet {
      */
     private void aggiungiProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            int idProd = Integer.parseInt(request.getParameter(ID_PROD_ATTRIBUTE));
+            int idProd = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
             if(prodModel.checkProductAvailability(idProd)) {
                 carrelloBean.addProdottoCarrello(prodModel.doRetrieveByID(idProd));
             }
             List<ProdottoBean> cart = carrelloBean.getCarrello();
-            request.getSession().setAttribute(CARRELLO_ATTRIBUTE, carrelloBean);
-            request.setAttribute(CARRELLO_ATTRIBUTE, cart);
+            request.getSession().setAttribute(CARRELLO_PARAM, carrelloBean);
+            request.setAttribute(CARRELLO_PARAM, cart);
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
@@ -236,9 +237,9 @@ public class ProdottoControl extends HttpServlet {
      */
     private void rimuoviProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            int idProd = Integer.parseInt(request.getParameter(ID_PROD_ATTRIBUTE));
+            int idProd = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
             carrelloBean.removeProdottoCarrello(idProd);
-            request.getSession().setAttribute(CARRELLO_ATTRIBUTE, carrelloBean);
+            request.getSession().setAttribute(CARRELLO_PARAM, carrelloBean);
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
@@ -256,7 +257,7 @@ public class ProdottoControl extends HttpServlet {
      */
     private void ricerca (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String nome = request.getParameter(RICERCA_ATTRIBUTE);
+            String nome = request.getParameter(RICERCA_PARAM);
 
             ProdottoBean prodotto = prodModel.doRetrieveByName(nome);
 
@@ -288,7 +289,7 @@ public class ProdottoControl extends HttpServlet {
      */
     private void suggerimentiProdottiRicerca (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String ricerca = request.getParameter(RICERCA_ATTRIBUTE);
+            String ricerca = request.getParameter(RICERCA_PARAM);
             List<String> suggerimenti = new ArrayList<>();
             suggerimenti.addAll(prodModel.doRetrieveBySuggest(ricerca));
 
