@@ -20,6 +20,7 @@ public class ProdottoModel implements ProdottoDAO {
     private static final String TABLE_PRODOTTO = "Prodotto";
     private static final String TABLE_COMPOSIZIONE_ORDINE = "ComposizioneOrdine";
     private static final String TABLE_IMMAGINE = "Immagine";
+    private static final String TABLE_APPARTENENZA = "Appartenenza";
 
     private static final String IDPROD_PARAM = "ID_Prodotto";
     private static final String NOME_PARAM = "Nome";
@@ -403,6 +404,62 @@ public class ProdottoModel implements ProdottoDAO {
             }
         }
         return suggerimenti;
+    }
+
+
+    /**
+     * funzione che restituisce tutti i prodotti che appartengono ad una determinata categoria
+     * @param category
+     * @return
+     * @throws SQLException
+     */
+    public synchronized List<ProdottoBean> doRetrieveByCategory (String category) throws SQLException {
+        List<ProdottoBean> categoryProd = new ArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = " SELECT p.* FROM " + TABLE_PRODOTTO + " p JOIN " + TABLE_APPARTENENZA + " a ON p.ID_Prodotto = a.ID_Prodotto "
+                + "JOIN Categoria c ON a.NomeCategoria = c.NomeCategoria" + " WHERE c.NomeCategoria = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, category);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ProdottoBean prod = new ProdottoBean();
+                prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
+                prod.setNomeProdotto(rs.getString(NOME_PARAM));
+                prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
+                prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
+                prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
+                prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
+                prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
+                categoryProd.add(prod);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return categoryProd;
     }
 
 }

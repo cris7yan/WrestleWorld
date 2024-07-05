@@ -4,6 +4,7 @@
 --%>
 <%@ page import="it.unisa.wrestleworld.model.CategoriaBean" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.net.URLEncoder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -31,10 +32,11 @@
             <% if (superstar != null && !superstar.isEmpty()) {
                 Iterator<?> superstarIt = superstar.iterator();
                 while (superstarIt.hasNext()) {
-                CategoriaBean ss = (CategoriaBean) superstarIt.next();
+                    CategoriaBean ss = (CategoriaBean) superstarIt.next();
+                    String encodedNome = URLEncoder.encode(ss.getNome(), "UTF-8");
             %>
             <div class="category-box superstar-box">
-                <a href="#"><img src="img/categorie/<%= ss.getImg() %>" alt="<%= ss.getNome() %>"></a>
+                <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=<%=encodedNome%>"><img src="img/categorie/<%= ss.getImg() %>" alt="<%= ss.getNome() %>"></a>
                 <div class="category-overlay"></div>
                 <div class="category-name"><%= ss.getNome() %></div>
             </div>
@@ -58,7 +60,7 @@
                     CategoriaBean plev = (CategoriaBean) pleIt.next();
             %>
             <div class="category-box ple-box">
-                <a href="#"><img src="img/categorie/<%= plev.getImg() %>" alt="<%= plev.getNome() %>"></a>
+                <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=<%= plev.getNome() %>"><img src="img/categorie/<%= plev.getImg() %>" alt="<%= plev.getNome() %>"></a>
                 <div class="category-overlay"></div>
                 <div class="category-name"><%= plev.getNome() %></div>
             </div>

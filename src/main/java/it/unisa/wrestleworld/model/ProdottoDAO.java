@@ -12,4 +12,6 @@ public interface ProdottoDAO {
     boolean checkProductAvailability (int id) throws SQLException;
     ProdottoBean doRetrieveByName (String nome) throws SQLException;
     List<String> doRetrieveBySuggest (String suggest) throws SQLException;
+    List<ProdottoBean> doRetrieveByCategory (String category) throws SQLException;
+
 }

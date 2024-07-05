@@ -131,3 +131,17 @@ h1 {
     text-decoration: none; /* Rimuove la sottolineatura al passaggio del mouse */
     color: #fff; /* Assicura che il testo sia sempre bianco */
 }
+
+.error-message {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    margin: 20px 0;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.error-message p {
+    margin: 0;
+}

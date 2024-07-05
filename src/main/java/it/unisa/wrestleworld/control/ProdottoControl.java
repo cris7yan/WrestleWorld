@@ -83,6 +83,8 @@ public class ProdottoControl extends HttpServlet {
                     case "ricerca":
                         ricerca(request, response);
                         break;
+                    case "visualizzaProdottiCategoria":
+                        visualizzaProdottiCategoria(request, response);
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
                         break;
@@ -302,4 +304,34 @@ public class ProdottoControl extends HttpServlet {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
     }
+
+
+    /**
+     * funzione che gestisce la visualizzazione dei prodotti di una determinata categoria
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void visualizzaProdottiCategoria (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String categoria = request.getParameter("categoria");
+            List<ProdottoBean> prodottiCategoria = prodModel.doRetrieveByCategory(categoria);
+
+            List<String> imgProdottiCategoria = new ArrayList<>();
+            for(ProdottoBean prod : prodottiCategoria) {
+                imgProdottiCategoria.add(prodModel.doRetrieveAllImages(prod).get(0));
+            }
+            request.setAttribute("prodottiCategoria", prodottiCategoria);
+            request.setAttribute("imgProdottiCategoria", imgProdottiCategoria);
+
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/prodottiCategoria.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        }
+    }
+
 }

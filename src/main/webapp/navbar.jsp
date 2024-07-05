@@ -110,41 +110,40 @@
     <ul>
         <li><a href="CategoriaControl?action=visualizzaSuperstar">Superstar</a></li>
 
-        <li><a href="#">Title Belts</a>
+        <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&tipo=Title Belts">Title Belts</a>
             <ul id="submenu">
-                <li><a href="#">Title Belts</a></li>
-                <li><a href="#">Side Plates</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Title Belts Replica">Title Belts</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Side Plates">Side Plates</a></li>
             </ul>
         </li>
 
-
-        <li><a href="#">T-Shirts</a></li>
+        <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=T-Shirt">T-Shirts</a></li>
 
         <li><a href="#">Abbigliamento</a>
             <ul id="submenu">
-                <li><a href="#">T-Shirts</a></li>
-                <li><a href="#">Felpe con cappuccio e Felpe</a></li>
-                <li><a href="#">Pantaloncini</a></li>
-                <li><a href="#">Canotte</a></li>
-                <li><a href="#">Giacche</a></li>
-                <li><a href="#">Cappelli</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=T-Shirt">T-Shirts</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Felpe con cappuccio e Felpe">Felpe con cappuccio e Felpe</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Pantaloncini">Pantaloncini</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Canotte">Canotte</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Giacche">Giacche</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Cappelli">Cappelli</a></li>
             </ul>
         </li>
 
         <li><a href="#">Accessori</a>
             <ul id="submenu">
-                <li><a href="#">Cover Phone</a></li>
-                <li><a href="#">Zaini e borse</a></li>
-                <li><a href="#">Orologi</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Cover Phone">Cover Phone</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Zaini e borse">Zaini e borse</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Orologi">Orologi</a></li>
             </ul>
         </li>
 
         <li><a href="#">Collezionabili</a>
             <ul id="submenu">
-                <li><a href="#">Figure</a></li>
-                <li><a href="#">Firmati</a></li>
-                <li><a href="#">Foto</a></li>
-                <li><a href="#">Memorabilia</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Figure">Figure</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Firmati">Firmati</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Foto">Foto</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Memorabilia">Memorabilia</a></li>
             </ul>
         </li>
 
