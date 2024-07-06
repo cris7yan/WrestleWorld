@@ -207,6 +207,8 @@
         %>
     </div>
 
+    <!-- Blocchi promo -->
+
 <%@ include file="footer.jsp" %>
 </body>
 </html>

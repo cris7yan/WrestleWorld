@@ -123,48 +123,62 @@ public class ProdottoControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void visualizzaHomePage (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void visualizzaHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Liste per prelevare dal database i prodotti ed i prodotti piu venduti
-            List<ProdottoBean> bestSellers = null;
-            try {
-                bestSellers = prodModel.doRetrieveBestSellers();
-                request.setAttribute("bestSellers", bestSellers);
+            List<ProdottoBean> bestSellers = recuperaBestSellers();
+            request.setAttribute("bestSellers", bestSellers);
 
-                // Prelevo le immagini per i prodotti piu venduti
-                List<String> imgBestProd = new ArrayList<>();
-                for (ProdottoBean best : bestSellers) {
-                    imgBestProd.add(prodModel.doRetrieveAllImages(best).get(0));
-                }
-                request.setAttribute("imgBestProd", imgBestProd);
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, "Errore nel recupero dei bestSellers: " + e.getMessage());
+            List<String> imgBestProd = new ArrayList<>();
+            for (ProdottoBean best : bestSellers) {
+                imgBestProd.add(prodModel.doRetrieveAllImages(best).get(0));
             }
+            request.setAttribute("imgBestProd", imgBestProd);
 
-            // Prelevo i prodotti migliori in offerta
-            List<ProdottoBean> bestOnOffer = null;
-            try {
-                bestOnOffer = prodModel.doRetrieveBestOnOffer();
-                request.setAttribute("bestOnOffer", bestOnOffer);
+            List<ProdottoBean> bestOnOffer = recuperaBestOnOffer();
+            request.setAttribute("bestOnOffer", bestOnOffer);
 
-                // Prelevo le immagini per i prodotti in offerta
-                List<String> imgBestOnOffer = new ArrayList<>();
-                for (ProdottoBean offer : bestOnOffer) {
-                    imgBestOnOffer.add(prodModel.doRetrieveAllImages(offer).get(0));
-                }
-                request.setAttribute("imgBestOnOffer", imgBestOnOffer);
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, "Errore nel recupero dei bestOnOffer: " + e.getMessage());
+            List<String> imgBestOnOffer = new ArrayList<>();
+            for (ProdottoBean offer : bestOnOffer) {
+                imgBestOnOffer.add(prodModel.doRetrieveAllImages(offer).get(0));
             }
+            request.setAttribute("imgBestOnOffer", imgBestOnOffer);
 
-            // Forward alla pagina index.jsp
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/index.jsp");
             reqDispatcher.forward(request, response);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
     }
 
+    /**
+     * funzione che recupera i bestSellers
+     * @return
+     * @throws SQLException
+     */
+    private List<ProdottoBean> recuperaBestSellers() throws SQLException {
+        try {
+            return prodModel.doRetrieveBestSellers();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, "Errore nel recupero dei bestSellers: " + e.getMessage());
+            throw e; // Lancia l'eccezione per la gestione nel metodo superiore, se necessario
+        }
+    }
+
+    /**
+     * funzione che recupera i migliori prodotti in offerta
+     * @return
+     * @throws SQLException
+     */
+    private List<ProdottoBean> recuperaBestOnOffer() throws SQLException {
+        try {
+            return prodModel.doRetrieveBestOnOffer();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, "Errore nel recupero dei bestOnOffer: " + e.getMessage());
+            throw e; // Lancia l'eccezione per la gestione nel metodo superiore, se necessario
+        }
+    }
 
 
     /**

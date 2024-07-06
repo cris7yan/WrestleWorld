@@ -10,19 +10,19 @@ carousels.forEach((carousel, index) => {
         slider.style.transform = `translateX(-${currentSlide * 100}%)`;
     }
 
-    function prevSlide(carouselIndex) {
+    function prevSlide() {
         currentSlide = (currentSlide === 0) ? totalSlides - 1 : currentSlide - 1;
-        updateSlidePosition(carouselIndex);
+        updateSlidePosition();
     }
 
-    function nextSlide(carouselIndex) {
+    function nextSlide() {
         currentSlide = (currentSlide === totalSlides - 1) ? 0 : currentSlide + 1;
-        updateSlidePosition(carouselIndex);
+        updateSlidePosition();
     }
 
     // Event listeners for navigation buttons
     const prevBtn = carousel.querySelector('.slider-nav-btn:nth-child(1)');
     const nextBtn = carousel.querySelector('.slider-nav-btn:nth-child(2)');
-    prevBtn.addEventListener('click', () => prevSlide(index));
-    nextBtn.addEventListener('click', () => nextSlide(index));
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
 });

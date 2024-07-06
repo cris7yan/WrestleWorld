@@ -494,18 +494,13 @@ public class ProdottoModel implements ProdottoDAO {
             while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean();
 
-                prod.setIDProdotto(rs.getInt("ID_Prodotto"));
-                prod.setNomeProdotto(rs.getString("Nome"));
-                prod.setDescrizioneProdotto(rs.getString("Descrizione"));
-                prod.setPrezzoProdotto(rs.getFloat("Prezzo")); // Prezzo originale
-                prod.setPrezzoOffertaProdotto(rs.getFloat("PrezzoEffettivo")); // Prezzo scontato = Prezzo - Prezzo_Offerta
+                prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
+                prod.setNomeProdotto(rs.getString(NOME_PARAM));
+                prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
+                prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM)); // Prezzo originale
+                prod.setPrezzoOffertaProdotto(rs.getFloat("PrezzoEffettivo"));
 
                 bestOnOffer.add(prod);
-            }
-            for (ProdottoBean prodotto : bestOnOffer) {
-                System.out.println("Prodotto: " + prodotto.getNomeProdotto());
-                System.out.println("Prezzo Originale: " + prodotto.getPrezzoProdotto());
-                System.out.println("Prezzo Offerta: " + prodotto.getPrezzoOffertaProdotto());
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
