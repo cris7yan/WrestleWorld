@@ -13,5 +13,6 @@ public interface ProdottoDAO {
     ProdottoBean doRetrieveByName (String nome) throws SQLException;
     List<String> doRetrieveBySuggest (String suggest) throws SQLException;
     List<ProdottoBean> doRetrieveByCategory (String category) throws SQLException;
+    List<ProdottoBean> doRetrieveBestOnOffer () throws SQLException;
 
 }

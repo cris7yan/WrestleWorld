@@ -14,6 +14,7 @@ public class ProdottoBean implements Serializable {
     private String marca;
     private String modello;
     private float prezzo;
+    private float prezzoOfferta;
     private boolean disponibilita;
     private List<String> img;
 
@@ -48,6 +49,10 @@ public class ProdottoBean implements Serializable {
 
     public float getPrezzoProdotto () {
         return this.prezzo;
+    }
+
+    public float getPrezzoOffertaProdotto () {
+        return this.prezzoOfferta;
     }
 
     public boolean getDisponibilitaProdotto () {
@@ -85,6 +90,10 @@ public class ProdottoBean implements Serializable {
 
     public void setPrezzoProdotto (float prezzo) {
         this.prezzo = prezzo;
+    }
+
+    public void setPrezzoOffertaProdotto (float prezzoOfferta) {
+        this.prezzoOfferta = prezzoOfferta;
     }
 
     public void setDisponibilitaProdotto (boolean disp) {

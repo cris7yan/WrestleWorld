@@ -26,9 +26,11 @@ public class ProdottoModel implements ProdottoDAO {
     private static final String NOME_PARAM = "Nome";
     private static final String DESCRIZIONE_PARAM = "Descrizione";
     private static final String PREZZO_PARAM = "Prezzo";
+    private static final String PREZZO_OFFERTA_PARAM = "Prezzo_Offerta";
     private static final String MATERIALE_PARAM = "Materiale";
     private static final String MARCA_PARAM = "Marca";
     private static final String MODELLO_PARAM = "Modello";
+    private static final String DISPONIBILITA_PARAM = "Disponibilita";
 
     private static final String SELECT_ALL_FROM = "SELECT * FROM ";
     private static final String WHERE_IDPROD = " WHERE ID_Prodotto = ?";
@@ -78,7 +80,8 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
-                prod.setDisponibilitaProdotto(rs.getBoolean("Disponibilita"));
+                prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
+                prod.setDisponibilitaProdotto(rs.getBoolean(DISPONIBILITA_PARAM));
 
                 prodotti.add(prod);
             }
@@ -116,7 +119,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT P.ID_Prodotto, P.Nome, P.Descrizione, P.Prezzo, SUM(Co.Quantita) as Tot FROM " + TABLE_PRODOTTO
+        String query = "SELECT P.ID_Prodotto, P.Nome, P.Descrizione, P.Prezzo, P.Prezzo_Offerta, SUM(Co.Quantita) as Tot FROM " + TABLE_PRODOTTO
                 + " P JOIN " + TABLE_COMPOSIZIONE_ORDINE + " Co ON P.ID_Prodotto = Co.ID_Prodotto "
                 + "GROUP BY P.ID_Prodotto "
                 + "ORDER BY Tot DESC LIMIT 3";
@@ -133,6 +136,7 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setNomeProdotto(rs.getString(NOME_PARAM));
                 prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
+                prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
 
                 bestSellers.add(prod);
             }
@@ -233,6 +237,7 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setNomeProdotto(rs.getString(NOME_PARAM));
                 prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
+                prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
                 prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
@@ -278,7 +283,7 @@ public class ProdottoModel implements ProdottoDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                disp = rs.getBoolean("Disponibilita");
+                disp = rs.getBoolean(DISPONIBILITA_PARAM);
                 if(disp) {
                     return disp;
                 }
@@ -332,6 +337,7 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setNomeProdotto(rs.getString(NOME_PARAM));
                 prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
+                prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
                 prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
@@ -435,6 +441,7 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setNomeProdotto(rs.getString(NOME_PARAM));
                 prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
+                prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
                 prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
@@ -460,6 +467,66 @@ public class ProdottoModel implements ProdottoDAO {
             }
         }
         return categoryProd;
+    }
+
+
+    /**
+     * funzione che restituisce i migliori prodotti in offerta
+     * @return
+     * @throws SQLException
+     */
+    public synchronized List<ProdottoBean> doRetrieveBestOnOffer() throws SQLException {
+        List<ProdottoBean> bestOnOffer = new ArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT ID_Prodotto, Nome, Descrizione, Prezzo, " +
+                "CASE WHEN Prezzo_Offerta > 0 AND Prezzo_Offerta < Prezzo THEN Prezzo_Offerta ELSE Prezzo END AS PrezzoEffettivo, Disponibilita " +
+                "FROM " + TABLE_PRODOTTO + " WHERE Prezzo_Offerta > 0 AND Prezzo_Offerta < Prezzo " +
+                "ORDER BY Prezzo - Prezzo_Offerta DESC LIMIT 10";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ProdottoBean prod = new ProdottoBean();
+
+                prod.setIDProdotto(rs.getInt("ID_Prodotto"));
+                prod.setNomeProdotto(rs.getString("Nome"));
+                prod.setDescrizioneProdotto(rs.getString("Descrizione"));
+                prod.setPrezzoProdotto(rs.getFloat("Prezzo")); // Prezzo originale
+                prod.setPrezzoOffertaProdotto(rs.getFloat("PrezzoEffettivo")); // Prezzo scontato = Prezzo - Prezzo_Offerta
+
+                bestOnOffer.add(prod);
+            }
+            for (ProdottoBean prodotto : bestOnOffer) {
+                System.out.println("Prodotto: " + prodotto.getNomeProdotto());
+                System.out.println("Prezzo Originale: " + prodotto.getPrezzoProdotto());
+                System.out.println("Prezzo Offerta: " + prodotto.getPrezzoOffertaProdotto());
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return bestOnOffer;
     }
 
 }

@@ -126,24 +126,45 @@ public class ProdottoControl extends HttpServlet {
     private void visualizzaHomePage (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // Liste per prelevare dal database i prodotti ed i prodotti piu venduti
-            List<ProdottoBean> bestSellers = prodModel.doRetrieveBestSellers();
-            request.setAttribute("bestSellers", bestSellers);
+            List<ProdottoBean> bestSellers = null;
+            try {
+                bestSellers = prodModel.doRetrieveBestSellers();
+                request.setAttribute("bestSellers", bestSellers);
 
-            // prelevo le immagini per i prodotti piu venduti
-            List<String> imgBestProd = new ArrayList<>();
-            for (ProdottoBean best : bestSellers) {
-                imgBestProd.add(prodModel.doRetrieveAllImages(best).get(0));
+                // Prelevo le immagini per i prodotti piu venduti
+                List<String> imgBestProd = new ArrayList<>();
+                for (ProdottoBean best : bestSellers) {
+                    imgBestProd.add(prodModel.doRetrieveAllImages(best).get(0));
+                }
+                request.setAttribute("imgBestProd", imgBestProd);
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, "Errore nel recupero dei bestSellers: " + e.getMessage());
             }
-            request.setAttribute("imgBestProd", imgBestProd);
 
+            // Prelevo i prodotti migliori in offerta
+            List<ProdottoBean> bestOnOffer = null;
+            try {
+                bestOnOffer = prodModel.doRetrieveBestOnOffer();
+                request.setAttribute("bestOnOffer", bestOnOffer);
+
+                // Prelevo le immagini per i prodotti in offerta
+                List<String> imgBestOnOffer = new ArrayList<>();
+                for (ProdottoBean offer : bestOnOffer) {
+                    imgBestOnOffer.add(prodModel.doRetrieveAllImages(offer).get(0));
+                }
+                request.setAttribute("imgBestOnOffer", imgBestOnOffer);
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, "Errore nel recupero dei bestOnOffer: " + e.getMessage());
+            }
+
+            // Forward alla pagina index.jsp
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/index.jsp");
             reqDispatcher.forward(request, response);
-        } catch (SQLException e) {
-            logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
     }
+
 
 
     /**
