@@ -33,6 +33,7 @@ public class ProdottoControl extends HttpServlet {
 
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
+    private static final String MSG_ERROR_RECUPERO_DATI = "Errore durante il recupero dei dati: ";
 
     public ProdottoControl () {
         super();
@@ -161,7 +162,7 @@ public class ProdottoControl extends HttpServlet {
         try {
             return prodModel.doRetrieveBestSellers();
         } catch (SQLException e) {
-            logger.log(Level.WARNING, "Errore nel recupero dei bestSellers: " + e.getMessage());
+            logger.log(Level.WARNING, MSG_ERROR_RECUPERO_DATI, e);
             throw e; // Lancia l'eccezione per la gestione nel metodo superiore, se necessario
         }
     }
@@ -175,7 +176,7 @@ public class ProdottoControl extends HttpServlet {
         try {
             return prodModel.doRetrieveBestOnOffer();
         } catch (SQLException e) {
-            logger.log(Level.WARNING, "Errore nel recupero dei bestOnOffer: " + e.getMessage());
+            logger.log(Level.WARNING, MSG_ERROR_RECUPERO_DATI, e);
             throw e; // Lancia l'eccezione per la gestione nel metodo superiore, se necessario
         }
     }
