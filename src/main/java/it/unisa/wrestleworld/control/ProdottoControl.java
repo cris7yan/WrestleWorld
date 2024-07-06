@@ -33,7 +33,7 @@ public class ProdottoControl extends HttpServlet {
 
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
-    private static final String MSG_ERROR_RECUPERO_DATI = "Errore durante il recupero dei dati: ";
+    private static final String MSG_ERROR_RECUPERO_DATI_HOMEPAGE = "Errore durante il recupero dei dati per la HomePage ";
 
     public ProdottoControl () {
         super();
@@ -147,9 +147,11 @@ public class ProdottoControl extends HttpServlet {
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/index.jsp");
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
-            logger.log(Level.WARNING, e.getMessage());
+            logger.log(Level.SEVERE, MSG_ERROR_RECUPERO_DATI_HOMEPAGE, e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, MSG_ERROR_RECUPERO_DATI_HOMEPAGE);
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, MSG_ERROR_FORWARD);
         }
     }
 
@@ -159,12 +161,7 @@ public class ProdottoControl extends HttpServlet {
      * @throws SQLException
      */
     private List<ProdottoBean> recuperaBestSellers() throws SQLException {
-        try {
-            return prodModel.doRetrieveBestSellers();
-        } catch (SQLException e) {
-            logger.log(Level.WARNING, MSG_ERROR_RECUPERO_DATI, e);
-            throw e; // Lancia l'eccezione per la gestione nel metodo superiore, se necessario
-        }
+        return prodModel.doRetrieveBestSellers();
     }
 
     /**
@@ -173,12 +170,7 @@ public class ProdottoControl extends HttpServlet {
      * @throws SQLException
      */
     private List<ProdottoBean> recuperaBestOnOffer() throws SQLException {
-        try {
-            return prodModel.doRetrieveBestOnOffer();
-        } catch (SQLException e) {
-            logger.log(Level.WARNING, MSG_ERROR_RECUPERO_DATI, e);
-            throw e; // Lancia l'eccezione per la gestione nel metodo superiore, se necessario
-        }
+        return prodModel.doRetrieveBestOnOffer();
     }
 
 
