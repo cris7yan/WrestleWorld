@@ -110,7 +110,7 @@
     <ul>
         <li><a href="CategoriaControl?action=visualizzaSuperstar">Superstar</a></li>
 
-        <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&tipo=Title Belts">Title Belts</a>
+        <li><a href="ProdottoControl?action=visualizzaProdottiCategorie&categorie=Title Belts Replica,Side Plates">Title Belts</a>
             <ul id="submenu">
                 <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Title Belts Replica">Title Belts</a></li>
                 <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Side Plates">Side Plates</a></li>
@@ -141,7 +141,7 @@
         <li><a href="#">Collezionabili</a>
             <ul id="submenu">
                 <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Figure">Figure</a></li>
-                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Firmati">Firmati</a></li>
+                <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Firmato">Firmati</a></li>
                 <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Foto">Foto</a></li>
                 <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Memorabilia">Memorabilia</a></li>
             </ul>

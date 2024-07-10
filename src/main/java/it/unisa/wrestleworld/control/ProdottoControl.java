@@ -1,7 +1,6 @@
 package it.unisa.wrestleworld.control;
 
-import it.unisa.wrestleworld.model.ProdottoBean;
-import it.unisa.wrestleworld.model.ProdottoModel;
+import it.unisa.wrestleworld.model.*;
 import it.unisa.wrestleworld.util.Carrello;
 
 import com.google.gson.Gson;
@@ -15,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +24,8 @@ public class ProdottoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     static final Logger logger = Logger.getLogger(ProdottoControl.class.getName());
 
-    private static ProdottoModel prodModel = new ProdottoModel();
+    private static ProdottoDAO prodModel = new ProdottoModel();
+    private static TagliaProdottoDAO taglieModel = new TagliaProdottoModel();
     private static Carrello carrelloBean = new Carrello();
 
     private static final String CARRELLO_PARAM = "carrello";
@@ -81,7 +82,7 @@ public class ProdottoControl extends HttpServlet {
                     case "suggerimentiRicerca":
                         suggerimentiProdottiRicerca(request, response);
                         break;
-                    case "ricerca":
+                    case RICERCA_PARAM:
                         ricerca(request, response);
                         break;
                     case "visualizzaProdottiCategoria":
@@ -218,8 +219,12 @@ public class ProdottoControl extends HttpServlet {
 
             List<String> imgProd = prodModel.doRetrieveAllImages((ProdottoBean) prod);
 
+            List<TagliaProdottoBean> taglieProd = taglieModel.doRetrieveAllSizeByProduct((ProdottoBean) prod);
+
             request.setAttribute("prodotto", prod);
             request.setAttribute("imgProd", imgProd);
+            request.setAttribute("taglieProd", taglieProd);
+
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/dettagliProdotto.jsp");
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {

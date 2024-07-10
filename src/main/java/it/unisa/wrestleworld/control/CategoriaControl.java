@@ -86,6 +86,13 @@ public class CategoriaControl extends HttpServlet {
     }
 
 
+    /**
+     * Metodo che si occupa di far visualizzare tutte le superstar presenti nel sito
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void visualizzaSuperstar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<CategoriaBean> superstar = catModel.doRetrieveAllSuperstar();
@@ -102,6 +109,14 @@ public class CategoriaControl extends HttpServlet {
         }
     }
 
+
+    /**
+     * Metodo per visualizzare i PLE presenti sul sito
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void visualizzaPremiumLiveEvent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<CategoriaBean> ple = catModel.doRetrieveAllPLE();
@@ -118,7 +133,14 @@ public class CategoriaControl extends HttpServlet {
         }
     }
 
-    // Metodo aggiuntivo per visualizzare entrambe le categorie di default
+
+    /**
+     * Metodo aggiuntivo per visualizzare entrambe le categorie di default
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void visualizzaCategorie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<CategoriaBean> ple = catModel.doRetrieveAllPLE();

@@ -1,9 +1,6 @@
 package it.unisa.wrestleworld.control;
 
-import it.unisa.wrestleworld.model.OrdineBean;
-import it.unisa.wrestleworld.model.OrdineDAO;
-import it.unisa.wrestleworld.model.OrdineModel;
-import it.unisa.wrestleworld.model.ProdottoBean;
+import it.unisa.wrestleworld.model.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,6 +22,8 @@ public class OrdineControl extends HttpServlet {
     static final Logger logger = Logger.getLogger(OrdineControl.class.getName());
 
     static OrdineDAO ordineModel = new OrdineModel();
+    static IndirizzoDAO indirizzoModel = new IndirizzoModel();
+    static MetodoPagamentoDAO metodoPagamentoModel = new MetodoPagamentoModel();
 
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
@@ -53,6 +52,9 @@ public class OrdineControl extends HttpServlet {
                         break;
                     case "visualizzaDettagliOrdine":
                         visualizzaDettagliOrdini(request, response);
+                        break;
+                    case "visualizzaDatiUtente":
+                        visualizzaDatiUtente(request, response);
                         break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
@@ -122,6 +124,36 @@ public class OrdineControl extends HttpServlet {
 
             request.setAttribute("prodottiOrdine", prodottiOrdine);
             RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/dettagliOrdine.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+
+    private void visualizzaDatiUtente (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            HttpSession session = request.getSession();
+            String email = (String) session.getAttribute("email");
+
+            List<Integer> indirizzi = indirizzoModel.doRetrieveAllID(email);
+            List<IndirizzoBean> indirizziUtente = new ArrayList<>();
+            for (int ind : indirizzi) {
+                indirizziUtente.add(indirizzoModel.doRetrieveByID(ind));
+            }
+
+            List<Integer> metodi = metodoPagamentoModel.doRetrieveAllID(email);
+            List<MetodoPagamentoBean> metodiPagamentoUtente = new ArrayList<>();
+            for(int mp : metodi) {
+                metodiPagamentoUtente.add(metodoPagamentoModel.doRetrieveByID(mp));
+            }
+
+            request.setAttribute("indirizziUtente", indirizziUtente);
+            request.setAttribute("metodiPagamentoUtente", metodiPagamentoUtente);
+
+            RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/paginaAcquisto.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);

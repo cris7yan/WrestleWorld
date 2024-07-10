@@ -21,6 +21,7 @@ public class ProdottoModel implements ProdottoDAO {
     private static final String TABLE_COMPOSIZIONE_ORDINE = "ComposizioneOrdine";
     private static final String TABLE_IMMAGINE = "Immagine";
     private static final String TABLE_APPARTENENZA = "Appartenenza";
+    private static final String TABLE_TAGLIAPRODOTTO = "TagliaProdotto";
 
     private static final String IDPROD_PARAM = "ID_Prodotto";
     private static final String NOME_PARAM = "Nome";
@@ -31,6 +32,9 @@ public class ProdottoModel implements ProdottoDAO {
     private static final String MARCA_PARAM = "Marca";
     private static final String MODELLO_PARAM = "Modello";
     private static final String DISPONIBILITA_PARAM = "Disponibilita";
+    private static final String ID_TAGLIAPROD_PARAM = "ID_TagliaProdotto";
+    private static final String TAGLIA_PARAM = "Taglia";
+    private static final String QUANTITA_PARAM = "Quantita";
 
     private static final String SELECT_ALL_FROM = "SELECT * FROM ";
     private static final String WHERE_IDPROD = " WHERE ID_Prodotto = ?";
@@ -61,15 +65,17 @@ public class ProdottoModel implements ProdottoDAO {
         List<ProdottoBean> prodotti = new ArrayList<>();
 
         Connection conn = null;
-        PreparedStatement ps = null;
+        PreparedStatement psProd = null;
+        PreparedStatement psTaglia = null;
 
-        String query = SELECT_ALL_FROM + TABLE_PRODOTTO;
+        String queryProdotto = SELECT_ALL_FROM + TABLE_PRODOTTO;
+        String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();
-            ps = conn.prepareStatement(query);
+            psProd = conn.prepareStatement(queryProdotto);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = psProd.executeQuery();
             while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean();
 
@@ -83,6 +89,23 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
                 prod.setDisponibilitaProdotto(rs.getBoolean(DISPONIBILITA_PARAM));
 
+                psTaglia = conn.prepareStatement(queryTaglia);
+                psTaglia.setInt(1, prod.getIDProdotto());
+
+                ResultSet rsTaglia = psTaglia.executeQuery();
+                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                while (rsTaglia.next()) {
+                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+
+                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+
+                    taglieProdotto.add(taglia);
+                }
+                prod.setTaglieProdotto(taglieProdotto);
+
                 prodotti.add(prod);
             }
         } catch (SQLException e) {
@@ -90,8 +113,15 @@ public class ProdottoModel implements ProdottoDAO {
         } finally {
             // chiusura PreparedStatement e Connection
             try {
-                if (ps != null) {
-                    ps.close();
+                if (psProd != null) {
+                    psProd.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (psTaglia != null) {
+                    psTaglia.close();
                 }
             } catch (SQLException e) {
                 logger.log(Level.WARNING, MSG_ERROR_PS, e);
@@ -117,18 +147,20 @@ public class ProdottoModel implements ProdottoDAO {
         List<ProdottoBean> bestSellers = new ArrayList<>();
 
         Connection conn = null;
-        PreparedStatement ps = null;
+        PreparedStatement psProd = null;
+        PreparedStatement psTaglia = null;
 
         String query = "SELECT P.ID_Prodotto, P.Nome, P.Descrizione, P.Prezzo, P.Prezzo_Offerta, SUM(Co.Quantita) as Tot FROM " + TABLE_PRODOTTO
                 + " P JOIN " + TABLE_COMPOSIZIONE_ORDINE + " Co ON P.ID_Prodotto = Co.ID_Prodotto "
                 + "GROUP BY P.ID_Prodotto "
                 + "ORDER BY Tot DESC LIMIT 3";
+        String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();
-            ps = conn.prepareStatement(query);
+            psProd = conn.prepareStatement(query);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = psProd.executeQuery();
             while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean();
 
@@ -138,6 +170,23 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
                 prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
 
+                psTaglia = conn.prepareStatement(queryTaglia);
+                psTaglia.setInt(1, prod.getIDProdotto());
+
+                ResultSet rsTaglia = psTaglia.executeQuery();
+                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                while (rsTaglia.next()) {
+                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+
+                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+
+                    taglieProdotto.add(taglia);
+                }
+                prod.setTaglieProdotto(taglieProdotto);
+
                 bestSellers.add(prod);
             }
         } catch (SQLException e) {
@@ -145,8 +194,15 @@ public class ProdottoModel implements ProdottoDAO {
         } finally {
             // chiusura PreparedStatement e Connection
             try {
-                if (ps != null) {
-                    ps.close();
+                if (psProd != null) {
+                    psProd.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (psTaglia != null) {
+                    psTaglia.close();
                 }
             } catch (SQLException e) {
                 logger.log(Level.WARNING, MSG_ERROR_PS, e);
@@ -219,19 +275,21 @@ public class ProdottoModel implements ProdottoDAO {
      */
     public synchronized ProdottoBean doRetrieveByID (int id) throws SQLException {
         Connection conn = null;
-        PreparedStatement ps = null;
+        PreparedStatement psProd = null;
+        PreparedStatement psTaglia = null;
 
         ProdottoBean prod = new ProdottoBean();
 
         String query = SELECT_ALL_FROM + TABLE_PRODOTTO + WHERE_IDPROD;
+        String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();
-            ps = conn.prepareStatement(query);
+            psProd = conn.prepareStatement(query);
 
-            ps.setInt(1, id);
+            psProd.setInt(1, id);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = psProd.executeQuery();
             while (rs.next()) {
                 prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
                 prod.setNomeProdotto(rs.getString(NOME_PARAM));
@@ -241,14 +299,38 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
+
+                psTaglia = conn.prepareStatement(queryTaglia);
+                psTaglia.setInt(1, prod.getIDProdotto());
+
+                ResultSet rsTaglia = psTaglia.executeQuery();
+                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                while (rsTaglia.next()) {
+                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+
+                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+
+                    taglieProdotto.add(taglia);
+                }
+                prod.setTaglieProdotto(taglieProdotto);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } finally {
             // chiusura PreparedStatement e Connection
             try {
-                if (ps != null) {
-                    ps.close();
+                if (psProd != null) {
+                    psProd.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (psTaglia != null) {
+                    psTaglia.close();
                 }
             } catch (SQLException e) {
                 logger.log(Level.WARNING, MSG_ERROR_PS, e);
@@ -275,6 +357,7 @@ public class ProdottoModel implements ProdottoDAO {
         boolean disp = false;
         Connection conn = null;
         PreparedStatement ps = null;
+
         String query = "SELECT Disponibilita FROM " + TABLE_PRODOTTO + WHERE_IDPROD;
 
         try {
@@ -321,17 +404,19 @@ public class ProdottoModel implements ProdottoDAO {
         ProdottoBean prod = new ProdottoBean();
 
         Connection conn = null;
-        PreparedStatement ps = null;
+        PreparedStatement psProd = null;
+        PreparedStatement psTaglia = null;
 
         String query = SELECT_ALL_FROM + TABLE_PRODOTTO + " WHERE Nome LIKE ? AND Disponibilita = 1";
+        String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();
-            ps = conn.prepareStatement(query);
+            psProd = conn.prepareStatement(query);
 
-            ps.setString(1, nome);
+            psProd.setString(1, nome);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = psProd.executeQuery();
             while (rs.next()) {
                 prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
                 prod.setNomeProdotto(rs.getString(NOME_PARAM));
@@ -341,14 +426,38 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
+
+                psTaglia = conn.prepareStatement(queryTaglia);
+                psTaglia.setInt(1, prod.getIDProdotto());
+
+                ResultSet rsTaglia = psTaglia.executeQuery();
+                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                while (rsTaglia.next()) {
+                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+
+                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+
+                    taglieProdotto.add(taglia);
+                }
+                prod.setTaglieProdotto(taglieProdotto);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } finally {
             // chiusura PreparedStatement e Connection
             try {
-                if (ps != null) {
-                    ps.close();
+                if (psProd != null) {
+                    psProd.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (psTaglia != null) {
+                    psTaglia.close();
                 }
             } catch (SQLException e) {
                 logger.log(Level.WARNING, MSG_ERROR_PS, e);
@@ -423,18 +532,20 @@ public class ProdottoModel implements ProdottoDAO {
         List<ProdottoBean> categoryProd = new ArrayList<>();
 
         Connection conn = null;
-        PreparedStatement ps = null;
+        PreparedStatement psProd = null;
+        PreparedStatement psTaglia = null;
 
         String query = " SELECT p.* FROM " + TABLE_PRODOTTO + " p JOIN " + TABLE_APPARTENENZA + " a ON p.ID_Prodotto = a.ID_Prodotto "
                 + "JOIN Categoria c ON a.NomeCategoria = c.NomeCategoria" + " WHERE c.NomeCategoria = ?";
+        String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();
-            ps = conn.prepareStatement(query);
+            psProd = conn.prepareStatement(query);
 
-            ps.setString(1, category);
+            psProd.setString(1, category);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = psProd.executeQuery();
             while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean();
                 prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
@@ -445,6 +556,24 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
+
+                psTaglia = conn.prepareStatement(queryTaglia);
+                psTaglia.setInt(1, prod.getIDProdotto());
+
+                ResultSet rsTaglia = psTaglia.executeQuery();
+                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                while (rsTaglia.next()) {
+                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+
+                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+
+                    taglieProdotto.add(taglia);
+                }
+                prod.setTaglieProdotto(taglieProdotto);
+
                 categoryProd.add(prod);
             }
         } catch (SQLException e) {
@@ -452,8 +581,15 @@ public class ProdottoModel implements ProdottoDAO {
         } finally {
             // chiusura PreparedStatement e Connection
             try {
-                if (ps != null) {
-                    ps.close();
+                if (psProd != null) {
+                    psProd.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (psTaglia != null) {
+                    psTaglia.close();
                 }
             } catch (SQLException e) {
                 logger.log(Level.WARNING, MSG_ERROR_PS, e);
@@ -479,18 +615,20 @@ public class ProdottoModel implements ProdottoDAO {
         List<ProdottoBean> bestOnOffer = new ArrayList<>();
 
         Connection conn = null;
-        PreparedStatement ps = null;
+        PreparedStatement psProd = null;
+        PreparedStatement psTaglia = null;
 
         String query = "SELECT ID_Prodotto, Nome, Descrizione, Prezzo, " +
                 "CASE WHEN Prezzo_Offerta > 0 AND Prezzo_Offerta < Prezzo THEN Prezzo_Offerta ELSE Prezzo END AS PrezzoEffettivo, Disponibilita " +
                 "FROM " + TABLE_PRODOTTO + " WHERE Prezzo_Offerta > 0 AND Prezzo_Offerta < Prezzo " +
                 "ORDER BY Prezzo - Prezzo_Offerta DESC LIMIT 10";
+        String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();
-            ps = conn.prepareStatement(query);
+            psProd = conn.prepareStatement(query);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = psProd.executeQuery();
             while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean();
 
@@ -500,6 +638,23 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM)); // Prezzo originale
                 prod.setPrezzoOffertaProdotto(rs.getFloat("PrezzoEffettivo"));
 
+                psTaglia = conn.prepareStatement(queryTaglia);
+                psTaglia.setInt(1, prod.getIDProdotto());
+
+                ResultSet rsTaglia = psTaglia.executeQuery();
+                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                while (rsTaglia.next()) {
+                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+
+                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+
+                    taglieProdotto.add(taglia);
+                }
+                prod.setTaglieProdotto(taglieProdotto);
+
                 bestOnOffer.add(prod);
             }
         } catch (SQLException e) {
@@ -507,8 +662,15 @@ public class ProdottoModel implements ProdottoDAO {
         } finally {
             // chiusura PreparedStatement e Connection
             try {
-                if (ps != null) {
-                    ps.close();
+                if (psProd != null) {
+                    psProd.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (psTaglia != null) {
+                    psTaglia.close();
                 }
             } catch (SQLException e) {
                 logger.log(Level.WARNING, MSG_ERROR_PS, e);

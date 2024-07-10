@@ -76,3 +76,54 @@ body {
     color: #333;
     margin-bottom: 5px;
 }
+
+/* Aggiungi questo CSS al tuo file paginaProdotto.css */
+
+/* Stile base per il menu a tendina */
+select[name="taglie"] {
+    width: 200px; /* Larghezza del menu a tendina */
+    padding: 10px; /* Spaziatura interna */
+    border: 1px solid #ccc; /* Bordo */
+    border-radius: 5px; /* Angoli arrotondati */
+    background-color: #fff; /* Colore di sfondo */
+    font-size: 16px; /* Dimensione del testo */
+    color: #333; /* Colore del testo */
+    appearance: none; /* Rimuovi la freccia standard del browser */
+    -webkit-appearance: none; /* Per Safari/Chrome */
+    -moz-appearance: none; /* Per Firefox */
+    cursor: pointer; /* Cambia il cursore quando si passa sopra */
+    margin-top: 10px; /* Margine superiore */
+}
+
+/* Stile per le opzioni del menu a tendina */
+select[name="taglie"] option {
+    padding: 10px; /* Spaziatura interna */
+    font-size: 16px; /* Dimensione del testo */
+    color: #333; /* Colore del testo */
+    background-color: #fff; /* Colore di sfondo */
+}
+
+/* Aggiungi un'icona per il menu a tendina */
+select[name="taglie"]::after {
+    content: '▼'; /* Icona della freccia */
+    font-size: 12px; /* Dimensione dell'icona */
+    color: #333; /* Colore dell'icona */
+    position: absolute; /* Posizionamento assoluto */
+    right: 10px; /* Distanza dal lato destro */
+    top: 50%; /* Centrato verticalmente */
+    transform: translateY(-50%); /* Centrato verticalmente */
+    pointer-events: none; /* Disabilita gli eventi pointer */
+}
+
+/* Contenitore per rendere l'icona visibile */
+.product-details {
+    position: relative; /* Posizionamento relativo per il contenitore */
+}
+
+/* Stile per la label del menu a tendina */
+.product-sizes {
+    font-size: 18px; /* Dimensione del testo */
+    font-weight: bold; /* Grassetto */
+    color: #333; /* Colore del testo */
+    margin-bottom: 5px; /* Margine inferiore */
+}

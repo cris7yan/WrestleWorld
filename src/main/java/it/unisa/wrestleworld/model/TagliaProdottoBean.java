@@ -40,7 +40,6 @@ public class TagliaProdottoBean implements Serializable {
         this.idProdotto = idProdotto;
     }
 
-
     public void setTaglia(String taglia) {
         this.taglia = taglia;
     }

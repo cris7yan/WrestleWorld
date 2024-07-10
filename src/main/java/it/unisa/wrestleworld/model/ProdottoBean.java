@@ -17,6 +17,7 @@ public class ProdottoBean implements Serializable {
     private float prezzoOfferta;
     private boolean disponibilita;
     private List<String> img;
+    private List<TagliaProdottoBean> taglieProdotto;
 
     public ProdottoBean () {
         // Costruttore
@@ -63,6 +64,10 @@ public class ProdottoBean implements Serializable {
         return this.img;
     }
 
+    public List<TagliaProdottoBean> getTaglieProdotto() {
+        return this.taglieProdotto;
+    }
+
     // Metodi Set
     public void setIDProdotto (int idProdotto) {
         this.idProdotto = idProdotto;
@@ -102,6 +107,18 @@ public class ProdottoBean implements Serializable {
 
     public void setImmaginiProdotto (String img) {
         this.img.add(img);
+    }
+
+    public void setTaglieProdotto (List<TagliaProdottoBean> taglie) {
+        this.taglieProdotto = taglie;
+    }
+
+    public void addTagliaProdotto(TagliaProdottoBean tagliaProdotto) {
+        this.taglieProdotto.add(tagliaProdotto);
+    }
+
+    public void removeTagliaProdotto(TagliaProdottoBean tagliaProdotto) {
+        this.taglieProdotto.remove(tagliaProdotto);
     }
 
 }
