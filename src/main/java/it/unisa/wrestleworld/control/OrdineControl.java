@@ -1,6 +1,7 @@
 package it.unisa.wrestleworld.control;
 
 import it.unisa.wrestleworld.model.*;
+import it.unisa.wrestleworld.util.Carrello;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -133,10 +134,22 @@ public class OrdineControl extends HttpServlet {
     }
 
 
+    /**
+     * funzione che permette la visualizzazione dei metodi di pagamento e degli indirizzi di un determinato utente nella fase di acquisto
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void visualizzaDatiUtente (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute("email");
+
+            if (email == null || email.isEmpty()) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
 
             List<Integer> indirizzi = indirizzoModel.doRetrieveAllID(email);
             List<IndirizzoBean> indirizziUtente = new ArrayList<>();
