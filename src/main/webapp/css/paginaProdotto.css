@@ -42,6 +42,7 @@ body {
 .product-details {
     flex: 1;
     padding: 20px;
+    position: relative;
 }
 
 /* Stile per il nome del prodotto */
@@ -113,11 +114,6 @@ select[name="taglie"]::after {
     top: 50%; /* Centrato verticalmente */
     transform: translateY(-50%); /* Centrato verticalmente */
     pointer-events: none; /* Disabilita gli eventi pointer */
-}
-
-/* Contenitore per rendere l'icona visibile */
-.product-details {
-    position: relative; /* Posizionamento relativo per il contenitore */
 }
 
 /* Stile per la label del menu a tendina */
