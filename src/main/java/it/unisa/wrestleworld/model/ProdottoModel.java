@@ -64,16 +64,12 @@ public class ProdottoModel implements ProdottoDAO {
     public synchronized List<ProdottoBean> doRetrieveAll() throws SQLException {
         List<ProdottoBean> prodotti = new ArrayList<>();
 
-        Connection conn = null;
-        PreparedStatement psProd = null;
-        PreparedStatement psTaglia = null;
-
         String queryProdotto = SELECT_ALL_FROM + TABLE_PRODOTTO;
         String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
-        try {
-            conn = dataSource.getConnection();
-            psProd = conn.prepareStatement(queryProdotto);
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement psProd = conn.prepareStatement(queryProdotto);
+             PreparedStatement psTaglia = conn.prepareStatement(queryTaglia)) {
 
             ResultSet rs = psProd.executeQuery();
             while (rs.next()) {
@@ -89,53 +85,31 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
                 prod.setDisponibilitaProdotto(rs.getBoolean(DISPONIBILITA_PARAM));
 
-                psTaglia = conn.prepareStatement(queryTaglia);
                 psTaglia.setInt(1, prod.getIDProdotto());
 
-                ResultSet rsTaglia = psTaglia.executeQuery();
-                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
-                while (rsTaglia.next()) {
-                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+                try (ResultSet rsTaglia = psTaglia.executeQuery()) {
+                    List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                    while (rsTaglia.next()) {
+                        TagliaProdottoBean taglia = new TagliaProdottoBean();
 
-                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
-                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
-                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
-                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                        taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                        taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
 
-                    taglieProdotto.add(taglia);
+                        taglieProdotto.add(taglia);
+                    }
+                    prod.setTaglieProdotto(taglieProdotto);
                 }
-                prod.setTaglieProdotto(taglieProdotto);
 
                 prodotti.add(prod);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
-        } finally {
-            // chiusura PreparedStatement e Connection
-            try {
-                if (psProd != null) {
-                    psProd.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (psTaglia != null) {
-                    psTaglia.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
-            }
         }
         return prodotti;
     }
+
 
 
     /**
@@ -146,19 +120,15 @@ public class ProdottoModel implements ProdottoDAO {
     public synchronized List<ProdottoBean> doRetrieveBestSellers() throws SQLException {
         List<ProdottoBean> bestSellers = new ArrayList<>();
 
-        Connection conn = null;
-        PreparedStatement psProd = null;
-        PreparedStatement psTaglia = null;
-
-        String query = "SELECT P.ID_Prodotto, P.Nome, P.Descrizione, P.Prezzo, P.Prezzo_Offerta, SUM(Co.Quantita) as Tot FROM " + TABLE_PRODOTTO
-                + " P JOIN " + TABLE_COMPOSIZIONE_ORDINE + " Co ON P.ID_Prodotto = Co.ID_Prodotto "
+        String query = "SELECT P.ID_Prodotto, P.Nome, P.Descrizione, P.Prezzo, P.Prezzo_Offerta, SUM(Co.Quantita) as Tot FROM "
+                + TABLE_PRODOTTO + " P JOIN " + TABLE_COMPOSIZIONE_ORDINE + " Co ON P.ID_Prodotto = Co.ID_Prodotto "
                 + "GROUP BY P.ID_Prodotto "
                 + "ORDER BY Tot DESC LIMIT 3";
         String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
-        try {
-            conn = dataSource.getConnection();
-            psProd = conn.prepareStatement(query);
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement psProd = conn.prepareStatement(query);
+             PreparedStatement psTaglia = conn.prepareStatement(queryTaglia)) {
 
             ResultSet rs = psProd.executeQuery();
             while (rs.next()) {
@@ -170,51 +140,29 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
                 prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
 
-                psTaglia = conn.prepareStatement(queryTaglia);
                 psTaglia.setInt(1, prod.getIDProdotto());
 
-                ResultSet rsTaglia = psTaglia.executeQuery();
-                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
-                while (rsTaglia.next()) {
-                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+                try (ResultSet rsTaglia = psTaglia.executeQuery()) {
+                    List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                    while (rsTaglia.next()) {
+                        TagliaProdottoBean taglia = new TagliaProdottoBean();
 
-                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
-                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
-                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
-                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                        taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                        taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
 
-                    taglieProdotto.add(taglia);
+                        taglieProdotto.add(taglia);
+                    }
+                    prod.setTaglieProdotto(taglieProdotto);
                 }
-                prod.setTaglieProdotto(taglieProdotto);
 
                 bestSellers.add(prod);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
-        } finally {
-            // chiusura PreparedStatement e Connection
-            try {
-                if (psProd != null) {
-                    psProd.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (psTaglia != null) {
-                    psTaglia.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
-            }
         }
+
         return bestSellers;
     }
 
@@ -273,23 +221,19 @@ public class ProdottoModel implements ProdottoDAO {
      * @return
      * @throws SQLException
      */
-    public synchronized ProdottoBean doRetrieveByID (int id) throws SQLException {
-        Connection conn = null;
-        PreparedStatement psProd = null;
-        PreparedStatement psTaglia = null;
-
+    public synchronized ProdottoBean doRetrieveByID(int id) throws SQLException {
         ProdottoBean prod = new ProdottoBean();
 
         String query = SELECT_ALL_FROM + TABLE_PRODOTTO + WHERE_IDPROD;
         String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
-        try {
-            conn = dataSource.getConnection();
-            psProd = conn.prepareStatement(query);
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement psProd = conn.prepareStatement(query);
+             PreparedStatement psTaglia = conn.prepareStatement(queryTaglia)) {
 
             psProd.setInt(1, id);
-
             ResultSet rs = psProd.executeQuery();
+
             while (rs.next()) {
                 prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
                 prod.setNomeProdotto(rs.getString(NOME_PARAM));
@@ -300,49 +244,27 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
 
-                psTaglia = conn.prepareStatement(queryTaglia);
                 psTaglia.setInt(1, prod.getIDProdotto());
 
-                ResultSet rsTaglia = psTaglia.executeQuery();
-                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
-                while (rsTaglia.next()) {
-                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+                try (ResultSet rsTaglia = psTaglia.executeQuery()) {
+                    List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                    while (rsTaglia.next()) {
+                        TagliaProdottoBean taglia = new TagliaProdottoBean();
 
-                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
-                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
-                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
-                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                        taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                        taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
 
-                    taglieProdotto.add(taglia);
+                        taglieProdotto.add(taglia);
+                    }
+                    prod.setTaglieProdotto(taglieProdotto);
                 }
-                prod.setTaglieProdotto(taglieProdotto);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
-        } finally {
-            // chiusura PreparedStatement e Connection
-            try {
-                if (psProd != null) {
-                    psProd.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (psTaglia != null) {
-                    psTaglia.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
-            }
         }
+
         return prod;
     }
 
@@ -400,23 +322,19 @@ public class ProdottoModel implements ProdottoDAO {
      * @return
      * @throws SQLException
      */
-    public synchronized ProdottoBean doRetrieveByName (String nome) throws SQLException {
+    public synchronized ProdottoBean doRetrieveByName(String nome) throws SQLException {
         ProdottoBean prod = new ProdottoBean();
-
-        Connection conn = null;
-        PreparedStatement psProd = null;
-        PreparedStatement psTaglia = null;
 
         String query = SELECT_ALL_FROM + TABLE_PRODOTTO + " WHERE Nome LIKE ? AND Disponibilita = 1";
         String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
-        try {
-            conn = dataSource.getConnection();
-            psProd = conn.prepareStatement(query);
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement psProd = conn.prepareStatement(query);
+             PreparedStatement psTaglia = conn.prepareStatement(queryTaglia)) {
 
             psProd.setString(1, nome);
-
             ResultSet rs = psProd.executeQuery();
+
             while (rs.next()) {
                 prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
                 prod.setNomeProdotto(rs.getString(NOME_PARAM));
@@ -427,49 +345,27 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
 
-                psTaglia = conn.prepareStatement(queryTaglia);
                 psTaglia.setInt(1, prod.getIDProdotto());
 
-                ResultSet rsTaglia = psTaglia.executeQuery();
-                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
-                while (rsTaglia.next()) {
-                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+                try (ResultSet rsTaglia = psTaglia.executeQuery()) {
+                    List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                    while (rsTaglia.next()) {
+                        TagliaProdottoBean taglia = new TagliaProdottoBean();
 
-                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
-                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
-                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
-                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                        taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                        taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
 
-                    taglieProdotto.add(taglia);
+                        taglieProdotto.add(taglia);
+                    }
+                    prod.setTaglieProdotto(taglieProdotto);
                 }
-                prod.setTaglieProdotto(taglieProdotto);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
-        } finally {
-            // chiusura PreparedStatement e Connection
-            try {
-                if (psProd != null) {
-                    psProd.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (psTaglia != null) {
-                    psTaglia.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
-            }
         }
+
         return prod;
     }
 
@@ -528,24 +424,20 @@ public class ProdottoModel implements ProdottoDAO {
      * @return
      * @throws SQLException
      */
-    public synchronized List<ProdottoBean> doRetrieveByCategory (String category) throws SQLException {
+    public synchronized List<ProdottoBean> doRetrieveByCategory(String category) throws SQLException {
         List<ProdottoBean> categoryProd = new ArrayList<>();
 
-        Connection conn = null;
-        PreparedStatement psProd = null;
-        PreparedStatement psTaglia = null;
-
-        String query = " SELECT p.* FROM " + TABLE_PRODOTTO + " p JOIN " + TABLE_APPARTENENZA + " a ON p.ID_Prodotto = a.ID_Prodotto "
-                + "JOIN Categoria c ON a.NomeCategoria = c.NomeCategoria" + " WHERE c.NomeCategoria = ?";
+        String query = "SELECT p.* FROM " + TABLE_PRODOTTO + " p JOIN " + TABLE_APPARTENENZA + " a ON p.ID_Prodotto = a.ID_Prodotto "
+                + "JOIN Categoria c ON a.NomeCategoria = c.NomeCategoria WHERE c.NomeCategoria = ?";
         String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
-        try {
-            conn = dataSource.getConnection();
-            psProd = conn.prepareStatement(query);
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement psProd = conn.prepareStatement(query);
+             PreparedStatement psTaglia = conn.prepareStatement(queryTaglia)) {
 
             psProd.setString(1, category);
-
             ResultSet rs = psProd.executeQuery();
+
             while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean();
                 prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
@@ -557,51 +449,29 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
 
-                psTaglia = conn.prepareStatement(queryTaglia);
                 psTaglia.setInt(1, prod.getIDProdotto());
 
-                ResultSet rsTaglia = psTaglia.executeQuery();
-                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
-                while (rsTaglia.next()) {
-                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+                try (ResultSet rsTaglia = psTaglia.executeQuery()) {
+                    List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                    while (rsTaglia.next()) {
+                        TagliaProdottoBean taglia = new TagliaProdottoBean();
 
-                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
-                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
-                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
-                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                        taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                        taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
 
-                    taglieProdotto.add(taglia);
+                        taglieProdotto.add(taglia);
+                    }
+                    prod.setTaglieProdotto(taglieProdotto);
                 }
-                prod.setTaglieProdotto(taglieProdotto);
 
                 categoryProd.add(prod);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
-        } finally {
-            // chiusura PreparedStatement e Connection
-            try {
-                if (psProd != null) {
-                    psProd.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (psTaglia != null) {
-                    psTaglia.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
-            }
         }
+
         return categoryProd;
     }
 
@@ -614,21 +484,18 @@ public class ProdottoModel implements ProdottoDAO {
     public synchronized List<ProdottoBean> doRetrieveBestOnOffer() throws SQLException {
         List<ProdottoBean> bestOnOffer = new ArrayList<>();
 
-        Connection conn = null;
-        PreparedStatement psProd = null;
-        PreparedStatement psTaglia = null;
-
         String query = "SELECT ID_Prodotto, Nome, Descrizione, Prezzo, " +
                 "CASE WHEN Prezzo_Offerta > 0 AND Prezzo_Offerta < Prezzo THEN Prezzo_Offerta ELSE Prezzo END AS PrezzoEffettivo, Disponibilita " +
                 "FROM " + TABLE_PRODOTTO + " WHERE Prezzo_Offerta > 0 AND Prezzo_Offerta < Prezzo " +
                 "ORDER BY Prezzo - Prezzo_Offerta DESC LIMIT 10";
         String queryTaglia = SELECT_ALL_FROM + TABLE_TAGLIAPRODOTTO + WHERE_IDPROD;
 
-        try {
-            conn = dataSource.getConnection();
-            psProd = conn.prepareStatement(query);
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement psProd = conn.prepareStatement(query);
+             PreparedStatement psTaglia = conn.prepareStatement(queryTaglia)) {
 
             ResultSet rs = psProd.executeQuery();
+
             while (rs.next()) {
                 ProdottoBean prod = new ProdottoBean();
 
@@ -638,52 +505,31 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM)); // Prezzo originale
                 prod.setPrezzoOffertaProdotto(rs.getFloat("PrezzoEffettivo"));
 
-                psTaglia = conn.prepareStatement(queryTaglia);
                 psTaglia.setInt(1, prod.getIDProdotto());
 
-                ResultSet rsTaglia = psTaglia.executeQuery();
-                List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
-                while (rsTaglia.next()) {
-                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+                try (ResultSet rsTaglia = psTaglia.executeQuery()) {
+                    List<TagliaProdottoBean> taglieProdotto = new ArrayList<>();
+                    while (rsTaglia.next()) {
+                        TagliaProdottoBean taglia = new TagliaProdottoBean();
 
-                    taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
-                    taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
-                    taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
-                    taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(ID_TAGLIAPROD_PARAM));
+                        taglia.setIdProdotto(rsTaglia.getInt(IDPROD_PARAM));
+                        taglia.setTaglia(rsTaglia.getString(TAGLIA_PARAM));
+                        taglia.setQuantita(rsTaglia.getInt(QUANTITA_PARAM));
 
-                    taglieProdotto.add(taglia);
+                        taglieProdotto.add(taglia);
+                    }
+                    prod.setTaglieProdotto(taglieProdotto);
                 }
-                prod.setTaglieProdotto(taglieProdotto);
 
                 bestOnOffer.add(prod);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
-        } finally {
-            // chiusura PreparedStatement e Connection
-            try {
-                if (psProd != null) {
-                    psProd.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (psTaglia != null) {
-                    psTaglia.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
-            }
         }
+
         return bestOnOffer;
     }
+
 
 }

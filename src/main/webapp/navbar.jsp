@@ -110,7 +110,7 @@
     <ul>
         <li><a href="CategoriaControl?action=visualizzaSuperstar">Superstar</a></li>
 
-        <li><a href="ProdottoControl?action=visualizzaProdottiCategorie&categorie=Title Belts Replica,Side Plates">Title Belts</a>
+        <li><a href="#">Title Belts</a>
             <ul id="submenu">
                 <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Title Belts Replica">Title Belts</a></li>
                 <li><a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Side Plates">Side Plates</a></li>
