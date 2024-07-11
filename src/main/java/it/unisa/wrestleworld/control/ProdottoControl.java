@@ -254,7 +254,13 @@ public class ProdottoControl extends HttpServlet {
             request.getSession().setAttribute(CARRELLO_PARAM, carrelloBean);
             request.setAttribute(CARRELLO_PARAM, cart);
 
-            response.sendRedirect(request.getContextPath() + "/carrello.jsp");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            Gson gson = new Gson();
+            String jsonCart = gson.toJson(cart);
+            out.print(jsonCart);
+            out.flush();
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (IOException e) {

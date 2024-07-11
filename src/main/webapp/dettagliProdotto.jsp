@@ -16,16 +16,17 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>WrestleWorld | Pagina prodotto</title>
-  <link href="css/paginaProdotto.css" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
+    <title>WrestleWorld | Pagina prodotto</title>
+    <link href="css/paginaProdotto.css" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS" crossorigin="anonymous"></script>
 </head>
 <style>
-  /* Aggiunta per evitare sovrapposizione con la navbar */
-  body {
-    margin-top: 70px; /* Altezza della navbar + margine */
-    padding-top: 5px; /* Spaziatura sopra il contenuto del body */
-  }
+    /* Aggiunta per evitare sovrapposizione con la navbar */
+    body {
+        margin-top: 70px; /* Altezza della navbar + margine */
+        padding-top: 5px; /* Spaziatura sopra il contenuto del body */
+    }
 </style>
 <body>
 <%@ include file="navbar.jsp"%>
@@ -33,16 +34,16 @@
 <div class="product-container">
 
     <div class="product-img">
-      <%
-        if(prod instanceof ProdottoBean) {
-          for(String img : imgProd) {
-      %>
+        <%
+            if(prod instanceof ProdottoBean) {
+                for(String img : imgProd) {
+        %>
 
-      <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
+        <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
 
-      <%
-        }
-      %>
+        <%
+            }
+        %>
     </div>
 
     <div class="product-details">
@@ -53,35 +54,59 @@
         <p class="product-materiale">Materiale: <%=((ProdottoBean) prod).getMaterialeProdotto()%>  <br></p>
         <p class="product-modello">Modello: <%=((ProdottoBean) prod).getModelloProdotto()%>  <br></p>
         <p class="product-sizes">Taglie disponibili:</p>
-            <div class="select-container">
-                <select name="taglie" id="taglia-select" required>
-                    <option value="" disabled selected>--Seleziona una taglia</option>
-                    <%
-                        for(TagliaProdottoBean taglia : taglieProd) {
-                    %>
-                    <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %></option>
-                    <%
-                        }
-                    %>
-                </select>
-            </div>
+        <div class="select-container">
+            <select name="taglie" id="taglia-select" required>
+                <option value="" disabled selected>--Seleziona una taglia</option>
+                <%
+                    for(TagliaProdottoBean taglia : taglieProd) {
+                %>
+                <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %></option>
+                <%
+                    }
+                %>
+            </select>
+        </div>
         <br><br>
-        <a id="add-to-cart-link" href="#">Aggiungi al carrello</a>
+        <button id="add-to-cart-button">Aggiungi al carrello</button>
     </div>
 
-  <%
-    }
-  %>
+    <%
+        }
+    %>
 
 </div>
 
 <script>
-    document.getElementById('taglia-select').addEventListener('change', function() {
-        var taglia = this.value;
+    document.getElementById('add-to-cart-button').addEventListener('click', function() {
+        var taglia = document.getElementById('taglia-select').value;
         var idProd = '<%= ((ProdottoBean) prod).getIDProdotto() %>';
         var link = 'ProdottoControl?action=aggiungiAlCarrello&IDProd=' + idProd + '&taglia=' + taglia;
-        document.getElementById('add-to-cart-link').setAttribute('href', link);
+
+        if (!taglia) {
+            alert('Seleziona una taglia prima di aggiungere al carrello.');
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: link,
+            success: function(response) {
+                var carrello = JSON.parse(response);
+                aggiornaVisualizzazioneCarrello(carrello);
+                alert('Prodotto aggiunto al carrello con successo!');
+            },
+            error: function() {
+                alert('Errore durante l\'aggiunta del prodotto al carrello.');
+            }
+        });
     });
+
+    function aggiornaVisualizzazioneCarrello(carrello) {
+        // Implementa la logica per aggiornare la visualizzazione del carrello
+        // con le informazioni contenute nella variabile `carrello`
+        // Ad esempio, puoi aggiornare un contatore del carrello nella navbar
+        document.getElementById('cart-count').innerText = carrello.length;
+    }
 </script>
 
 <%@ include file="footer.jsp"%>
