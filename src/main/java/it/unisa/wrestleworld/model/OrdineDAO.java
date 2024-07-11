@@ -7,7 +7,7 @@ import java.util.List;
 public interface OrdineDAO {
 
     void doSave (Date data, float prezzoTotale, String emailUtente) throws SQLException;
-    void doUpdateComprendeOrdine (int IdOrdine, int IdProdotto, int quantita, float prezzoUnitario) throws SQLException;
+    void doUpdateComprendeOrdine (int idOrdine, int idProdotto, int quantita, float prezzoUnitario) throws SQLException;
     List<OrdineBean> doRetrieveAllByEmail (String email) throws SQLException;
     List<ProdottoBean> doRetrieveOrdineByID (int id) throws SQLException;
     int doRetrieveLastOrdineID () throws SQLException;

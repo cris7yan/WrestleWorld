@@ -34,8 +34,10 @@
         <%
             for (IndirizzoBean indirizzo : indirizziUtente) {
         %>
-        <input type="radio" name="indirizzoScelto" value="<%=indirizzo.getIdIndirizzo()%>" id="<%=indirizzo.getIdIndirizzo()%>" required>
-        <label><%=indirizzo.getViaIndirizzo()%>, <%=indirizzo.getCittaIndirizzo()%>, <%=indirizzo.getProvinciaIndirizzo()%>, <%=indirizzo.getNomeCompletoIndirizzo()%></label>
+        <input type="radio" name="indirizzoScelto" value="<%=indirizzo.getIdIndirizzo()%>" id="indirizzo_<%=indirizzo.getIdIndirizzo()%>" required>
+        <label for="indirizzo_<%=indirizzo.getIdIndirizzo()%>">
+            <%=indirizzo.getViaIndirizzo()%>, <%=indirizzo.getCittaIndirizzo()%>, <%=indirizzo.getProvinciaIndirizzo()%>, <%=indirizzo.getNomeCompletoIndirizzo()%>
+        </label>
         <%
             }
         %>
@@ -43,14 +45,17 @@
         <%
             for (MetodoPagamentoBean metodo : metodiPagamentoUtente) {
         %>
-        <input type="radio" name="metodoScelto" value="<%=metodo.getIdMetodoPagamento()%>" id="<%=metodo.getIdMetodoPagamento()%>" required>
-        <label><%=metodo.getNumeroCarta()%>, <%=metodo.getIntestatario()%>, <%=metodo.getDataScadenza()%></label>
+        <input type="radio" name="metodoScelto" value="<%=metodo.getIdMetodoPagamento()%>" id="metodo_<%=metodo.getIdMetodoPagamento()%>" required>
+        <label for="metodo_<%=metodo.getIdMetodoPagamento()%>">
+            <%=metodo.getNumeroCarta()%>, <%=metodo.getIntestatario()%>, <%=metodo.getDataScadenza()%>
+        </label>
         <%
             }
         %>
 
         <button type="submit">Acquista</button>
     </form>
+
 
 </body>
 </html>

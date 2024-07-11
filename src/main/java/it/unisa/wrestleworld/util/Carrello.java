@@ -37,35 +37,43 @@ public class Carrello implements Serializable {
         return false;
     }
 
-    public void aggiungiProdottoCarrello (ProdottoBean prodotto, String taglia) {
-        int numProd = 0;    // numero di quantità del prodotto in carrello
-        boolean presente = false;   // boolean che verifica se un prodotto è già presente nella lista oppure no
-
-        for (ProdottoBean prod : this.carrelloUtente) {
-            if(prod.getIDProdotto() == prodotto.getIDProdotto() && prod.getTagliaSelezionata().equals(taglia)) {
-                numProd = prod.getQuantitaCarrello();
-                presente = true;
-            }
-        }
+    public void aggiungiProdottoCarrello(ProdottoBean prodotto, String taglia) {
+        int numProd = getQuantitaProdottoInCarrello(prodotto, taglia);
+        boolean presente = numProd > 0;
 
         int nuovaQuantita = numProd + 1;
 
         if (verificaQuantitaDisponibile(prodotto, taglia, nuovaQuantita)) {
             if (presente) {
-                for (ProdottoBean prod : this.carrelloUtente) {
-                    if (prod.getIDProdotto() == prodotto.getIDProdotto() && prod.getTagliaSelezionata().equals(taglia)) {
-                        prod.aumentaQuantitaCarrello();
-                    }
-                }
+                aumentaQuantitaProdotto(prodotto, taglia);
             } else {
-                prodotto.setQuantitaCarrello(1);
-                prodotto.setTagliaSelezionata(taglia);
-                this.carrelloUtente.add(prodotto);
+                aggiungiNuovoProdottoAlCarrello(prodotto, taglia);
             }
-        } else {
-            // Gestisci il caso in cui la quantità richiesta non sia disponibile
-            System.out.println("Quantità richiesta non disponibile per il prodotto " + prodotto.getNomeProdotto() + " nella taglia " + taglia);
         }
+    }
+
+    private int getQuantitaProdottoInCarrello(ProdottoBean prodotto, String taglia) {
+        for (ProdottoBean prod : this.carrelloUtente) {
+            if (prod.getIDProdotto() == prodotto.getIDProdotto() && prod.getTagliaSelezionata().equals(taglia)) {
+                return prod.getQuantitaCarrello();
+            }
+        }
+        return 0;
+    }
+
+    private void aumentaQuantitaProdotto(ProdottoBean prodotto, String taglia) {
+        for (ProdottoBean prod : this.carrelloUtente) {
+            if (prod.getIDProdotto() == prodotto.getIDProdotto() && prod.getTagliaSelezionata().equals(taglia)) {
+                prod.aumentaQuantitaCarrello();
+                break;
+            }
+        }
+    }
+
+    private void aggiungiNuovoProdottoAlCarrello(ProdottoBean prodotto, String taglia) {
+        prodotto.setQuantitaCarrello(1);
+        prodotto.setTagliaSelezionata(taglia);
+        this.carrelloUtente.add(prodotto);
     }
 
     public void rimuoviProdottoCarrello (int idProdotto, String taglia) {

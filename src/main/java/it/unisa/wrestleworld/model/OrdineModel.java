@@ -87,7 +87,7 @@ public class OrdineModel implements OrdineDAO {
      * @param prezzoUnitario
      * @throws SQLException
      */
-    public synchronized void doUpdateComprendeOrdine (int IdOrdine, int IdProdotto, int quantita, float prezzoUnitario) throws SQLException {
+    public synchronized void doUpdateComprendeOrdine (int idOrdine, int idProdotto, int quantita, float prezzoUnitario) throws SQLException {
         Connection conn = null;
         PreparedStatement ps = null;
 
@@ -97,8 +97,8 @@ public class OrdineModel implements OrdineDAO {
             conn = dataSource.getConnection();
             ps = conn.prepareStatement(query);
 
-            ps.setInt(1, IdOrdine);
-            ps.setInt(2, IdProdotto);
+            ps.setInt(1, idOrdine);
+            ps.setInt(2, idProdotto);
             ps.setInt(3, quantita);
             ps.setFloat(4, prezzoUnitario);
 

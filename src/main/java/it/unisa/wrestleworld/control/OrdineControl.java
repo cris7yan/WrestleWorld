@@ -24,6 +24,8 @@ public class OrdineControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     static final Logger logger = Logger.getLogger(OrdineControl.class.getName());
 
+    private static final String EMAIL_PARAM = "email";
+
     static OrdineDAO ordineModel = new OrdineModel();
     static IndirizzoDAO indirizzoModel = new IndirizzoModel();
     static MetodoPagamentoDAO metodoPagamentoModel = new MetodoPagamentoModel();
@@ -58,6 +60,9 @@ public class OrdineControl extends HttpServlet {
                         break;
                     case "visualizzaDatiUtente":
                         visualizzaDatiUtente(request, response);
+                        break;
+                    case "checkout":
+                        checkout(request, response);
                         break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
@@ -99,7 +104,7 @@ public class OrdineControl extends HttpServlet {
     private void visualizzaOrdini (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            String email = (String) session.getAttribute("email");
+            String email = (String) session.getAttribute(EMAIL_PARAM);
             List<OrdineBean> ordini = ordineModel.doRetrieveAllByEmail(email);
 
             request.setAttribute("ordini", ordini);
@@ -146,7 +151,7 @@ public class OrdineControl extends HttpServlet {
     private void visualizzaDatiUtente (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            String email = (String) session.getAttribute("email");
+            String email = (String) session.getAttribute(EMAIL_PARAM);
 
             if (email == null || email.isEmpty()) {
                 response.sendRedirect("login.jsp");
@@ -185,11 +190,11 @@ public class OrdineControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void checkout (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void checkout (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             HttpSession session = request.getSession();
 
-            String email = (String) session.getAttribute("email");
+            String email = (String) session.getAttribute(EMAIL_PARAM);
             if (email == null || email.isEmpty()) {
                 response.sendRedirect("login.jsp");
                 return;
