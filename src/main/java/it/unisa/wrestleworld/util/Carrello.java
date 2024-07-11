@@ -28,31 +28,43 @@ public class Carrello implements Serializable {
 
     // Metodi per la gestione dei prodotti nel carrello
 
+    private boolean verificaQuantitaDisponibile (ProdottoBean prodotto, String taglia, int quantitaRichiesta) {
+        for (TagliaProdottoBean tagliaProdotto : prodotto.getTaglieProdotto()) {
+            if (tagliaProdotto.getTaglia().equals(taglia)) {
+                return tagliaProdotto.getQuantita() >= quantitaRichiesta;
+            }
+        }
+        return false;
+    }
+
     public void aggiungiProdottoCarrello (ProdottoBean prodotto, String taglia) {
         int numProd = 0;    // numero di quantità del prodotto in carrello
         boolean presente = false;   // boolean che verifica se un prodotto è già presente nella lista oppure no
 
         for (ProdottoBean prod : this.carrelloUtente) {
-            if(prod.getIDProdotto() == prodotto.getIDProdotto()) {
+            if(prod.getIDProdotto() == prodotto.getIDProdotto() && prod.getTagliaSelezionata().equals(taglia)) {
                 numProd = prod.getQuantitaCarrello();
+                presente = true;
             }
         }
 
-        if (numProd > 0) { presente = true; }
+        int nuovaQuantita = numProd + 1;
 
-        if (presente) {
-            for (ProdottoBean prod : this.carrelloUtente) {
-                if (prod.getIDProdotto() == prodotto.getIDProdotto()) {
-                    for (TagliaProdottoBean tagliaProdotto : prod.getTaglieProdotto()) {
-                        if(tagliaProdotto.getTaglia().equals(taglia)) {
-                            prod.aumentaQuantitaCarrello();
-                        }
+        if (verificaQuantitaDisponibile(prodotto, taglia, nuovaQuantita)) {
+            if (presente) {
+                for (ProdottoBean prod : this.carrelloUtente) {
+                    if (prod.getIDProdotto() == prodotto.getIDProdotto() && prod.getTagliaSelezionata().equals(taglia)) {
+                        prod.aumentaQuantitaCarrello();
                     }
                 }
+            } else {
+                prodotto.setQuantitaCarrello(1);
+                prodotto.setTagliaSelezionata(taglia);
+                this.carrelloUtente.add(prodotto);
             }
         } else {
-            prodotto.setQuantitaCarrello(1);
-            this.carrelloUtente.add(prodotto);
+            // Gestisci il caso in cui la quantità richiesta non sia disponibile
+            System.out.println("Quantità richiesta non disponibile per il prodotto " + prodotto.getNomeProdotto() + " nella taglia " + taglia);
         }
     }
 

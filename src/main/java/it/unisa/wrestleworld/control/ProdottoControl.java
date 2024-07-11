@@ -241,7 +241,7 @@ public class ProdottoControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void aggiungiProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void aggiungiProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int idProd = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
             String taglia = request.getParameter("taglia");
@@ -254,11 +254,10 @@ public class ProdottoControl extends HttpServlet {
             request.getSession().setAttribute(CARRELLO_PARAM, carrelloBean);
             request.setAttribute(CARRELLO_PARAM, cart);
 
-            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
-            reqDispatcher.forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/carrello.jsp");
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
-        } catch (ServletException | IOException e) {
+        } catch (IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         }
     }
