@@ -279,7 +279,9 @@ public class ProdottoControl extends HttpServlet {
     private void rimuoviProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int idProd = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
-            carrelloBean.rimuoviProdottoCarrello(idProd);
+            String taglia = request.getParameter("taglia");
+            carrelloBean.rimuoviProdottoCarrello(idProd, taglia);
+
             request.getSession().setAttribute(CARRELLO_PARAM, carrelloBean);
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
             reqDispatcher.forward(request, response);

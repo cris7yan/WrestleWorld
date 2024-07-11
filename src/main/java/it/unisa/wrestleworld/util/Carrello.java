@@ -68,9 +68,9 @@ public class Carrello implements Serializable {
         }
     }
 
-    public void rimuoviProdottoCarrello (int idProdotto) {
+    public void rimuoviProdottoCarrello (int idProdotto, String taglia) {
         for (ProdottoBean prod : this.carrelloUtente) {
-            boolean is = prod.getIDProdotto() == idProdotto;
+            boolean is = prod.getIDProdotto() == idProdotto && prod.getTagliaSelezionata().equals(taglia);
 
             if (is) {
                 if(prod.getQuantitaCarrello() == 1) {

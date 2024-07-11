@@ -26,7 +26,6 @@
 
         <%= ((ProdottoBean) prod).getNomeProdotto()%>
         <%= ((ProdottoBean) prod).getPrezzoProdotto()%> <br>
-        <%= ((ProdottoBean) prod).getQuantitaCarrello() %> <br>
 
     <%
             }
