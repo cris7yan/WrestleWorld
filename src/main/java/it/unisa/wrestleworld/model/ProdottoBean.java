@@ -19,6 +19,10 @@ public class ProdottoBean implements Serializable {
     private List<String> img;
     private List<TagliaProdottoBean> taglieProdotto;
 
+    // Variabili per la gestione del carrello
+    private int quantitaCarrello;
+    private String tagliaCarrello;
+
     public ProdottoBean () {
         // Costruttore
     }
@@ -113,12 +117,55 @@ public class ProdottoBean implements Serializable {
         this.taglieProdotto = taglie;
     }
 
-    public void addTagliaProdotto(TagliaProdottoBean tagliaProdotto) {
+    // Altri metodi
+    public void addTagliaProdotto (TagliaProdottoBean tagliaProdotto) {
         this.taglieProdotto.add(tagliaProdotto);
     }
 
-    public void removeTagliaProdotto(TagliaProdottoBean tagliaProdotto) {
+    public void removeTagliaProdotto (TagliaProdottoBean tagliaProdotto) {
         this.taglieProdotto.remove(tagliaProdotto);
+    }
+
+    public int getQuantitaPerTaglia (String taglia) {
+        for (TagliaProdottoBean tagliaProdotto : this.taglieProdotto) {
+            if (tagliaProdotto.getTaglia().equals(taglia)) {
+                return tagliaProdotto.getQuantita();
+            }
+        }
+        return -1; // indica che la taglia non è stata trovata
+    }
+
+    // Metodi per la gestione del carrello
+    public int getQuantitaCarrello () {
+        return this.quantitaCarrello;
+    }
+
+    public void setQuantitaCarrello (int quantitaCarrello) {
+        this.quantitaCarrello = quantitaCarrello;
+    }
+
+    public void aumentaQuantitaCarrello () {
+        this.quantitaCarrello++;
+    }
+
+    public void decrementaQuantitaCarrello () {
+        this.quantitaCarrello--;
+    }
+
+    public void aumentaQuantitaCarrello (int quantita) {
+        this.quantitaCarrello += quantita;
+    }
+
+    public void decrementaQuantitaCarrello (int quantita) {
+        this.quantitaCarrello -= quantita;
+    }
+
+    public String getTagliaSelezionata() {
+        return this.tagliaCarrello;
+    }
+
+    public void setTagliaSelezionata(String tagliaSelezionata) {
+        this.tagliaCarrello = tagliaSelezionata;
     }
 
 }

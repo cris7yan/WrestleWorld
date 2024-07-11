@@ -244,12 +244,16 @@ public class ProdottoControl extends HttpServlet {
     private void aggiungiProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int idProd = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
+            String taglia = request.getParameter("taglia");
             if(prodModel.checkProductAvailability(idProd)) {
-                carrelloBean.addProdottoCarrello(prodModel.doRetrieveByID(idProd));
+                ProdottoBean prodotto = prodModel.doRetrieveByID(idProd);
+                prodotto.setTagliaSelezionata(taglia);
+                carrelloBean.aggiungiProdottoCarrello(prodotto, taglia);
             }
             List<ProdottoBean> cart = carrelloBean.getCarrello();
             request.getSession().setAttribute(CARRELLO_PARAM, carrelloBean);
             request.setAttribute(CARRELLO_PARAM, cart);
+
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
@@ -270,7 +274,7 @@ public class ProdottoControl extends HttpServlet {
     private void rimuoviProdottoCarrello (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int idProd = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
-            carrelloBean.removeProdottoCarrello(idProd);
+            carrelloBean.rimuoviProdottoCarrello(idProd);
             request.getSession().setAttribute(CARRELLO_PARAM, carrelloBean);
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
             reqDispatcher.forward(request, response);

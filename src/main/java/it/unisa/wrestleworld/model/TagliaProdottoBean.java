@@ -48,11 +48,11 @@ public class TagliaProdottoBean implements Serializable {
         this.quantita = quantita;
     }
 
-    public void aumentaQuantita () {
+    public void aumentaQuantitaPerTaglia() {
         this.quantita++;
     }
 
-    public void decrementaQuantita () {
+    public void decrementaQuantitaPerTaglia() {
         this.quantita--;
     }
 

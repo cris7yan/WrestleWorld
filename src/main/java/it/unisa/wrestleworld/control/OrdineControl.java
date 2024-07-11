@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -169,6 +171,48 @@ public class OrdineControl extends HttpServlet {
             RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/paginaAcquisto.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+
+    /**
+     * funzione che gestisce l'operazione di effettuazione di un'ordine
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void checkout (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            HttpSession session = request.getSession();
+
+            String email = (String) session.getAttribute("email");
+            if (email == null || email.isEmpty()) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+            Carrello carrello = (Carrello) session.getAttribute("carrello");
+
+            LocalDate oggi = LocalDate.now();
+            Date dataOggi = Date.valueOf(oggi);
+            ordineModel.doSave(dataOggi, carrello.getPrezzoCarrello(), email);
+
+            int idNuovoOrdine = ordineModel.doRetrieveLastOrdineID();
+            List<ProdottoBean> prodottiCarrello = carrello.getCarrello();
+            for (ProdottoBean prod : prodottiCarrello) {
+                if (prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() < prod.getPrezzoProdotto()) {
+                    ordineModel.doUpdateComprendeOrdine(idNuovoOrdine, prod.getIDProdotto(), prod.getQuantitaCarrello(), prod.getPrezzoOffertaProdotto());
+                }
+                else {
+                    ordineModel.doUpdateComprendeOrdine(idNuovoOrdine, prod.getIDProdotto(), prod.getQuantitaCarrello(), prod.getPrezzoProdotto());
+                }
+            }
+
+            carrello.svuotaCarrello();
+        } catch (IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());

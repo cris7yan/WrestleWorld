@@ -54,8 +54,8 @@
         <p class="product-modello">Modello: <%=((ProdottoBean) prod).getModelloProdotto()%>  <br></p>
         <p class="product-sizes">Taglie disponibili:</p>
             <div class="select-container">
-                <select name="taglie" required>
-                    <option value="" disabled selected>Seleziona una taglia</option>
+                <select name="taglie" id="taglia-select" required>
+                    <option value="" disabled selected>--Seleziona una taglia</option>
                     <%
                         for(TagliaProdottoBean taglia : taglieProd) {
                     %>
@@ -66,7 +66,7 @@
                 </select>
             </div>
         <br><br>
-        <a href="ProdottoControl?action=aggiungiAlCarrello&IDProd=<%= ((ProdottoBean) prod).getIDProdotto() %>">Aggiungi al carrelo</a>
+        <a id="add-to-cart-link" href="#">Aggiungi al carrello</a>
     </div>
 
   <%
@@ -74,6 +74,15 @@
   %>
 
 </div>
+
+<script>
+    document.getElementById('taglia-select').addEventListener('change', function() {
+        var taglia = this.value;
+        var idProd = '<%= ((ProdottoBean) prod).getIDProdotto() %>';
+        var link = 'ProdottoControl?action=aggiungiAlCarrello&IDProd=' + idProd + '&taglia=' + taglia;
+        document.getElementById('add-to-cart-link').setAttribute('href', link);
+    });
+</script>
 
 <%@ include file="footer.jsp"%>
 </body>

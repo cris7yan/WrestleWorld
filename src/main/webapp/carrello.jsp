@@ -23,6 +23,8 @@
         <div class="product-details">
             <p class="product-name"> <%=((ProdottoBean) prod).getNomeProdotto()%>  <br></p>
             <p class="product-price"><%=((ProdottoBean) prod).getPrezzoProdotto()%>&euro; <br></p>
+            <p class="product-size">Taglia: <%= ((ProdottoBean) prod).getTagliaSelezionata() %></p>
+            <p class="product-name">Quantità: <%=((ProdottoBean) prod).getQuantitaCarrello()%><br></p>
             <a href="paginaAcquisto.jsp">Acquista</a><br>
             <a href="ProdottoControl?action=rimuoviDalCarrello&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">Rimuovi dal carrello</a>
             <br><br>
