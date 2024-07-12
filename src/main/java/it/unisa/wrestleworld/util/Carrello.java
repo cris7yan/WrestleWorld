@@ -106,19 +106,21 @@ public class Carrello implements Serializable {
         carrelloUtente.clear();
     }
 
-    public float getPrezzoCarrello () {
+    public float getPrezzoCarrello() {
         float prezzoTotale = 0;
-        float prezzoProd = 0;
 
         for (ProdottoBean prod : this.carrelloUtente) {
-            if(prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() <= prod.getPrezzoProdotto()) {
-                prezzoProd = prod.getPrezzoOffertaProdotto();
+            float prezzoProdotto;
+            if (prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() <= prod.getPrezzoProdotto()) {
+                prezzoProdotto = prod.getPrezzoOffertaProdotto();
             } else {
-                prezzoProd = prod.getPrezzoProdotto();
+                prezzoProdotto = prod.getPrezzoProdotto();
             }
-            prezzoTotale += prezzoProd;
+            prezzoTotale += prezzoProdotto * prod.getQuantitaCarrello();
         }
+
         return prezzoTotale;
     }
+
 
 }

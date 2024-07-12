@@ -55,9 +55,7 @@
 
             <div class="product-details">
 
-                <%
-                    if (prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() < prod.getPrezzoProdotto()) {
-                %>
+                <%  if (prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() < prod.getPrezzoProdotto()) {    %>
 
                 <div class="price">
                     <div class="product-price-container">
@@ -70,18 +68,15 @@
                     </div>
                 </div>
 
-                <%
-                    } else {
-                %>
+                <%  } else {   %>
+
                 <div class="price">
                     <span class="product-price">
                         <span class="euro"><%= euroOriginale %></span><span class="decimal">,<%= String.format("%02d", centesimiOriginale) %></span>&euro;
                     </span>
                 </div>
 
-                <%
-                    }
-                %>
+                <%  }   %>
 
                 <div class="name">
                     <span class="product-name">

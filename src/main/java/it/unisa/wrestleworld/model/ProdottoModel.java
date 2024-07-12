@@ -532,4 +532,14 @@ public class ProdottoModel implements ProdottoDAO {
     }
 
 
+    /**
+     * funzione che aggiorna diminuendo la quantità dei prodotti dopo un ordine
+     * @param id
+     * @param quantity
+     * @throws SQLException
+     */
+    public synchronized void doDecreaseProductQuantity (int id, String taglia, int quantity) throws SQLException {
+
+    }
+
 }

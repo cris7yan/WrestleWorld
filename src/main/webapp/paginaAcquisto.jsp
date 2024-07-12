@@ -11,9 +11,6 @@
     List<IndirizzoBean> indirizziUtente = (List<IndirizzoBean>) request.getAttribute("indirizziUtente");
     List<MetodoPagamentoBean> metodiPagamentoUtente = (List<MetodoPagamentoBean>) request.getAttribute("metodiPagamentoUtente");
 
-    System.out.println("Indirizzi Utente: " + indirizziUtente);
-    System.out.println("Metodi Pagamento Utente: " + metodiPagamentoUtente);
-
     if(indirizziUtente == null || metodiPagamentoUtente == null) {
         response.sendRedirect("./OrdineControl?action=visualizzaDatiUtente");
         return;
@@ -55,7 +52,6 @@
 
         <button type="submit">Acquista</button>
     </form>
-
 
 </body>
 </html>
