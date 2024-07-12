@@ -39,9 +39,12 @@
                     String img = (String) imgIt.next();
 
                     if (prod != null) {
-                        BigDecimal prezzo = new BigDecimal(prod.getPrezzoProdotto());
-                        int euro = prezzo.intValue();
-                        int centesimi = prezzo.remainder(BigDecimal.ONE).movePointRight(2).intValue();
+                        BigDecimal prezzoOriginale = new BigDecimal(prod.getPrezzoProdotto());
+                        BigDecimal prezzoOfferta = new BigDecimal(prod.getPrezzoOffertaProdotto());
+                        int euroOriginale = prezzoOriginale.intValue();
+                        int centesimiOriginale = prezzoOriginale.remainder(BigDecimal.ONE).movePointRight(2).intValue();
+                        int euroOfferta = prezzoOfferta.intValue();
+                        int centesimiOfferta = prezzoOfferta.remainder(BigDecimal.ONE).movePointRight(2).intValue();
         %>
 
         <div class="product">
@@ -52,11 +55,33 @@
 
             <div class="product-details">
 
+                <%
+                    if (prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() < prod.getPrezzoProdotto()) {
+                %>
+
+                <div class="price">
+                    <div class="product-price-container">
+                        <span class="product-price-offerta">
+                            <span class="euro"><%= euroOfferta %></span><span class="decimal">,<%= String.format("%02d", centesimiOfferta) %></span>&euro;
+                        </span>
+                        <span class="product-price-originale">
+                            <span class="euro"><%= euroOriginale %></span><span class="decimal">,<%= String.format("%02d", centesimiOriginale) %></span>&euro;
+                        </span>
+                    </div>
+                </div>
+
+                <%
+                    } else {
+                %>
                 <div class="price">
                     <span class="product-price">
-                        <span class="euro"><%= euro %></span><span class="decimal">,<%= String.format("%02d", centesimi) %></span>&euro;
+                        <span class="euro"><%= euroOriginale %></span><span class="decimal">,<%= String.format("%02d", centesimiOriginale) %></span>&euro;
                     </span>
                 </div>
+
+                <%
+                    }
+                %>
 
                 <div class="name">
                     <span class="product-name">
