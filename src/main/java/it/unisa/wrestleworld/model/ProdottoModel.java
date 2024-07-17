@@ -539,7 +539,39 @@ public class ProdottoModel implements ProdottoDAO {
      * @throws SQLException
      */
     public synchronized void doDecreaseProductQuantity (int id, String taglia, int quantity) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
 
+        String query = "UPDATE " + TABLE_TAGLIAPRODOTTO + " SET Quantita = Quantita - ? WHERE ID_Prodotto = ? AND Taglia = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, quantity);
+            ps.setInt(2, id);
+            ps.setString(3, taglia);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
     }
 
 }

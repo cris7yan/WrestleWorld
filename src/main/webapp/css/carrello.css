@@ -1,0 +1,70 @@
+body {
+    font-family: "Avenir Next", sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+.cart-details {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.cart-details h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-details img {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.product-details p, .product-details a {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
+
+.product-details p {
+    margin: 0 10px;
+}
+
+.product-quantity {
+    flex: 0.5;
+}
+
+.remove-button {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+.remove-button:hover {
+    background-color: #ff0000;
+}
+
+.total-price {
+    text-align: right;
+    padding: 10px;
+}
+
+.total-price h3 {
+    margin: 0;
+}

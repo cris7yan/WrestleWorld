@@ -44,7 +44,7 @@
         <ul id="navbar">
 
             <!-- Barra di ricerca -->
-            <form action="ProdottoControl?action=ricerca" method="post">
+            <form id="searchForm" action="ProdottoControl?action=ricerca" method="post">
                 <div class="search-box">
                     <input class="search-input" type="search" name="ricerca" placeholder="Cerca il tuo prodotto" list="suggerimentiProdotti">
                     <div id="suggerimentiProdotti" class="suggerimentiProdotti"></div>
@@ -151,12 +151,11 @@
     </ul>
 </div>
 
-
 <script>
     $(document).ready(function () {
         var lastSuggestions = [];   // memorizza gli ultimi suggerimenti ricevuti dalla chiamata AJAX
 
-        $('.search-input').keyup(function () {
+        $('#searchForm .search-input').keyup(function () {
             var ricerca = $(this).val();    // Recupera il valore dell'input di ricerca
             if (ricerca !== '') {
                 $.ajax({
@@ -175,7 +174,7 @@
                         $('#suggerimentiProdotti').html(sugg).show();   // Inserisce gli elementi dei suggerimenti nell'elemento con id 'suggerimentiProdotti' e li mostra
 
                         $('#suggerimentiProdotti div').click(function () {
-                            $('.search-input').val($(this).text());     // Imposta il valore dell'input di ricerca con il testo del suggerimento cliccato
+                            $('#searchForm .search-input').val($(this).text());     // Imposta il valore dell'input di ricerca con il testo del suggerimento cliccato
                             $('#suggerimentiProdotti').hide();      // Nasconde l'elenco dei suggerimenti
                         });
                     }
@@ -195,7 +194,7 @@
         });
 
         // Controlla l'invio del form per verificare se il termine di ricerca è valido
-        $('form').submit(function (event) {
+        $('#searchForm').submit(function (event) {
             var ricerca = $('.search-input').val();
 
             // Verifica se il valore di ricerca non è presente negli ultimi suggerimenti ricevuti
@@ -203,6 +202,10 @@
                 alert('Nessun prodotto trovato con il parametro di ricerca inserito.');
                 event.preventDefault();     // Impedisce l'invio del form
             }
+        });
+
+        $('#checkoutForm').submit(function (event) {
+
         });
     });
 </script>

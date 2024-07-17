@@ -27,6 +27,7 @@ public class OrdineControl extends HttpServlet {
     private static final String EMAIL_PARAM = "email";
 
     static OrdineDAO ordineModel = new OrdineModel();
+    static ProdottoDAO prodModel = new ProdottoModel();
     static IndirizzoDAO indirizzoModel = new IndirizzoModel();
     static MetodoPagamentoDAO metodoPagamentoModel = new MetodoPagamentoModel();
 
@@ -193,12 +194,7 @@ public class OrdineControl extends HttpServlet {
     private void checkout (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             HttpSession session = request.getSession();
-
             String email = (String) session.getAttribute(EMAIL_PARAM);
-            if (email == null || email.isEmpty()) {
-                response.sendRedirect("login.jsp");
-                return;
-            }
             Carrello carrello = (Carrello) session.getAttribute("carrello");
 
             LocalDate oggi = LocalDate.now();
@@ -210,14 +206,19 @@ public class OrdineControl extends HttpServlet {
             for (ProdottoBean prod : prodottiCarrello) {
                 if (prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() < prod.getPrezzoProdotto()) {
                     ordineModel.doUpdateComprendeOrdine(idNuovoOrdine, prod.getIDProdotto(), prod.getQuantitaCarrello(), prod.getPrezzoOffertaProdotto());
+                    prodModel.doDecreaseProductQuantity(prod.getIDProdotto(), prod.getTagliaSelezionata(), prod.getQuantitaCarrello());
                 }
                 else {
                     ordineModel.doUpdateComprendeOrdine(idNuovoOrdine, prod.getIDProdotto(), prod.getQuantitaCarrello(), prod.getPrezzoProdotto());
+                    prodModel.doDecreaseProductQuantity(prod.getIDProdotto(), prod.getTagliaSelezionata(), prod.getQuantitaCarrello());
                 }
             }
 
             carrello.svuotaCarrello();
-        } catch (IOException e) {
+
+            RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/index.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());

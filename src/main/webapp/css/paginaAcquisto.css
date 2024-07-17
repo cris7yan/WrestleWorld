@@ -1,4 +1,4 @@
-body {
+.acquisto-container {
     font-family: "Avenir Next", sans-serif;
     background-color: #f8f8f8;
     margin: 0;
@@ -9,7 +9,7 @@ body {
     height: 100vh;
 }
 
-form {
+.acquisto-container form {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -18,18 +18,18 @@ form {
     width: 100%;
 }
 
-input[type="radio"] {
+.acquisto-container input[type="radio"] {
     margin-right: 10px;
 }
 
-label {
+.acquisto-container label {
     display: block;
     margin-bottom: 10px;
     font-size: 14px;
     cursor: pointer;
 }
 
-button {
+.acquisto-container button {
     background-color: #007BFF;
     color: #fff;
     padding: 10px 20px;
@@ -40,10 +40,10 @@ button {
     width: 100%;
 }
 
-button:hover {
+.acquisto-container button:hover {
     background-color: #0056b3;
 }
 
-form > div {
+.acquisto-container form > div {
     margin-bottom: 20px;
 }

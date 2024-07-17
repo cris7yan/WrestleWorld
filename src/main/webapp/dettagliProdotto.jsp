@@ -88,7 +88,7 @@
         <p class="product-sizes">Taglie disponibili:</p>
         <div class="select-container">
             <select name="taglie" id="taglia-select" required>
-                <option value="" disabled selected>--Seleziona una taglia</option>
+                <option value="" disabled selected>--Seleziona una taglia--</option>
                 <%
                     for(TagliaProdottoBean taglia : taglieProd) {
                 %>
