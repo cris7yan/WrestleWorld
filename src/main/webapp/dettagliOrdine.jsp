@@ -24,11 +24,20 @@
             for(ProdottoBean prod : prodottiOrdine) {
     %>
 
-        <%= ((ProdottoBean) prod).getNomeProdotto()%>
-        <%= ((ProdottoBean) prod).getPrezzoProdotto()%> <br>
+    <div class="prodotto">
+        <p>Nome: <%= prod.getNomeProdotto() %></p>
+        <p>Prezzo: <%= prod.getPrezzoProdotto() %> €</p>
+        <p>Quantità: <%= prod.getQuantitaCarrello() %></p>
+        <p>Taglia: <%= prod.getTagliaSelezionata() %></p>
+        <br>
+    </div>
 
     <%
-            }
+        }
+    } else {
+    %>
+    <p>Nessun prodotto trovato per questo ordine.</p>
+    <%
         }
     %>
 

@@ -204,14 +204,18 @@ public class OrdineControl extends HttpServlet {
             int idNuovoOrdine = ordineModel.doRetrieveLastOrdineID();
             List<ProdottoBean> prodottiCarrello = carrello.getCarrello();
             for (ProdottoBean prod : prodottiCarrello) {
+                String taglia = prod.getTagliaSelezionata();
+                int quantita = prod.getQuantitaCarrello();
+                float prezzo;
+
                 if (prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() < prod.getPrezzoProdotto()) {
-                    ordineModel.doUpdateComprendeOrdine(idNuovoOrdine, prod.getIDProdotto(), prod.getQuantitaCarrello(), prod.getPrezzoOffertaProdotto());
-                    prodModel.doDecreaseProductQuantity(prod.getIDProdotto(), prod.getTagliaSelezionata(), prod.getQuantitaCarrello());
+                    prezzo = prod.getPrezzoOffertaProdotto();
+                } else {
+                    prezzo = prod.getPrezzoProdotto();
                 }
-                else {
-                    ordineModel.doUpdateComprendeOrdine(idNuovoOrdine, prod.getIDProdotto(), prod.getQuantitaCarrello(), prod.getPrezzoProdotto());
-                    prodModel.doDecreaseProductQuantity(prod.getIDProdotto(), prod.getTagliaSelezionata(), prod.getQuantitaCarrello());
-                }
+
+                ordineModel.doUpdateComprendeOrdine(idNuovoOrdine, prod.getIDProdotto(), taglia, quantita, prezzo);
+                prodModel.doDecreaseProductQuantity(prod.getIDProdotto(), taglia, quantita);
             }
 
             carrello.svuotaCarrello();

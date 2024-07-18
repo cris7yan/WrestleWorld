@@ -16,6 +16,8 @@ public class OrdineModel implements OrdineDAO {
 
     private static final String TABLE_ORDINE = "Ordine";
     private static final String TABLE_COMPOSIZIONE_ORDINE = "ComposizioneOrdine";
+    private static final String TABLE_PRODOTTO = "Prodotto";
+    private static final String TABLE_TAGLIAPRODOTTO = "TagliaProdotto";
 
     private static final String IDORDINE_PARAM = "ID_Ordine";
 
@@ -87,11 +89,11 @@ public class OrdineModel implements OrdineDAO {
      * @param prezzoUnitario
      * @throws SQLException
      */
-    public synchronized void doUpdateComprendeOrdine (int idOrdine, int idProdotto, int quantita, float prezzoUnitario) throws SQLException {
+    public synchronized void doUpdateComprendeOrdine (int idOrdine, int idProdotto, String taglia, int quantita, float prezzoUnitario) throws SQLException {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "INSERT INTO " + TABLE_COMPOSIZIONE_ORDINE + " (ID_Ordine, ID_Prodotto, Quantita, Prezzo)" + " VALUES (?,?,?,?)";
+        String query = "INSERT INTO ComposizioneOrdine (ID_Ordine, ID_Prodotto, Taglia, Quantita, Prezzo) VALUES (?,?,?,?,?)";
 
         try {
             conn = dataSource.getConnection();
@@ -99,8 +101,9 @@ public class OrdineModel implements OrdineDAO {
 
             ps.setInt(1, idOrdine);
             ps.setInt(2, idProdotto);
-            ps.setInt(3, quantita);
-            ps.setFloat(4, prezzoUnitario);
+            ps.setString(3, taglia);
+            ps.setInt(4, quantita);
+            ps.setFloat(5, prezzoUnitario);
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -184,13 +187,16 @@ public class OrdineModel implements OrdineDAO {
      * @return
      * @throws SQLException
      */
-    public synchronized List<ProdottoBean> doRetrieveOrdineByID (int id) throws SQLException {
+    public synchronized List<ProdottoBean> doRetrieveOrdineByID(int id) throws SQLException {
         List<ProdottoBean> listaProdottiOrdine = new ArrayList<>();
 
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "SELECT ID_Ordine FROM " + TABLE_COMPOSIZIONE_ORDINE + " WHERE ID_Ordine = ?";
+        String query = "SELECT p.*, c.Prezzo AS PrezzoOrdine, c.Quantita, c.Taglia " +
+                "FROM " + TABLE_COMPOSIZIONE_ORDINE + " c " +
+                "JOIN " + TABLE_PRODOTTO + " p ON c.ID_Prodotto = p.ID_Prodotto " +
+                "WHERE c.ID_Ordine = ?";
 
         try {
             conn = dataSource.getConnection();
@@ -200,7 +206,19 @@ public class OrdineModel implements OrdineDAO {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                listaProdottiOrdine.add(prodModel.doRetrieveByID(rs.getInt(IDORDINE_PARAM)));
+                ProdottoBean prodotto = new ProdottoBean();
+
+                prodotto.setIDProdotto(rs.getInt("ID_Prodotto"));
+                prodotto.setNomeProdotto(rs.getString("Nome"));
+                prodotto.setDescrizioneProdotto(rs.getString("Descrizione"));
+                prodotto.setMaterialeProdotto(rs.getString("Materiale"));
+                prodotto.setMarcaProdotto(rs.getString("Marca"));
+                prodotto.setModelloProdotto(rs.getString("Modello"));
+                prodotto.setPrezzoProdotto(rs.getFloat("PrezzoOrdine"));
+                prodotto.setQuantitaCarrello(rs.getInt("Quantita"));
+                prodotto.setTagliaSelezionata(rs.getString("Taglia"));
+
+                listaProdottiOrdine.add(prodotto);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
