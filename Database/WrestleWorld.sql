@@ -100,7 +100,7 @@ CREATE TABLE MetodoPagamento (
 CREATE TABLE Ordine (
     ID_Ordine int AUTO_INCREMENT NOT NULL PRIMARY KEY,
     Data_ordine DATE NOT NULL,
-    Totale decimal(10,2) CHECK ((Totale > 0)) NOT NULL,
+    Totale decimal(10,2) CHECK ((Totale > 0)) NOT NULL, -- Prezzo totale dell'ordine --
     EmailUtente varchar(255) NOT NULL,
         FOREIGN KEY (EmailUtente) REFERENCES Utente(Email) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -111,9 +111,10 @@ CREATE TABLE ComposizioneOrdine (
         FOREIGN KEY (ID_Ordine) REFERENCES Ordine(ID_Ordine),
     ID_Prodotto int NOT NULL,
         FOREIGN KEY (ID_Prodotto) REFERENCES Prodotto(ID_Prodotto),
+    Taglia varchar(50) NOT NULL,
     Quantita int NOT NULL,
-    Prezzo decimal(10,2),
-    PRIMARY KEY(ID_Ordine, ID_Prodotto)
+    Prezzo decimal(10,2), -- Prezzo Unitario del prodotto --
+    PRIMARY KEY(ID_Ordine, ID_Prodotto, Taglia)
 );
 
 
@@ -924,18 +925,18 @@ INSERT INTO Ordine (Data_ordine, Totale, EmailUtente) VALUES
     ('2024-02-14', 131.96, 'teresacasciello@gmail.com');
 
 
-INSERT INTO ComposizioneOrdine (ID_Ordine, ID_Prodotto, Quantita, Prezzo) VALUES
-    (1, 1, 1, 32.99),
-    (2, 2, 1, 32.99),
-    (3, 4, 1, 32.99),
-    (3, 31, 1, 32.99),
-    (4, 10, 1, 32.99),
-    (5, 9, 1,  32.99),
-    (6, 1, 2, 64.98),
-    (6, 43, 1, 32.99),
-    (7, 60, 3, 32.99),
-    (7, 1, 1, 32.99),
-    (7, 13, 1, 77.99),
-    (8, 38, 1, 32.99),
-    (8, 3, 1, 32.99),
-    (8, 5, 2, 32.99);
+INSERT INTO ComposizioneOrdine (ID_Ordine, ID_Prodotto, Taglia, Quantita, Prezzo) VALUES
+    (1, 1, 'L', 1, 32.99),
+    (2, 2, 'L', 1, 32.99),
+    (3, 4, 'M', 1, 32.99),
+    (3, 31, 'M', 1, 32.99),
+    (4, 10, 'S', 1, 32.99),
+    (5, 9, 'S', 1,  32.99),
+    (6, 1, 'M', 2, 64.98),
+    (6, 43, 'M', 1, 32.99),
+    (7, 60, 'XL', 3, 32.99),
+    (7, 1, 'XL', 1, 32.99),
+    (7, 13, 'L', 1, 77.99),
+    (8, 38, 'M', 1, 32.99),
+    (8, 3, 'L', 1, 32.99),
+    (8, 5, 'L', 2, 32.99);
