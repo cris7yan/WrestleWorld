@@ -247,39 +247,51 @@ h1 {
     margin-bottom: 0; /* Rimosso il margine tra le opzioni di filtro */
 }
 
-.filter-option input[type="checkbox"] {
+.filter-option input[type="checkbox"],
+.filter-option input[type="radio"] {
     appearance: none; /* Rimuove lo stile predefinito del browser */
-    width: 15px; /* Ridotto la larghezza della checkbox */
-    height: 15px; /* Ridotto l'altezza della checkbox */
+    width: 15px; /* Dimensione della checkbox/radio */
+    height: 15px; /* Dimensione della checkbox/radio */
     border-radius: 50%; /* Forma circolare */
-    border: 1px solid black; /* Bordo della checkbox meno spesso */
-    margin-right: 5px; /* Ridotto il margine tra la checkbox e il testo */
+    border: 1px solid black; /* Bordo di default */
+    margin-right: 5px; /* Margine tra la checkbox/radio e il testo */
     cursor: pointer;
     position: relative;
+    background-color: white; /* Sfondo bianco di default */
 }
 
-.filter-option input[type="checkbox"]:checked::before {
-    content: "";
+/* Bordo più spesso e margine colorato quando selezionato */
+.filter-option input[type="checkbox"]:checked,
+.filter-option input[type="radio"]:checked {
+    border: 4px solid black; /* Bordo più spesso quando selezionato */
+    background-color: white; /* Sfondo bianco quando selezionato */
+}
+
+/* Icona personalizzata al centro quando selezionato */
+.filter-option input[type="checkbox"]:checked::before,
+.filter-option input[type="radio"]:checked::before {
+    content: ""; /* Rimuove il contenuto predefinito */
     position: absolute;
-    top: 3px; /* Ridotto il top per adattare meglio l'icona di selezione */
-    left: 3px; /* Ridotto il left per adattare meglio l'icona di selezione */
-    width: 8px; /* Ridotto la dimensione dell'icona di selezione */
-    height: 8px; /* Ridotto la dimensione dell'icona di selezione */
-    background-color: black; /* Colore del selettore */
-    border-radius: 50%; /* Forma circolare del selettore */
+    top: 50%;
+    left: 50%;
 }
 
-.filter-option label {
-    font-size: 14px; /* Ridotto la dimensione del testo */
-    margin: 0;
+.filter-apply {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.filter-apply button {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
     cursor: pointer;
+    font-family: 'Avenir Next', sans-serif;
 }
 
-.filter-option input[type="checkbox"]:focus {
-    outline: none; /* Rimuove l'effetto di messa a fuoco */
-    box-shadow: 0 0 0 1px lightgray; /* Evidenzia l'elemento quando è focalizzato */
-}
-
-.filter-option input[type="checkbox"]:checked {
-    background-color: black; /* Colore di sfondo della checkbox selezionata */
+.filter-apply button:hover {
+    background-color: darkgray;
 }
