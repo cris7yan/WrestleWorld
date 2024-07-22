@@ -1,4 +1,3 @@
-
 h1 {
     text-align: center;                     /* Per centrare i titoli */
     font-family: 'Avenir Next', sans-serif; /* Imposta il font */
@@ -6,8 +5,11 @@ h1 {
 
 /* Stile per il container principale dei prodotti */
 .product-container {
-    text-align: center;                     /* Per centrare i prodotti */
-    font-family: 'Avenir Next', sans-serif; /* Imposta il font */
+    flex: 1; /* Occupa tutto lo spazio rimanente */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centra i prodotti */
+    gap: 10px; /* Spazio tra i prodotti */
 }
 
 /* Stile per ogni singolo prodotto */
@@ -17,14 +19,14 @@ h1 {
     height: 450px;                          /* Altezza fissa del prodotto */
     margin: 10px;
     padding: 10px;
-    border: 2px solid transparent;          /* Bordo trasparente */
-    border-radius: 15px;                    /* Arrotonda i bordi */
-    background: linear-gradient(white, white) padding-box, /* Sfondo bianco */
-                linear-gradient(45deg, yellow, red) border-box; /* Gradiente per il bordo */
+    border: 2px solid transparent;
+    border-radius: 15px;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(45deg, yellow, red) border-box;
     text-align: left;
-    overflow: hidden;                       /* Nasconde il contenuto che sfora */
-    vertical-align: top;                    /* Allineamento verticale in alto */
-    font-family: 'Avenir Next', sans-serif; /* Imposta il font */
+    overflow: hidden;
+    vertical-align: top;
+    font-family: 'Avenir Next', sans-serif;
     position: relative;
 }
 
@@ -213,4 +215,71 @@ h1 {
     position: absolute;
     top: 5px;
     right: 10px;
+}
+
+/* Stile per il contenitore principale del catalogo */
+.catalog-container {
+    display: flex; /* Dispone gli elementi in una riga */
+    padding: 10px;
+    box-sizing: border-box; /* Include il padding nel calcolo della larghezza */
+}
+
+/* Stile per la sezione dei filtri */
+.filters {
+    width: 200px; /* Larghezza fissa per la sezione dei filtri */
+    padding: 10px;
+    border-right: 2px solid lightgray; /* Linea verticale di separazione */
+    box-sizing: border-box; /* Include il padding nel calcolo della larghezza */
+    font-family: 'Avenir Next', sans-serif; /* Imposta il font */
+}
+
+/* Linea orizzontale di separazione tra le sezioni dei filtri */
+.filter-divider {
+    border: none;
+    border-top: 1px solid lightgray;
+    margin: 5px 0; /* Ridotto il margine per meno spazio tra sezioni */
+}
+
+/* Stile per le opzioni di filtro (checkbox e label) */
+.filter-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0; /* Rimosso il margine tra le opzioni di filtro */
+}
+
+.filter-option input[type="checkbox"] {
+    appearance: none; /* Rimuove lo stile predefinito del browser */
+    width: 15px; /* Ridotto la larghezza della checkbox */
+    height: 15px; /* Ridotto l'altezza della checkbox */
+    border-radius: 50%; /* Forma circolare */
+    border: 1px solid black; /* Bordo della checkbox meno spesso */
+    margin-right: 5px; /* Ridotto il margine tra la checkbox e il testo */
+    cursor: pointer;
+    position: relative;
+}
+
+.filter-option input[type="checkbox"]:checked::before {
+    content: "";
+    position: absolute;
+    top: 3px; /* Ridotto il top per adattare meglio l'icona di selezione */
+    left: 3px; /* Ridotto il left per adattare meglio l'icona di selezione */
+    width: 8px; /* Ridotto la dimensione dell'icona di selezione */
+    height: 8px; /* Ridotto la dimensione dell'icona di selezione */
+    background-color: black; /* Colore del selettore */
+    border-radius: 50%; /* Forma circolare del selettore */
+}
+
+.filter-option label {
+    font-size: 14px; /* Ridotto la dimensione del testo */
+    margin: 0;
+    cursor: pointer;
+}
+
+.filter-option input[type="checkbox"]:focus {
+    outline: none; /* Rimuove l'effetto di messa a fuoco */
+    box-shadow: 0 0 0 1px lightgray; /* Evidenzia l'elemento quando è focalizzato */
+}
+
+.filter-option input[type="checkbox"]:checked {
+    background-color: black; /* Colore di sfondo della checkbox selezionata */
 }

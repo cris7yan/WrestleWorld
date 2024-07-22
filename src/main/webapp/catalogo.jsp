@@ -20,43 +20,137 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>WrestleWorld | Catalogo</title>
-  <link href="css/catalogo.css" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
+    <title>WrestleWorld | Catalogo</title>
+    <link href="css/catalogo.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <%@ include file="navbar.jsp"%>
 
-    <h1>WrestleWorld Catalogo</h1>
+<h1>WrestleWorld Catalogo</h1>
 
+<div class="catalog-container">
+
+    <div class="filters">
+        <div class="filter-section">
+            <h3>Superstar</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="cat1">
+                <label for="cat1">Superstar 1</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Superstar 2</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Superstar 3</label>
+            </div>
+        </div>
+        <hr class="filter-divider">
+
+        <div class="filter-section">
+            <h3>Genere</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="cat1">
+                <label for="cat1">Uomo</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Donna</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Unisex</label>
+            </div>
+        </div>
+        <hr class="filter-divider">
+
+        <div class="filter-section">
+            <h3>Categoria</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="cat1">
+                <label for="cat1">Abbigliamento</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Accessori</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Collezionabili</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Firmati</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Title Belts</label>
+            </div>
+        </div>
+        <hr class="filter-divider">
+
+        <div class="filter-section">
+            <h3>Marca</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="cat1">
+                <label for="cat1">Marca 1</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Marca 2</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Marca 3</label>
+            </div>
+        </div>
+        <hr class="filter-divider">
+
+        <div class="filter-section">
+            <h3>Prezzo</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="cat1">
+                <label for="cat1">Categoria 1</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Categoria 2</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">In offerta</label>
+            </div>
+        </div>
+        <hr class="filter-divider">
+
+    </div>
+
+    <!-- Sezione Prodotti -->
     <div class="product-container">
-        <%
-            if (prodotti != null && !prodotti.isEmpty()) {
-                Iterator<?> prodIt = prodotti.iterator();
-                Iterator<?> imgIt = imgProdotti.iterator();
-                while (prodIt.hasNext()) {
-                    ProdottoBean prod = (ProdottoBean) prodIt.next();
-                    String img = (String) imgIt.next();
+        <% if (prodotti != null && !prodotti.isEmpty()) {
+            Iterator<?> prodIt = prodotti.iterator();
+            Iterator<?> imgIt = imgProdotti.iterator();
+            while (prodIt.hasNext()) {
+                ProdottoBean prod = (ProdottoBean) prodIt.next();
+                String img = (String) imgIt.next();
 
-                    if (prod != null) {
-                        BigDecimal prezzoOriginale = new BigDecimal(prod.getPrezzoProdotto());
-                        BigDecimal prezzoOfferta = new BigDecimal(prod.getPrezzoOffertaProdotto());
-                        int euroOriginale = prezzoOriginale.intValue();
-                        int centesimiOriginale = prezzoOriginale.remainder(BigDecimal.ONE).movePointRight(2).intValue();
-                        int euroOfferta = prezzoOfferta.intValue();
-                        int centesimiOfferta = prezzoOfferta.remainder(BigDecimal.ONE).movePointRight(2).intValue();
+                if (prod != null) {
+                    BigDecimal prezzoOriginale = new BigDecimal(prod.getPrezzoProdotto());
+                    BigDecimal prezzoOfferta = new BigDecimal(prod.getPrezzoOffertaProdotto());
+                    int euroOriginale = prezzoOriginale.intValue();
+                    int centesimiOriginale = prezzoOriginale.remainder(BigDecimal.ONE).movePointRight(2).intValue();
+                    int euroOfferta = prezzoOfferta.intValue();
+                    int centesimiOfferta = prezzoOfferta.remainder(BigDecimal.ONE).movePointRight(2).intValue();
         %>
 
         <div class="product">
-
             <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
                 <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
             </a>
-
             <div class="product-details">
-
                 <%  if (prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() < prod.getPrezzoProdotto()) {    %>
-
                 <div class="price">
                     <div class="product-price-container">
                         <span class="product-price-offerta">
@@ -67,19 +161,14 @@
                         </span>
                     </div>
                 </div>
-
                 <div class="promo-attiva">Promo attiva!</div>
-
                 <%  } else {   %>
-
                 <div class="price">
                     <span class="product-price">
                         <span class="euro"><%= euroOriginale %></span><span class="decimal">,<%= String.format("%02d", centesimiOriginale) %></span>&euro;
                     </span>
                 </div>
-
                 <%  }   %>
-
                 <div class="name">
                     <span class="product-name">
                         <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
@@ -87,26 +176,18 @@
                         </a>
                     </span>
                 </div>
-
                 <div class="button">
                     <div class="button-layer"></div>
                     <button>
                         <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%= ((ProdottoBean) prod).getIDProdotto() %>">Visualizza prodotto</a>
                     </button>
                 </div>
-
-                <%
-                    }
-                %>
             </div>
-
         </div>
 
-            <%
-                    }
-                }
-            %>
+        <% }    }   } %>
     </div>
+</div>
 
 <%@ include file="footer.jsp"%>
 </body>

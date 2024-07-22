@@ -27,6 +27,104 @@
 <body>
 <%@ include file="navbar.jsp"%>
 
+<div class="catalog-container">
+
+    <div class="filters">
+        <div class="filter-section">
+            <h3>Superstar</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="cat1">
+                <label for="cat1">Superstar 1</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Superstar 2</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Superstar 3</label>
+            </div>
+        </div>
+        <hr class="filter-divider">
+
+        <div class="filter-section">
+            <h3>Genere</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="cat1">
+                <label for="cat1">Uomo</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Donna</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Unisex</label>
+            </div>
+        </div>
+        <hr class="filter-divider">
+
+        <div class="filter-section">
+            <h3>Categoria</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="cat1">
+                <label for="cat1">Abbigliamento</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Accessori</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Collezionabili</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Firmati</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Title Belts</label>
+            </div>
+        </div>
+        <hr class="filter-divider">
+
+        <div class="filter-section">
+            <h3>Marca</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="cat1">
+                <label for="cat1">Marca 1</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Marca 2</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Marca 3</label>
+            </div>
+        </div>
+        <hr class="filter-divider">
+
+        <div class="filter-section">
+            <h3>Prezzo</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="cat1">
+                <label for="cat1">Categoria 1</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">Categoria 2</label>
+            </div>
+            <div class="filter-option">
+                <input type="checkbox" id="cat2">
+                <label for="cat2">In offerta</label>
+            </div>
+        </div>
+        <hr class="filter-divider">
+
+    </div>
+
     <div class="product-container">
         <%
             if (prodottiCategoria != null && !prodottiCategoria.isEmpty()) {
@@ -112,7 +210,7 @@
             }
         %>
     </div>
-
+</div>
 
 <%@ include file="footer.jsp"%>
 </body>
