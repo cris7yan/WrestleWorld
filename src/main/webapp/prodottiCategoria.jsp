@@ -66,6 +66,8 @@
                     </div>
                 </div>
 
+                <div class="promo-attiva">Promo attiva!</div>
+
                 <%  } else {   %>
 
                 <div class="price">

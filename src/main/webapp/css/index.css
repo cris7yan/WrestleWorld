@@ -219,3 +219,19 @@ h1 {
     cursor: pointer;
     user-select: none;
 }
+
+.promo-attiva {
+    background-color: red;
+    color: white;
+    border-radius: 20px;
+    padding: 1px 5px;
+    text-align: center;
+    font-weight: bold;
+    margin: 5px auto;
+    display: inline-block;
+    font-size: 12px;
+    font-family: 'Avenir Next', sans-serif;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
