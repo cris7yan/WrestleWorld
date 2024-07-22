@@ -17,7 +17,6 @@ public class OrdineModel implements OrdineDAO {
     private static final String TABLE_ORDINE = "Ordine";
     private static final String TABLE_COMPOSIZIONE_ORDINE = "ComposizioneOrdine";
     private static final String TABLE_PRODOTTO = "Prodotto";
-    private static final String TABLE_TAGLIAPRODOTTO = "TagliaProdotto";
 
     private static final String IDORDINE_PARAM = "ID_Ordine";
 
