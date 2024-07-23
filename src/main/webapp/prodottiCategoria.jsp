@@ -31,23 +31,6 @@
 
     <div class="filters">
         <div class="filter-section">
-            <h3>Superstar</h3>
-            <div class="filter-option">
-                <input type="checkbox" id="superstar1">
-                <label for="superstar1">Superstar 1</label>
-            </div>
-            <div class="filter-option">
-                <input type="checkbox" id="superstar2">
-                <label for="superstar2">Superstar 2</label>
-            </div>
-            <div class="filter-option">
-                <input type="checkbox" id="superstar3">
-                <label for="superstar3">Superstar 3</label>
-            </div>
-        </div>
-        <hr class="filter-divider">
-
-        <div class="filter-section">
             <h3>Genere</h3>
             <div class="filter-option">
                 <input type="radio" id="male" name="gender">

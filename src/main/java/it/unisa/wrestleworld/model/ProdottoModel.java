@@ -41,6 +41,7 @@ public class ProdottoModel implements ProdottoDAO {
 
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
+    private static final String MSG_ERROR_RS = " Errore durante la chiusura della ResultSet";
 
 
     // approccio per ottenere risorse dal database
@@ -572,6 +573,144 @@ public class ProdottoModel implements ProdottoDAO {
                 logger.log(Level.WARNING, MSG_ERROR_CONN, e);
             }
         }
+    }
+
+
+    public synchronized String getTipoCategoria(int idProdotto) throws SQLException {
+        String tipoCategoria = null;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String query = "SELECT c.TipoCategoria FROM Prodotto p " +
+                "JOIN Appartenenza a ON p.ID_Prodotto = a.ID_Prodotto " +
+                "JOIN Categoria c ON a.NomeCategoria = c.NomeCategoria " +
+                "WHERE p.ID_Prodotto = ? " +
+                "AND c.TipoCategoria IN ('Title Belts', 'Abbigliamento', 'Accessori', 'Oggetti da collezione')";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, idProdotto);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                tipoCategoria = rs.getString("TipoCategoria");
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // Chiusura ResultSet, PreparedStatement e Connection
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_RS, e);
+            }
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return tipoCategoria;
+    }
+
+
+    public synchronized String getSessoProdotto (int idProdotto) throws SQLException {
+        String sessoProdotto = "";
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT a.NomeCategoria FROM Prodotto p " +
+                "JOIN Appartenenza a ON p.ID_Prodotto = a.ID_Prodotto " +
+                "JOIN Categoria c ON a.NomeCategoria = c.NomeCategoria " +
+                "WHERE p.ID_Prodotto = ? AND c.TipoCategoria = 'Sesso'";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, idProdotto);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                sessoProdotto = rs.getString("NomeCategoria");
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return sessoProdotto;
+    }
+
+
+    public synchronized boolean isFirmato (int idProdotto) throws SQLException {
+        boolean firmato = false;
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT EXISTS (" +
+                "SELECT 1 FROM Appartenenza a " +
+                "JOIN Categoria c ON a.NomeCategoria = c.NomeCategoria " +
+                "WHERE a.ID_Prodotto = ? AND c.TipoCategoria = 'Oggetti da collezione' AND c.NomeCategoria = 'Firmato')";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, idProdotto);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                firmato = rs.getBoolean(1);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return firmato;
     }
 
 }

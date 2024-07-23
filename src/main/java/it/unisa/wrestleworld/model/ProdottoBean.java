@@ -1,7 +1,10 @@
 package it.unisa.wrestleworld.model;
 
 import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ProdottoBean implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -18,10 +21,13 @@ public class ProdottoBean implements Serializable {
     private boolean disponibilita;
     private List<String> img;
     private List<TagliaProdottoBean> taglieProdotto;
+    private List<CategoriaBean> categorie;
 
     // Variabili per la gestione del carrello
     private int quantitaCarrello;
     private String tagliaCarrello;
+
+    private static ProdottoModel prodModel = new ProdottoModel();
 
     public ProdottoBean () {
         // Costruttore
@@ -72,6 +78,10 @@ public class ProdottoBean implements Serializable {
         return this.taglieProdotto;
     }
 
+    public List<CategoriaBean> getCategorieProdotto() {  // Aggiungi questo metodo
+        return this.categorie;
+    }
+
     // Metodi Set
     public void setIDProdotto (int idProdotto) {
         this.idProdotto = idProdotto;
@@ -117,6 +127,10 @@ public class ProdottoBean implements Serializable {
         this.taglieProdotto = taglie;
     }
 
+    public void setCategorieProdotto (List<CategoriaBean> categorie) {  // Aggiungi questo metodo
+        this.categorie = categorie;
+    }
+
     // Altri metodi
     public void addTagliaProdotto (TagliaProdottoBean tagliaProdotto) {
         this.taglieProdotto.add(tagliaProdotto);
@@ -124,6 +138,14 @@ public class ProdottoBean implements Serializable {
 
     public void removeTagliaProdotto (TagliaProdottoBean tagliaProdotto) {
         this.taglieProdotto.remove(tagliaProdotto);
+    }
+
+    public void addCategoria (CategoriaBean categoria) {
+        this.categorie.add(categoria);
+    }
+
+    public void removeCategoria (CategoriaBean categoria) {
+        this.categorie.remove(categoria);
     }
 
     public int getQuantitaPerTaglia (String taglia) {
@@ -166,6 +188,41 @@ public class ProdottoBean implements Serializable {
 
     public void setTagliaSelezionata(String tagliaSelezionata) {
         this.tagliaCarrello = tagliaSelezionata;
+    }
+
+    // Metodi per la gestione dei filtri
+    public float getPrezzoVenditaProdotto () {
+        if(this.prezzoOfferta > 0 && this.prezzoOfferta < this.prezzo){
+            return this.prezzoOfferta;
+        } else
+            return this.prezzo;
+    }
+
+    public String getCategoriaProdotto() {
+        try {
+            return prodModel.getTipoCategoria(this.getIDProdotto());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String getSessoProdotto () {
+        try {
+            return prodModel.getSessoProdotto(this.getIDProdotto());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean prodottoFirmato () {
+        try {
+            return prodModel.isFirmato(this.getIDProdotto());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }
