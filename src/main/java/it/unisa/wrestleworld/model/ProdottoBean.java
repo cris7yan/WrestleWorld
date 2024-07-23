@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 public class ProdottoBean implements Serializable {
     private static final long serialVersionUID = 1L;
     static final Logger logger = Logger.getLogger(ProdottoBean.class.getName());
-    private static final String MSG_ERROR_LOG = "Errore durante il recupero dei dati per il prodotto con ID: ";
 
     // Variabili Prodotto
     private int idProdotto;
@@ -30,6 +29,8 @@ public class ProdottoBean implements Serializable {
     private String tagliaCarrello;
 
     private static ProdottoModel prodModel = new ProdottoModel();
+
+    private final String MSG_ERROR_LOG = "Errore durante il recupero dei dati per il prodotto con ID: " + this.getIDProdotto();
 
     public ProdottoBean () {
         // Costruttore
@@ -205,7 +206,7 @@ public class ProdottoBean implements Serializable {
             return prodModel.getTipoCategoria(this.getIDProdotto());
         } catch (SQLException e) {
             if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
+                logger.log(Level.SEVERE, MSG_ERROR_LOG, e);
             }
             return null;
         }
@@ -216,7 +217,7 @@ public class ProdottoBean implements Serializable {
             return prodModel.getSessoProdotto(this.getIDProdotto());
         } catch (SQLException e) {
             if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
+                logger.log(Level.SEVERE, MSG_ERROR_LOG, e);
             }
             return null;
         }
@@ -227,7 +228,7 @@ public class ProdottoBean implements Serializable {
             return prodModel.isFirmato(this.getIDProdotto());
         } catch (SQLException e) {
             if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
+                logger.log(Level.SEVERE, MSG_ERROR_LOG, e);
             }
             return false;
         }
