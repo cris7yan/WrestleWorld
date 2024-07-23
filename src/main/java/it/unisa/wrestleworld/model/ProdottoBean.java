@@ -1,7 +1,5 @@
 package it.unisa.wrestleworld.model;
 
-import it.unisa.wrestleworld.control.ProdottoControl;
-
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
@@ -206,7 +204,9 @@ public class ProdottoBean implements Serializable {
         try {
             return prodModel.getTipoCategoria(this.getIDProdotto());
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
+            }
             return null;
         }
     }
@@ -215,7 +215,9 @@ public class ProdottoBean implements Serializable {
         try {
             return prodModel.getSessoProdotto(this.getIDProdotto());
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
+            }
             return null;
         }
     }
@@ -224,7 +226,9 @@ public class ProdottoBean implements Serializable {
         try {
             return prodModel.isFirmato(this.getIDProdotto());
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
+            }
             return false;
         }
     }
