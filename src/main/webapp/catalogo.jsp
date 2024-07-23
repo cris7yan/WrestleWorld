@@ -22,7 +22,6 @@
     <meta charset="UTF-8">
     <title>WrestleWorld | Catalogo</title>
     <link href="css/catalogo.css" rel="stylesheet" type="text/css">
-    <script src="js/gestioneFiltro.js"></script>
 </head>
 <body>
 <%@ include file="navbar.jsp"%>
@@ -52,20 +51,20 @@
         <div class="filter-section">
             <h3>Categoria</h3>
             <div class="filter-option">
-                <input type="checkbox" id="clothing">
-                <label for="clothing">Abbigliamento</label>
+                <input type="checkbox" id="Abbigliamento">
+                <label for="Abbigliamento">Abbigliamento</label>
             </div>
             <div class="filter-option">
-                <input type="checkbox" id="accessories">
-                <label for="accessories">Accessori</label>
+                <input type="checkbox" id="Accessori">
+                <label for="Accessori">Accessori</label>
             </div>
             <div class="filter-option">
-                <input type="checkbox" id="collectibles">
-                <label for="collectibles">Oggetti da collezione</label>
+                <input type="checkbox" id="Oggetti-da-collezione">
+                <label for="Oggetti-da-collezione">Collezionabili</label>
             </div>
             <div class="filter-option">
-                <input type="checkbox" id="title-belts">
-                <label for="title-belts">Title Belts</label>
+                <input type="checkbox" id="Title-Belts">
+                <label for="Title-Belts">Title Belts</label>
             </div>
         </div>
         <hr class="filter-divider">
@@ -73,8 +72,8 @@
         <div class="filter-section">
             <h3></h3>
             <div class="filter-option">
-                <input type="checkbox" id="signed">
-                <label for="signed">Firmati</label>
+                <input type="checkbox" id="Firmato">
+                <label for="Firmato">Firmati</label>
             </div>
         </div>
         <hr class="filter-divider">
@@ -113,34 +112,22 @@
         <hr class="filter-divider">
 
         <div class="filter-section">
-            <h3>Prezzo</h3>
+            <h3>Price</h3>
             <div class="filter-option">
-                <input type="radio" id="under-10" name="price">
-                <label for="under-10">< 10€</label>
+                <input type="radio" id="0-50" name="price">
+                <label for="0-50">0 - 50</label>
             </div>
             <div class="filter-option">
-                <input type="radio" id="10-50" name="price">
-                <label for="10-50">da 10€ a 50€</label>
+                <input type="radio" id="51-100" name="price">
+                <label for="51-100">51 - 100</label>
             </div>
             <div class="filter-option">
-                <input type="radio" id="50-75" name="price">
-                <label for="50-75">da 50€ a 75€</label>
+                <input type="radio" id="101-500" name="price">
+                <label for="101-500">101 - 500</label>
             </div>
             <div class="filter-option">
-                <input type="radio" id="75-100" name="price">
-                <label for="75-100">da 75€ a 100€</label>
-            </div>
-            <div class="filter-option">
-                <input type="radio" id="100-200" name="price">
-                <label for="100-200">da 100€ a 200€</label>
-            </div>
-            <div class="filter-option">
-                <input type="radio" id="200-500" name="price">
-                <label for="200-500">da 200€ a 500€</label>
-            </div>
-            <div class="filter-option">
-                <input type="radio" id="over-500" name="price">
-                <label for="over-500">> 500€</label>
+                <input type="radio" id="501-" name="price">
+                <label for="501-">500+</label>
             </div>
         </div>
         <hr class="filter-divider">
@@ -192,15 +179,8 @@
              data-signed="<%= prod.prodottoFirmato() %>"
              data-price="<%= prod.getPrezzoVenditaProdotto() %>"
              data-on-sale="<%= prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() < prod.getPrezzoProdotto() %>"
+             data-availability="<%= prod.getDisponibilitaProdotto() %>"
         >
-        <div>
-            Debug: Gender=<%= prod.getSessoProdotto() %>,
-            Brand=<%= prod.getMarcaProdotto() %>,
-            Category=<%= prod.getCategoriaProdotto() %>,
-            Price=<%= prod.getPrezzoVenditaProdotto() %>,
-            On Sale=<%= prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() < prod.getPrezzoProdotto() %>
-            Signed=<%= prod.prodottoFirmato() %>
-        </div>
 
         <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
                 <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
@@ -244,6 +224,8 @@
         <% }    }   } %>
     </div>
 </div>
+
+<script src="js/gestioneFiltro.js"></script>
 
 <%@ include file="footer.jsp"%>
 </body>
