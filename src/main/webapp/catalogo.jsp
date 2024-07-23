@@ -70,7 +70,6 @@
         <hr class="filter-divider">
 
         <div class="filter-section">
-            <h3></h3>
             <div class="filter-option">
                 <input type="checkbox" id="Firmato">
                 <label for="Firmato">Firmati</label>
@@ -112,7 +111,7 @@
         <hr class="filter-divider">
 
         <div class="filter-section">
-            <h3>Price</h3>
+            <h3>Range di prezzo</h3>
             <div class="filter-option">
                 <input type="radio" id="0-50" name="price">
                 <label for="0-50">0 - 50</label>
@@ -133,7 +132,6 @@
         <hr class="filter-divider">
 
         <div class="filter-section">
-            <h3></h3>
             <div class="filter-option">
                 <input type="checkbox" id="on-sale">
                 <label for="on-sale">In offerta</label>
@@ -142,7 +140,6 @@
         <hr class="filter-divider">
 
         <div class="filter-section">
-            <h3></h3>
             <div class="filter-option">
                 <input type="checkbox" id="disponibile" name="disponibile">
                 <label for="disponibile">Solo disponibili</label>

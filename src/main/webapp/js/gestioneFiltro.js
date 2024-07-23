@@ -15,7 +15,7 @@ const brandMapping = {
     'brand7': 'WWE Authentic'
 };
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     const applyButton = document.getElementById('apply-filters');
     if (applyButton) {
         applyButton.addEventListener('click', applyFilters);
@@ -25,115 +25,99 @@ document.addEventListener('DOMContentLoaded', (event) => {
 function applyFilters() {
     console.log('applyFilters function called'); // Debugging line
 
-    // Raccolta dei filtri selezionati
-    const selectedFilters = {
+    const selectedFilters = getSelectedFilters();
+    console.log('Selected Filters:', selectedFilters); // Debugging line
+
+    const products = document.querySelectorAll('.product');
+    products.forEach(product => {
+        const productData = getProductData(product);
+        console.log('Product Data:', productData); // Debugging line
+
+        const isVisible = isProductVisible(productData, selectedFilters);
+        product.style.display = isVisible ? 'block' : 'none';
+    });
+
+    window.scrollTo(0, 0);
+}
+
+function getSelectedFilters() {
+    return {
         gender: document.querySelector('input[name="gender"]:checked')?.id || null,
-        categories: [...document.querySelectorAll('.filters input[type="checkbox"]:checked')]
-            .map(el => categoryMapping[el.id] || el.id)
-            .filter(el => Object.values(categoryMapping).includes(el)),
-        brands: [...document.querySelectorAll('.filters input[type="checkbox"]:checked')]
-            .map(el => brandMapping[el.id] || el.id)
-            .filter(el => Object.values(brandMapping).includes(el)),
+        categories: getSelectedCheckboxes('.filters input[type="checkbox"]', categoryMapping),
+        brands: getSelectedCheckboxes('.filters input[type="checkbox"]', brandMapping),
         price: document.querySelector('input[name="price"]:checked')?.id || null,
         onSale: document.getElementById('on-sale').checked,
         signed: document.getElementById('Firmato').checked,
         available: document.getElementById('disponibile').checked
     };
+}
 
-    console.log('Selected Filters:', selectedFilters); // Debugging line
+function getSelectedCheckboxes(selector, mapping) {
+    return [...document.querySelectorAll(selector)]
+        .filter(el => el.checked)
+        .map(el => mapping[el.id] || el.id)
+        .filter(el => Object.values(mapping).includes(el));
+}
 
-    // Selezione di tutti i prodotti
-    const products = document.querySelectorAll('.product');
+function getProductData(product) {
+    return {
+        gender: product.getAttribute('data-gender'),
+        category: product.getAttribute('data-category'),
+        brand: product.getAttribute('data-brand'),
+        price: parseFloat(product.getAttribute('data-price')),
+        onSale: product.getAttribute('data-on-sale') === 'true',
+        signed: product.getAttribute('data-signed') === 'true',
+        available: product.getAttribute('data-availability') === 'true'
+    };
+}
 
-    // Applicazione dei filtri a ciascun prodotto
-    products.forEach(product => {
-        const gender = product.getAttribute('data-gender');
-        const category = product.getAttribute('data-category');
-        const brand = product.getAttribute('data-brand');
-        const price = parseFloat(product.getAttribute('data-price'));
-        const onSale = product.getAttribute('data-on-sale') === 'true';
-        const signed = product.getAttribute('data-signed') === 'true';
-        const available = product.getAttribute('data-availability') === 'true';
+function isProductVisible(productData, filters) {
+    return checkGender(productData.gender, filters.gender) &&
+        checkCategories(productData.category, filters.categories) &&
+        checkBrands(productData.brand, filters.brands) &&
+        checkPrice(productData.price, filters.price) &&
+        checkOnSale(productData.onSale, filters.onSale) &&
+        checkSigned(productData.signed, filters.signed) &&
+        checkAvailability(productData.available, filters.available);
+}
 
-        console.log('Product Data:', {
-            gender,
-            category,
-            brand,
-            price,
-            onSale,
-            signed,
-            available
-        }); // Debugging line
+function checkGender(productGender, filterGender) {
+    return !filterGender || filterGender === productGender || productGender === "";
+}
 
-        let isVisible = true;
+function checkCategories(productCategory, filterCategories) {
+    return !filterCategories.length || filterCategories.includes(productCategory);
+}
 
-        // Check gender
-        if (selectedFilters.gender && selectedFilters.gender !== gender && gender !== "") {
-            isVisible = false;
-        }
+function checkBrands(productBrand, filterBrands) {
+    return !filterBrands.length || filterBrands.includes(productBrand);
+}
 
-        // Check categories
-        if (selectedFilters.categories.length && !selectedFilters.categories.includes(category)) {
-            console.log(`Category filter: ${selectedFilters.categories}, Product category: ${category}`); // Debugging line
-            isVisible = false;
-        }
+function checkPrice(productPrice, filterPrice) {
+    if (!filterPrice) return true;
 
-        // Check brands
-        if (selectedFilters.brands.length && !selectedFilters.brands.includes(brand)) {
-            console.log(`Brand filter: ${selectedFilters.brands}, Product brand: ${brand}`); // Debugging line
-            isVisible = false;
-        }
+    const [minPrice, maxPrice] = getPriceRange(filterPrice);
+    return productPrice >= minPrice && productPrice <= maxPrice;
+}
 
-        // Check price
-        if (selectedFilters.price) {
-            let minPrice = 0;
-            let maxPrice = Infinity;
+function getPriceRange(priceFilter) {
+    switch (priceFilter) {
+        case '0-50': return [0, 50];
+        case '51-100': return [51, 100];
+        case '101-500': return [101, 500];
+        case '501-': return [501, Infinity];
+        default: return [0, Infinity];
+    }
+}
 
-            switch (selectedFilters.price) {
-                case '0-50':
-                    minPrice = 0;
-                    maxPrice = 50;
-                    break;
-                case '51-100':
-                    minPrice = 51;
-                    maxPrice = 100;
-                    break;
-                case '101-500':
-                    minPrice = 101;
-                    maxPrice = 500;
-                    break;
-                case '501-':
-                    minPrice = 501;
-                    maxPrice = Infinity;
-                    break;
-            }
+function checkOnSale(productOnSale, filterOnSale) {
+    return !filterOnSale || productOnSale;
+}
 
-            console.log(`Price filter: ${selectedFilters.price}, Product price: ${price}, Min price: ${minPrice}, Max price: ${maxPrice}`); // Debugging line
+function checkSigned(productSigned, filterSigned) {
+    return !filterSigned || productSigned;
+}
 
-            if (price < minPrice || price > maxPrice) {
-                isVisible = false;
-            }
-        }
-
-        // Check on sale
-        if (selectedFilters.onSale && !onSale) {
-            isVisible = false;
-        }
-
-        // Check signed
-        if (selectedFilters.signed && !signed) {
-            isVisible = false;
-        }
-
-        // Check availability
-        if (selectedFilters.available && !available) {
-            isVisible = false;
-        }
-
-        // Set visibility
-        product.style.display = isVisible ? 'block' : 'none';
-    });
-
-    // Scroll to the top of the page
-    window.scrollTo(0, 0);
+function checkAvailability(productAvailable, filterAvailable) {
+    return !filterAvailable || productAvailable;
 }
