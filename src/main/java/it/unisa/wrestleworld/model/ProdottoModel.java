@@ -575,7 +575,14 @@ public class ProdottoModel implements ProdottoDAO {
         }
     }
 
+    // Metodi per la gestione dei filtri
 
+    /**
+     * funzione che restituisce il tipo di categoria a cui appartiene un prodotto
+     * @param idProdotto
+     * @return
+     * @throws SQLException
+     */
     public synchronized String getTipoCategoria(int idProdotto) throws SQLException {
         String tipoCategoria = null;
         Connection conn = null;
@@ -628,6 +635,12 @@ public class ProdottoModel implements ProdottoDAO {
     }
 
 
+    /**
+     * funzione che restituisce il sesso di quel determinato prodotto
+     * @param idProdotto
+     * @return
+     * @throws SQLException
+     */
     public synchronized String getSessoProdotto (int idProdotto) throws SQLException {
         String sessoProdotto = "";
         Connection conn = null;
@@ -671,6 +684,12 @@ public class ProdottoModel implements ProdottoDAO {
     }
 
 
+    /**
+     * funzione che verifica se un determinato prodotto è firmato o no
+     * @param idProdotto
+     * @return
+     * @throws SQLException
+     */
     public synchronized boolean isFirmato (int idProdotto) throws SQLException {
         boolean firmato = false;
         Connection conn = null;

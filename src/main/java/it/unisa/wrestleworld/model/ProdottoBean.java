@@ -2,9 +2,7 @@ package it.unisa.wrestleworld.model;
 
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ProdottoBean implements Serializable {
     private static final long serialVersionUID = 1L;
