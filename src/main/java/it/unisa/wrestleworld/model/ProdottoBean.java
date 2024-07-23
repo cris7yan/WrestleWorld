@@ -1,11 +1,17 @@
 package it.unisa.wrestleworld.model;
 
+import it.unisa.wrestleworld.control.ProdottoControl;
+
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProdottoBean implements Serializable {
     private static final long serialVersionUID = 1L;
+    static final Logger logger = Logger.getLogger(ProdottoBean.class.getName());
+    private static final String MSG_ERROR_LOG = "Errore durante il recupero dei dati per il prodotto con ID: ";
 
     // Variabili Prodotto
     private int idProdotto;
@@ -200,25 +206,25 @@ public class ProdottoBean implements Serializable {
         try {
             return prodModel.getTipoCategoria(this.getIDProdotto());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
             return null;
         }
     }
 
-    public String getSessoProdotto () {
+    public String getSessoProdotto() {
         try {
             return prodModel.getSessoProdotto(this.getIDProdotto());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
             return null;
         }
     }
 
-    public boolean prodottoFirmato () {
+    public boolean prodottoFirmato() {
         try {
             return prodModel.isFirmato(this.getIDProdotto());
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, MSG_ERROR_LOG + this.getIDProdotto(), e);
             return false;
         }
     }
