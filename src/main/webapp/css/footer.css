@@ -6,6 +6,18 @@
     align-items: center;
     background: lightgray;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    width: 100%; /* Assicurati che il footer copra l'intera larghezza della pagina */
+    box-sizing: border-box; /* Includi padding e border nella larghezza totale */
+}
+
+#footer {
+    margin-top: auto; /* Spingi il footer in fondo alla pagina */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Assicura che il corpo della pagina copra l'intera altezza della finestra */
 }
 
 .chiSiamo, .chiSiamo p,

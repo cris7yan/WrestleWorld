@@ -1,49 +1,72 @@
 /* Stile per il contenitore principale */
-#main-container {
-    width: 80%;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Stile per il titolo */
-#main-container h1 {
-    color: #333;
-    margin-bottom: 20px;
-}
-
-/* Stile per i link */
-#main-container a {
-    color: #007bff;
-    text-decoration: none;
-    margin-bottom: 5px;
+body {
     display: flex;
-}
-
-#main-container a:hover {
-    text-decoration: underline;
-}
-
-.container {
+    flex-direction: column;
+    align-items: center;
     font-family: Arial, sans-serif;
-    margin: 20px;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* Stile per il contenitore dell'intestazione */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 0 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.header-container .logo {
+    height: 100px;
+    margin-right: 20px;
+    border-radius: 10px; /* Arrotonda i bordi del logo */
+}
+
+.header-container h1 {
+    color: #333;
+    margin: 0;
+    white-space: nowrap; /* Impedisce che il titolo vada a capo */
+}
+
+/* Stile per il contenitore dei dati */
+.dati-container {
+    text-align: center;
+    margin: 20px 0;
+    width: 80%;
+    max-width: 600px;
 }
 
 /* Stile per i titoli */
-.container p {
-    margin: 0;
-    padding: 5px 0;
+.dati-container p {
+    margin: 10px 0;
 }
 
-.container .label {
+.dati-container .label {
     font-weight: bold;
     color: #333;
 }
 
 /* Stile per i dati */
-.container .value {
-    margin-left: 10px;
+.dati-container .value {
     color: #555;
+}
+
+/* Stile per il contenitore dei link */
+.link-container {
+    text-align: center;
+}
+
+.link-container a {
+    display: block;
+    color: #007bff;
+    text-decoration: none;
+    margin: 10px 0;
+}
+
+.link-container a:hover {
+    text-decoration: underline;
 }

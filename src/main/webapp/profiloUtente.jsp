@@ -13,22 +13,25 @@
 <body>
 <%@ include file="navbar.jsp"%>
 
-<div id="main-container">
-    <h1>Sei nella tua pagina profilo</h1>
+<div class="header-container">
+    <h1>Benvenuto nel tuo profilo</h1>
+</div>
 
-    <div class="dati-container">
-        <p><span class="label">Email:</span> <span class="value"><%=emailUtente%></span></p>
-        <p><span class="label">Nome:</span> <span class="value"><%=nome%></span></p>
-        <p><span class="label">Cognome:</span> <span class="value"><%=cognome%></span></p>
-        <p><span class="label">Data di nascita:</span> <span class="value"><%=dataNascita%></span></p>
-    </div>
-    <a href="./modificaDati.jsp">Modifica i tuoi dati</a>
-    <br>
-    <a href="./indirizzi.jsp">Visualizza i tuoi indirizzi</a>
-    <br>
-    <a href="./ordini.jsp">Visualizza i tuoi ordini</a>
-    <br>
-    <a href="./metodiPagamento.jsp">Visualizza i tuoi metodi di pagamento</a>
+<div class="dati-container">
+    <p class="nome-cognome"><span class="value"><%=nome%> <%=cognome%></span></p>
+    <p class="email"><span class="label">Email:</span> <span class="value"><%=emailUtente%></span></p>
+    <p class="data-nascita"><span class="label">Data di nascita:</span> <span class="value"><%=dataNascita%></span></p>
+</div>
+
+<div class="link-container">
+    <% if ("Admin".equals(tipoUtente)) { %>
+        <a href="./admin.jsp">Visualizza utenti</a>
+    <% } else { %>
+        <a href="./modificaDati.jsp">Modifica i tuoi dati</a>
+        <a href="./indirizzi.jsp">Visualizza i tuoi indirizzi</a>
+        <a href="./ordini.jsp">Visualizza i tuoi ordini</a>
+        <a href="./metodiPagamento.jsp">Visualizza i tuoi metodi di pagamento</a>
+    <% } %>
 </div>
 
 <%@ include file="footer.jsp"%>

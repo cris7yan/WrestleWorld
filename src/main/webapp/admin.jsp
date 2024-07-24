@@ -29,13 +29,26 @@
         .user-box h2 {
             margin-top: 0;
         }
+        .user-box button {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .user-box button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
 <%@ include file="navbar.jsp" %>
 
 <div class="container">
-    <h1>Lista Utenti</h1>
+    <h1>Utenti registrati alla piattaforma</h1>
     <div class="user-list">
         <%
             for (UtenteBean utente : utenti) {
@@ -45,6 +58,7 @@
             <p><strong>Email:</strong> <%= utente.getEmail() %></p>
             <p><strong>Data di Nascita:</strong> <%= utente.getDataNascita() %></p>
             <p><strong>Tipo Utente:</strong> <%= utente.getTipoUtente() %></p>
+            <button onclick="location.href='AdminControl?action=visualizzaOrdiniUtenti&email=<%= utente.getEmail() %>'">Ordini Utente</button>
         </div>
         <%
             }

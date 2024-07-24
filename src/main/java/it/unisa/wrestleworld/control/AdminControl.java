@@ -51,6 +51,9 @@ public class AdminControl extends HttpServlet {
                     case "visualizzaUtenti":
                         visualizzaUtenti(request, response);
                         break;
+                    case "visualizzaOrdiniUtenti":
+                        visualizzaOrdiniUtenti(request, response);
+                        break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
                         break;
@@ -95,4 +98,25 @@ public class AdminControl extends HttpServlet {
             logger.log(Level.WARNING, e.getMessage());
         }
     }
+
+
+    private void visualizzaOrdiniUtenti (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String email = request.getParameter("email");
+            List<OrdineBean> ordiniUtente = new ArrayList<>(ordineModel.doRetrieveAllByEmail(email));
+
+            request.setAttribute("ordini", ordiniUtente);
+            request.setAttribute("email", email);
+            request.setAttribute("nomeOrdine", utModel.doRetrieveByEmail(email).getNome());
+            request.setAttribute("cognomeOrdine", utModel.doRetrieveByEmail(email).getCognome());
+
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/ordini.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
 }

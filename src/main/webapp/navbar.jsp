@@ -81,13 +81,9 @@
             }
             else {
                 if(tipoUtente.equals("Admin")) {
-            %>
-            <li>
-                <a href="./admin.jsp">UTENTI</a>
-            </li>
-            <%
-            }
-            else {
+
+                }
+                else {
             %>
             <li>
                 <a href="./carrello.jsp"><img src="img/sitoweb/cart.png" alt="Icon Error"></a>
