@@ -298,20 +298,24 @@ public class ProdottoControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void ricerca (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void ricerca(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String nome = request.getParameter(RICERCA_PARAM);
 
             ProdottoBean prodotto = prodModel.doRetrieveByName(nome);
-
-            if(prodotto != null) {
+            if (prodotto != null) {
                 List<String> imgProd = prodModel.doRetrieveAllImages(prodotto);
+
+                List<TagliaProdottoBean> taglieProd = taglieModel.doRetrieveAllSizeByProduct(prodotto);
 
                 request.setAttribute("prodotto", prodotto);
                 request.setAttribute("imgProd", imgProd);
+                request.setAttribute("taglieProd", taglieProd);
+
                 RequestDispatcher reqDispatcher = request.getRequestDispatcher("/dettagliProdotto.jsp");
                 reqDispatcher.forward(request, response);
             } else {
+                // Gestione caso prodotto non trovato
                 request.setAttribute("errorMessage", "Prodotto non trovato");
                 RequestDispatcher reqDispatcher = request.getRequestDispatcher("/index.jsp");
                 reqDispatcher.forward(request, response);
