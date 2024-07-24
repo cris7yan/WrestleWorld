@@ -2,6 +2,7 @@ package it.unisa.wrestleworld.model;
 
 import java.sql.SQLException;
 import java.sql.Date;
+import java.util.List;
 
 public interface UtenteDAO {
 
@@ -12,5 +13,7 @@ public interface UtenteDAO {
     void doUpdateData (String nome, String cognome, Date data, String email) throws SQLException;
     void doUpdateEmail (String email, String newEmail) throws SQLException;
     void doUpdatePassword (String email, String newPassword) throws SQLException;
+
+    List<UtenteBean> doRetrieveAllUtenti() throws SQLException;
 
 }

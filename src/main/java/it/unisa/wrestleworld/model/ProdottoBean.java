@@ -30,7 +30,7 @@ public class ProdottoBean implements Serializable {
 
     private static ProdottoModel prodModel = new ProdottoModel();
 
-    private final String MSG_ERROR_LOG = "Errore durante il recupero dei dati per il prodotto con ID: " + this.getIDProdotto();
+    private static final String MSG_ERROR_LOG = "Errore durante il recupero dei dati del prodotto";
 
     public ProdottoBean () {
         // Costruttore

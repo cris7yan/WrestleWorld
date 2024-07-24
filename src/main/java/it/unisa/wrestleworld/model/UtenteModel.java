@@ -5,6 +5,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -362,6 +364,53 @@ public class UtenteModel implements UtenteDAO {
                 logger.log(Level.WARNING, MSG_ERROR_CONN, e);
             }
         }
+    }
+
+    // Metodi per la gestione dell'admin
+
+    public synchronized List<UtenteBean> doRetrieveAllUtenti() throws SQLException {
+        List<UtenteBean> utenti = new ArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = SELECT_ALL_FROM + TABLE_UTENTE + " WHERE Tipo = 'Utente'";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                UtenteBean utente = new UtenteBean();
+
+                utente.setEmail(rs.getString(EMAIL_PARAM));
+                utente.setPassword(rs.getString("Password"));
+                utente.setNome(rs.getString("Nome"));
+                utente.setCognome(rs.getString("Cognome"));
+                utente.setDataNascita(rs.getDate("DataNascita"));
+                utente.setTipoUtente(rs.getString("Tipo"));
+
+                utenti.add(utente);
+            }
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return utenti;
     }
 
 }
