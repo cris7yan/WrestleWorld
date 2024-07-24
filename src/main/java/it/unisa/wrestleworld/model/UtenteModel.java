@@ -368,6 +368,11 @@ public class UtenteModel implements UtenteDAO {
 
     // Metodi per la gestione dell'admin
 
+    /**
+     * funzione che recupera tutti gli utenti iscritti
+     * @return
+     * @throws SQLException
+     */
     public synchronized List<UtenteBean> doRetrieveAllUtenti() throws SQLException {
         List<UtenteBean> utenti = new ArrayList<>();
 

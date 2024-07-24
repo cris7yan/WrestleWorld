@@ -284,4 +284,74 @@ public class OrdineModel implements OrdineDAO {
         return idLastOrdine;
     }
 
+    // Metodi per la gestione dell'admin
+
+    /**
+     * funzione che recupera tutti gli ordini effettuati
+     * @return
+     * @throws SQLException
+     */
+    public synchronized List<OrdineBean> doRetrieveAllOrdini() throws SQLException {
+        List<OrdineBean> ordini = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement psOrdine = null;
+        PreparedStatement psUtente = null;
+
+        String queryOrdine = "SELECT * FROM " + TABLE_ORDINE;
+        String queryUtente = "SELECT * FROM Utente WHERE Email = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            psOrdine = conn.prepareStatement(queryOrdine);
+
+            ResultSet rsOrdine = psOrdine.executeQuery();
+            while (rsOrdine.next()) {
+                OrdineBean ordine = new OrdineBean();
+
+                ordine.setIdOrdine(rsOrdine.getInt("ID_Ordine"));
+                ordine.setDataOrdine(rsOrdine.getDate("Data_ordine"));
+                ordine.setPrezzoTotaleOrdine(rsOrdine.getFloat("Totale"));
+
+                // Recupero dei dettagli dell'utente
+                String emailUtente = rsOrdine.getString("EmailUtente");
+                psUtente = conn.prepareStatement(queryUtente);
+                psUtente.setString(1, emailUtente);
+
+                ResultSet rsUtente = psUtente.executeQuery();
+                if (rsUtente.next()) {
+                    UtenteBean utente = new UtenteBean();
+                    utente.setEmail(rsUtente.getString("Email"));
+                    utente.setNome(rsUtente.getString("Nome")); // Aggiungi altri campi se necessari
+                    utente.setCognome(rsUtente.getString("Cognome")); // Aggiungi altri campi se necessari
+                    // Popola l'oggetto UtenteBean
+                    ordine.setUtenteOrdine(utente);
+                }
+
+                ordini.add(ordine);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // Chiusura PreparedStatement e Connection
+            try {
+                if (psOrdine != null) {
+                    psOrdine.close();
+                }
+                if (psUtente != null) {
+                    psUtente.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return ordini;
+    }
+
 }

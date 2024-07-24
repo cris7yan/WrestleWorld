@@ -12,4 +12,5 @@ public interface OrdineDAO {
     List<ProdottoBean> doRetrieveOrdineByID (int id) throws SQLException;
     int doRetrieveLastOrdineID () throws SQLException;
 
+    List<OrdineBean> doRetrieveAllOrdini () throws SQLException;
 }

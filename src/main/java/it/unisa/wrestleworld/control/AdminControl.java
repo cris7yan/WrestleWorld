@@ -54,6 +54,9 @@ public class AdminControl extends HttpServlet {
                     case "visualizzaOrdiniUtenti":
                         visualizzaOrdiniUtenti(request, response);
                         break;
+                    case "visualizzaOrdiniTotali":
+                        visualizzaOrdiniTotali(request, response);
+                        break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
                         break;
@@ -83,6 +86,13 @@ public class AdminControl extends HttpServlet {
     }
 
 
+    /**
+     * funzione che permette di visualizzare tutti gli utenti del sito
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void visualizzaUtenti (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<UtenteBean> utenti = new ArrayList<>();
@@ -90,7 +100,7 @@ public class AdminControl extends HttpServlet {
 
             request.setAttribute("utenti", utenti);
 
-            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/admin.jsp");
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/adminUtenti.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
@@ -100,6 +110,13 @@ public class AdminControl extends HttpServlet {
     }
 
 
+    /**
+     * funzione che permette di visualizzare tutti gli ordini effettuati da un solo utente
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void visualizzaOrdiniUtenti (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String email = request.getParameter("email");
@@ -111,6 +128,29 @@ public class AdminControl extends HttpServlet {
             request.setAttribute("cognomeOrdine", utModel.doRetrieveByEmail(email).getCognome());
 
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/ordini.jsp");
+            reqDispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+
+    /**
+     * funzione che permette di visualizzare tutti gli ordini effettuati sul sito
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void visualizzaOrdiniTotali (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            List<OrdineBean> ordini = ordineModel.doRetrieveAllOrdini();
+
+            request.setAttribute("ordini", ordini);
+
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("/adminOrdini.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);

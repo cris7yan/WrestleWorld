@@ -35,16 +35,15 @@
     <div class="ordini-container">
         <%
             if ("Utente".equals(tipoUtente)) {
+        %>
+        <h1>I tuoi ordini</h1>
+        <%
                 if (ordini != null && !ordini.isEmpty()) {
                     Iterator<?> ordIt = ordini.iterator();
                     while (ordIt.hasNext()) {
                         OrdineBean ordine = (OrdineBean) ordIt.next();
+                        if (ordine != null) {
         %>
-
-        <%
-            if (ordine != null) {
-        %>
-        <h1>I tuoi ordini</h1>
 
         <div class="ordine">
             ID Ordine: <%= ordine.getIdOrdine() %> <br>

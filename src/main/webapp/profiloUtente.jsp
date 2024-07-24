@@ -25,7 +25,8 @@
 
 <div class="link-container">
     <% if ("Admin".equals(tipoUtente)) { %>
-        <a href="./admin.jsp">Visualizza utenti</a>
+        <a href="adminUtenti.jsp">Visualizza utenti</a>
+        <a href="./adminOrdini.jsp">Visualizza ordini</a>
     <% } else { %>
         <a href="./modificaDati.jsp">Modifica i tuoi dati</a>
         <a href="./indirizzi.jsp">Visualizza i tuoi indirizzi</a>
