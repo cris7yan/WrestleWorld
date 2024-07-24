@@ -24,7 +24,6 @@ public class AdminControl extends HttpServlet {
     static OrdineDAO ordineModel = new OrdineModel();
     static ProdottoDAO prodModel = new ProdottoModel();
 
-    private static final String MSG_ERROR_INDEXPAGE = "Errore durante il reindirizzamento alla pagina principale";
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
 
@@ -95,8 +94,7 @@ public class AdminControl extends HttpServlet {
      */
     private void visualizzaUtenti (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<UtenteBean> utenti = new ArrayList<>();
-            utenti = utModel.doRetrieveAllUtenti();
+            List<UtenteBean> utenti = utModel.doRetrieveAllUtenti();
 
             request.setAttribute("utenti", utenti);
 

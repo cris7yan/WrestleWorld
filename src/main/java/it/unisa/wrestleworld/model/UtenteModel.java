@@ -17,6 +17,10 @@ public class UtenteModel implements UtenteDAO {
     private static final String TABLE_UTENTE = "Utente";
 
     private static final String EMAIL_PARAM = "Email";
+    private static final String PASSWORD_PARAM = "Password";
+    private static final String NOME_PARAM = "Nome";
+    private static final String COGNOME_PARAM = "Cognome";
+    private static final String DATA_NASCITA_PARAM = "DataNascita";
 
     private static final String SELECT_ALL_FROM = "SELECT * FROM ";
     private static final String UPDATE = "UPDATE ";
@@ -108,10 +112,10 @@ public class UtenteModel implements UtenteDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 utente.setEmail(rs.getString(EMAIL_PARAM));
-                utente.setPassword(rs.getString("Password"));
-                utente.setNome(rs.getString("Nome"));
-                utente.setCognome(rs.getString("Cognome"));
-                utente.setDataNascita(Date.valueOf(rs.getString("DataNascita")));
+                utente.setPassword(rs.getString(PASSWORD_PARAM));
+                utente.setNome(rs.getString(NOME_PARAM));
+                utente.setCognome(rs.getString(COGNOME_PARAM));
+                utente.setDataNascita(Date.valueOf(rs.getString(DATA_NASCITA_PARAM)));
                 utente.setTipoUtente(rs.getString("Tipo"));
             }
         } catch (SQLException e) {
@@ -164,10 +168,10 @@ public class UtenteModel implements UtenteDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 utente.setEmail(rs.getString(EMAIL_PARAM));
-                utente.setPassword(rs.getString("Password"));
-                utente.setNome(rs.getString("Nome"));
-                utente.setCognome(rs.getString("Cognome"));
-                utente.setDataNascita(Date.valueOf(rs.getString("DataNascita")));
+                utente.setPassword(rs.getString(PASSWORD_PARAM));
+                utente.setNome(rs.getString(NOME_PARAM));
+                utente.setCognome(rs.getString(COGNOME_PARAM));
+                utente.setDataNascita(Date.valueOf(rs.getString(DATA_NASCITA_PARAM)));
                 utente.setTipoUtente(rs.getString("Tipo"));
             }
         } catch (SQLException e) {
@@ -390,10 +394,10 @@ public class UtenteModel implements UtenteDAO {
                 UtenteBean utente = new UtenteBean();
 
                 utente.setEmail(rs.getString(EMAIL_PARAM));
-                utente.setPassword(rs.getString("Password"));
-                utente.setNome(rs.getString("Nome"));
-                utente.setCognome(rs.getString("Cognome"));
-                utente.setDataNascita(rs.getDate("DataNascita"));
+                utente.setPassword(rs.getString(PASSWORD_PARAM));
+                utente.setNome(rs.getString(NOME_PARAM));
+                utente.setCognome(rs.getString(COGNOME_PARAM));
+                utente.setDataNascita(Date.valueOf(rs.getString(DATA_NASCITA_PARAM)));
                 utente.setTipoUtente(rs.getString("Tipo"));
 
                 utenti.add(utente);

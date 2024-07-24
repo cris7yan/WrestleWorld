@@ -293,64 +293,32 @@ public class OrdineModel implements OrdineDAO {
      */
     public synchronized List<OrdineBean> doRetrieveAllOrdini() throws SQLException {
         List<OrdineBean> ordini = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement psOrdine = null;
-        PreparedStatement psUtente = null;
+        String query = "SELECT o.ID_Ordine, o.Data_ordine, o.Totale, u.Email, u.Nome, u.Cognome " +
+                "FROM " + TABLE_ORDINE + " o " +
+                "JOIN Utente u ON o.EmailUtente = u.Email";
 
-        String queryOrdine = "SELECT * FROM " + TABLE_ORDINE;
-        String queryUtente = "SELECT * FROM Utente WHERE Email = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
 
-        try {
-            conn = dataSource.getConnection();
-            psOrdine = conn.prepareStatement(queryOrdine);
-
-            ResultSet rsOrdine = psOrdine.executeQuery();
-            while (rsOrdine.next()) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
                 OrdineBean ordine = new OrdineBean();
+                ordine.setIdOrdine(rs.getInt(IDORDINE_PARAM));
+                ordine.setDataOrdine(rs.getDate("Data_ordine"));
+                ordine.setPrezzoTotaleOrdine(rs.getFloat("Totale"));
 
-                ordine.setIdOrdine(rsOrdine.getInt("ID_Ordine"));
-                ordine.setDataOrdine(rsOrdine.getDate("Data_ordine"));
-                ordine.setPrezzoTotaleOrdine(rsOrdine.getFloat("Totale"));
-
-                // Recupero dei dettagli dell'utente
-                String emailUtente = rsOrdine.getString("EmailUtente");
-                psUtente = conn.prepareStatement(queryUtente);
-                psUtente.setString(1, emailUtente);
-
-                ResultSet rsUtente = psUtente.executeQuery();
-                if (rsUtente.next()) {
-                    UtenteBean utente = new UtenteBean();
-                    utente.setEmail(rsUtente.getString("Email"));
-                    utente.setNome(rsUtente.getString("Nome")); // Aggiungi altri campi se necessari
-                    utente.setCognome(rsUtente.getString("Cognome")); // Aggiungi altri campi se necessari
-                    // Popola l'oggetto UtenteBean
-                    ordine.setUtenteOrdine(utente);
-                }
+                UtenteBean utente = new UtenteBean();
+                utente.setEmail(rs.getString("Email"));
+                utente.setNome(rs.getString("Nome"));
+                utente.setCognome(rs.getString("Cognome"));
+                ordine.setUtenteOrdine(utente);
 
                 ordini.add(ordine);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
-        } finally {
-            // Chiusura PreparedStatement e Connection
-            try {
-                if (psOrdine != null) {
-                    psOrdine.close();
-                }
-                if (psUtente != null) {
-                    psUtente.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
-            }
         }
+
         return ordini;
     }
 
