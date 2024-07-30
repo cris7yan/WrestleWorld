@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<section id="footer">
+<footer id="footer">
     <div class="info">
         <div class="chiSiamo">Chi siamo?
             <p>Cristyan Esposito</p>
@@ -49,7 +49,7 @@
         <h2 class="invito">SUI PRODOTTI PRESENTI NEL SITO</h2>
     </div>
 
-</section>
+</footer>
 
 </body>
 </html>

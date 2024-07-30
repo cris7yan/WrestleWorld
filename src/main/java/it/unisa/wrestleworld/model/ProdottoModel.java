@@ -732,4 +732,89 @@ public class ProdottoModel implements ProdottoDAO {
         return firmato;
     }
 
+    // Metodi per la gestione dell'admin
+
+    /**
+     * funzione che gestice l'operazione di rimozione di un prodotto dal database
+     * @param id
+     * @throws SQLException
+     */
+    public synchronized void doDeleteProduct (int id) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "DELETE FROM " + TABLE_PRODOTTO + " WHERE ID_Prodotto = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, id);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
+
+    /**
+     * funzione che gestisce l'operazione di aggiunta quantità ad un prodotto con taglia indicata
+     * @param id
+     * @param taglia
+     * @param quantity
+     * @throws SQLException
+     */
+    public synchronized void addQuantityProduct (int id, String taglia, int quantity) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "UPDATE " + TABLE_TAGLIAPRODOTTO + " SET Quantita = Quantita + ? WHERE ID_Prodotto = ? AND Taglia = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, quantity);
+            ps.setInt(2, id);
+            ps.setString(3, taglia);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,12 @@ public class AdminControl extends HttpServlet {
                         break;
                     case "visualizzaOrdiniTotali":
                         visualizzaOrdiniTotali(request, response);
+                        break;
+                    case "incrementaQuantitaProdotto":
+                        incrementaQuantitaProdotto(request, response);
+                        break;
+                    case "eliminaProdotto":
+                        eliminaProdotto(request, response);
                         break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
@@ -154,6 +161,69 @@ public class AdminControl extends HttpServlet {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+
+    /**
+     * funzione che permette ad un admin di modificare la quantità di un prodotto
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void incrementaQuantitaProdotto (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String idProdStr = request.getParameter("IDProd");
+            String taglia = request.getParameter("taglia");
+            String quantitaStr = request.getParameter("quantita");
+
+            int idProd = Integer.parseInt(idProdStr);
+            int quantita = Integer.parseInt(quantitaStr);
+
+            prodModel.addQuantityProduct(idProd, taglia, quantita);
+
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"message\": \"Quantità aggiornata con successo\"}");
+            out.flush();
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID o quantità non validi");
+        }
+    }
+
+
+    /**
+     * funzione che permette ad un admin di eliminare un prodotto dal sistema
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void eliminaProdotto (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String idProdStr = request.getParameter("IDProd");
+
+            int idProd = Integer.parseInt(idProdStr);
+
+            prodModel.doDeleteProduct(idProd);
+
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"message\": \"Prodotto eliminato con successo\"}");
+            out.flush();
+
+            response.sendRedirect("catalogo.jsp");
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID o quantità non validi");
         }
     }
 

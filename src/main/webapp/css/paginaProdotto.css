@@ -1,11 +1,7 @@
-/* paginaProdotto.css */
-
-/* Stile generale per la pagina prodotto */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    font-family: "Avenir Next", sans-serif;
 }
 
 .product-container {

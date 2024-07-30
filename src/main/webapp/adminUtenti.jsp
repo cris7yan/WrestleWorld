@@ -9,7 +9,7 @@
 <%
     List<UtenteBean> utenti = (List<UtenteBean>) request.getAttribute("utenti");
     if (utenti == null) {
-        response.sendRedirect("AdminControl?action=visualizzaUtenti");
+        response.sendRedirect("./AdminControl?action=visualizzaUtenti");
         return;
     }
 %>

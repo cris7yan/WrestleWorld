@@ -22,13 +22,6 @@
     <link href="css/paginaProdotto.css" rel="stylesheet" type="text/css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS" crossorigin="anonymous"></script>
 </head>
-<style>
-    /* Aggiunta per evitare sovrapposizione con la navbar */
-    body {
-        margin-top: 70px; /* Altezza della navbar + margine */
-        padding-top: 5px; /* Spaziatura sopra il contenuto del body */
-    }
-</style>
 <body>
 <%@ include file="navbar.jsp"%>
 
@@ -86,6 +79,37 @@
         <p class="product-materiale">Materiale: <%=((ProdottoBean) prod).getMaterialeProdotto()%>  <br></p>
         <p class="product-modello">Modello: <%=((ProdottoBean) prod).getModelloProdotto()%>  <br></p>
         <p class="product-sizes">Taglie disponibili:</p>
+
+        <%
+            if("Admin".equals(tipoUtente)) {
+        %>
+        <div class="admin-quantita-container">
+            <table>
+                <tr>
+                    <th>Taglia</th>
+                    <th>Quantità</th>
+                    <th>Aggiungi quantità</th>
+                </tr>
+                <%
+                    for(TagliaProdottoBean taglia : taglieProd) {
+                %>
+                <tr>
+                    <td><%= taglia.getTaglia() %></td>
+                    <td><%= taglia.getQuantita() %></td>
+                    <td>
+                        <input type="number" id="quantita-<%= taglia.getTaglia() %>" placeholder="Quantità">
+                        <button onclick="aggiungiQuantita('<%= ((ProdottoBean) prod).getIDProdotto() %>', '<%= taglia.getTaglia() %>')">Aggiungi quantità</button>
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+            </table>
+            <button id="delete-product-button" onclick="eliminaProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Elimina prodotto</button>
+        </div>
+        <%
+        } else {
+        %>
         <div class="select-container">
             <select name="taglie" id="taglia-select" required>
                 <option value="" disabled selected>--Seleziona una taglia--</option>
@@ -100,6 +124,9 @@
         </div>
         <br><br>
         <button id="add-to-cart-button">Aggiungi al carrello</button>
+        <%
+            }
+        %>
     </div>
 </div>
 
@@ -134,6 +161,55 @@
         // con le informazioni contenute nella variabile `carrello`
         // Ad esempio, puoi aggiornare un contatore del carrello nella navbar
         document.getElementById('cart-count').innerText = carrello.length;
+    }
+
+    function aggiungiQuantita(idProdotto, taglia) {
+        var quantita = document.getElementById('quantita-' + taglia).value;
+
+        if (quantita === "" || quantita <= 0) {
+            alert("Inserisci una quantità valida.");
+            return;
+        }
+
+        $.ajax({
+            url: 'AdminControl',
+            type: 'POST',
+            data: {
+                action: 'incrementaQuantitaProdotto',
+                IDProd: idProdotto,
+                taglia: taglia,
+                quantita: quantita
+            },
+            success: function(response) {
+                alert(response.message);
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                alert("Errore durante l'aggiornamento della quantità: " + xhr.responseText);
+            }
+        });
+    }
+
+    function eliminaProdotto(idProdotto) {
+        if (!confirm("Sei sicuro di voler eliminare questo prodotto?")) {
+            return;
+        }
+
+        $.ajax({
+            url: 'AdminControl',
+            type: 'POST',
+            data: {
+                action: 'eliminaProdotto',
+                IDProd: idProdotto
+            },
+            success: function (response) {
+                alert(response.message);
+                window.location.href = 'catalogo.jsp';
+            },
+            error: function (xhr, status, error) {
+                alert("Errore durante l'eliminazione del prodotto: " + xhr.responseText);
+            }
+        });
     }
 </script>
 
