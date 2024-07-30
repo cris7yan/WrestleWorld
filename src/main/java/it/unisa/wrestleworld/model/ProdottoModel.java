@@ -743,7 +743,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "DELETE FROM " + TABLE_PRODOTTO + " WHERE ID_Prodotto = ?";
+        String query = "DELETE FROM " + TABLE_PRODOTTO + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();

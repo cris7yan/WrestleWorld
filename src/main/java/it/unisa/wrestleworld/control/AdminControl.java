@@ -172,7 +172,7 @@ public class AdminControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void incrementaQuantitaProdotto (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void incrementaQuantitaProdotto (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String idProdStr = request.getParameter("IDProd");
             String taglia = request.getParameter("taglia");
@@ -204,7 +204,7 @@ public class AdminControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void eliminaProdotto (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void eliminaProdotto (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String idProdStr = request.getParameter("IDProd");
 
