@@ -18,4 +18,5 @@ public interface ProdottoDAO {
 
     void doDeleteProduct (int id) throws SQLException;
     void addQuantityProduct (int id, String taglia, int quantity) throws SQLException;
+    void makeProductUnavailable (int id) throws SQLException;
 }

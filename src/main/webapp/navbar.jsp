@@ -71,35 +71,31 @@
                 <a class="active" href="./login.jsp">My Account</a>
             </li>
 
-            <%
-                if(emailUtente == null) {
-            %>
-            <li>
-                <a href="./login.jsp"><img src="img/sitoweb/cart.png" alt="Icon Error"></a>
-            </li>
-            <%
-            }
-            else {
-                if(tipoUtente.equals("Admin")) {
+            <% if (emailUtente == null) { %>
 
-                }
-                else {
-            %>
             <li>
                 <a href="./carrello.jsp"><img src="img/sitoweb/cart.png" alt="Icon Error"></a>
             </li>
-            <%
-                }
-            %>
+
+            <% } else {
+                if ("Admin".equals(tipoUtente)) { %>
+
             <li>
                 <a href="UtenteControl?action=logout"><img src="img/sitoweb/logout.png" alt="Icon Error"></a>
             </li>
-            <%
-                }
-            %>
+
+            <% } else { %>
+
+            <li>
+                <a href="./carrello.jsp"><img src="img/sitoweb/cart.png" alt="Icon Error"></a>
+            </li>
+
+            <li>
+                <a href="UtenteControl?action=logout"><img src="img/sitoweb/logout.png" alt="Icon Error"></a>
+            </li>
+            <% } } %>
         </ul>
     </div>
-
 </header>
 
 <div class="dropdownmenu fixed-nav">

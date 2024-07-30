@@ -121,7 +121,7 @@ public class ProdottoModel implements ProdottoDAO {
     public synchronized List<ProdottoBean> doRetrieveBestSellers() throws SQLException {
         List<ProdottoBean> bestSellers = new ArrayList<>();
 
-        String query = "SELECT P.ID_Prodotto, P.Nome, P.Descrizione, P.Prezzo, P.Prezzo_Offerta, SUM(Co.Quantita) as Tot FROM "
+        String query = "SELECT P.ID_Prodotto, P.Nome, P.Descrizione, P.Prezzo, P.Prezzo_Offerta, P.Disponibilita, SUM(Co.Quantita) as Tot FROM "
                 + TABLE_PRODOTTO + " P JOIN " + TABLE_COMPOSIZIONE_ORDINE + " Co ON P.ID_Prodotto = Co.ID_Prodotto "
                 + "GROUP BY P.ID_Prodotto "
                 + "ORDER BY Tot DESC LIMIT 3";
@@ -140,6 +140,7 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
                 prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
+                prod.setDisponibilitaProdotto(rs.getBoolean(DISPONIBILITA_PARAM));
 
                 psTaglia.setInt(1, prod.getIDProdotto());
 
@@ -244,6 +245,7 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
+                prod.setDisponibilitaProdotto(rs.getBoolean(DISPONIBILITA_PARAM));
 
                 psTaglia.setInt(1, prod.getIDProdotto());
 
@@ -345,6 +347,7 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
+                prod.setDisponibilitaProdotto(rs.getBoolean(DISPONIBILITA_PARAM));
 
                 psTaglia.setInt(1, prod.getIDProdotto());
 
@@ -449,6 +452,7 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
                 prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
                 prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
+                prod.setDisponibilitaProdotto(rs.getBoolean(DISPONIBILITA_PARAM));
 
                 psTaglia.setInt(1, prod.getIDProdotto());
 
@@ -505,6 +509,7 @@ public class ProdottoModel implements ProdottoDAO {
                 prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
                 prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM)); // Prezzo originale
                 prod.setPrezzoOffertaProdotto(rs.getFloat("PrezzoEffettivo"));
+                prod.setDisponibilitaProdotto(rs.getBoolean(DISPONIBILITA_PARAM));
 
                 psTaglia.setInt(1, prod.getIDProdotto());
 
@@ -794,6 +799,41 @@ public class ProdottoModel implements ProdottoDAO {
             ps.setInt(1, quantity);
             ps.setInt(2, id);
             ps.setString(3, taglia);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
+
+    public synchronized void makeProductUnavailable (int id) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "UPDATE " + TABLE_PRODOTTO + " SET Disponibilita = FALSE " + WHERE_IDPROD;
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, id);
 
             ps.executeUpdate();
         } catch (SQLException e) {

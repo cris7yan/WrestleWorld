@@ -78,8 +78,17 @@
         <p class="product-marca">Marca: <%=((ProdottoBean) prod).getMarcaProdotto()%>  <br></p>
         <p class="product-materiale">Materiale: <%=((ProdottoBean) prod).getMaterialeProdotto()%>  <br></p>
         <p class="product-modello">Modello: <%=((ProdottoBean) prod).getModelloProdotto()%>  <br></p>
-        <p class="product-sizes">Taglie disponibili:</p>
 
+        <%
+            boolean disponibilita = ((ProdottoBean) prod).getDisponibilitaProdotto();
+            if (!disponibilita) {
+        %>
+            <p class="out-of-stock">Questo prodotto non è attualmente disponibile.</p>
+        <%
+            }
+        %>
+
+        <p class="product-sizes">Taglie disponibili:</p>
         <%
             if("Admin".equals(tipoUtente)) {
         %>
@@ -106,6 +115,7 @@
                 %>
             </table>
             <button id="delete-product-button" onclick="eliminaProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Elimina prodotto</button>
+            <button id="make-unavailable-button" onclick="rendiIndisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Rendi indisponibile</button>
         </div>
         <%
         } else {
@@ -208,6 +218,28 @@
             },
             error: function (xhr, status, error) {
                 alert("Errore durante l'eliminazione del prodotto: " + xhr.responseText);
+            }
+        });
+    }
+
+    function rendiIndisponibileProdotto(idProdotto) {
+        if (!confirm("Sei sicuro di voler rendere indisponibile questo prodotto?")) {
+            return;
+        }
+
+        $.ajax({
+            url: 'AdminControl',
+            type: 'POST',
+            data: {
+                action: 'rendiIndisponibileProdotto',
+                IDProd: idProdotto
+            },
+            success: function(response) {
+                alert(response.message);
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                alert("Errore durante l'operazione: " + xhr.responseText);
             }
         });
     }

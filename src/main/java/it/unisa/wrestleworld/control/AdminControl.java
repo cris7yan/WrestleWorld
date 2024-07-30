@@ -63,6 +63,9 @@ public class AdminControl extends HttpServlet {
                     case "eliminaProdotto":
                         eliminaProdotto(request, response);
                         break;
+                    case "rendiIndisponibileProdotto":
+                        rendiIndisponibileProdotto(request, response);
+                        break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
                         break;
@@ -218,6 +221,34 @@ public class AdminControl extends HttpServlet {
             out.flush();
 
             response.sendRedirect("catalogo.jsp");
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID o quantità non validi");
+        }
+    }
+
+
+    /**
+     * funzione che permette ad un admin di aggiornare la disponibilità di un prodotto
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    private void rendiIndisponibileProdotto (HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String idProdStr = request.getParameter("IDProd");
+
+            int idProd = Integer.parseInt(idProdStr);
+
+            prodModel.makeProductUnavailable(idProd);
+
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"message\": \"Prodotto reso indisponibile con successo\"}");
+            out.flush();
         } catch (IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
         } catch (SQLException e) {

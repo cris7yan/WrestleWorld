@@ -155,7 +155,12 @@ public class UtenteControl extends HttpServlet {
                     session.setAttribute(COGNOME_PARAM, utente.getCognome());
                     session.setAttribute(DATA_NASCITA_PARAM, utente.getDataNascita());
                     session.setAttribute("tipo", utente.getTipoUtente());
-                    response.sendRedirect(INDEX_PAGE);
+
+                    if ("Admin".equals(utente.getTipoUtente())) {
+                        response.sendRedirect("catalogo.jsp");
+                    } else {
+                        response.sendRedirect(INDEX_PAGE);
+                    }
                 }
             }
         } catch (ServletException | IOException e) {

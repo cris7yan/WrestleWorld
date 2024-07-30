@@ -184,3 +184,8 @@ select[name="taglie"]::after {
     color: #333; /* Colore del testo */
     margin-bottom: 5px; /* Margine inferiore */
 }
+
+.out-of-stock {
+    color: red;
+    font-weight: bold;
+}
