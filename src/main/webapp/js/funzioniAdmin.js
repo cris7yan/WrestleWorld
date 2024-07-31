@@ -1,5 +1,5 @@
 function aggiungiQuantita(idProdotto, taglia) {
-    var quantita = document.getElementById('quantita-' + taglia).value;
+    const quantita = document.getElementById('quantita-' + taglia).value;
 
     if (quantita === "" || quantita <= 0) {
         alert("Inserisci una quantità valida.");
