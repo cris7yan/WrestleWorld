@@ -63,6 +63,8 @@
                 </div>
             </form>
 
+            <% if (emailUtente == null) { %>
+
             <li>
                 <a class="active" href="./catalogo.jsp">Catalogo</a>
             </li>
@@ -70,8 +72,6 @@
             <li id="userLogin">
                 <a class="active" href="./login.jsp">My Account</a>
             </li>
-
-            <% if (emailUtente == null) { %>
 
             <li>
                 <a href="./carrello.jsp"><img src="img/sitoweb/cart.png" alt="Icon Error"></a>
@@ -81,10 +81,26 @@
                 if ("Admin".equals(tipoUtente)) { %>
 
             <li>
+                <a class="active" href="./index.jsp">Home Page</a>
+            </li>
+
+            <li id="userLogin">
+                <a class="active" href="./login.jsp">My Account</a>
+            </li>
+
+            <li>
                 <a href="UtenteControl?action=logout"><img src="img/sitoweb/logout.png" alt="Icon Error"></a>
             </li>
 
             <% } else { %>
+
+            <li>
+                <a class="active" href="./catalogo.jsp">Catalogo</a>
+            </li>
+
+            <li id="userLogin">
+                <a class="active" href="./login.jsp">My Account</a>
+            </li>
 
             <li>
                 <a href="./carrello.jsp"><img src="img/sitoweb/cart.png" alt="Icon Error"></a>

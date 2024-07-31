@@ -21,6 +21,7 @@
     <title>WrestleWorld | Pagina prodotto</title>
     <link href="css/paginaProdotto.css" rel="stylesheet" type="text/css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS" crossorigin="anonymous"></script>
+    <script src="js/funzioniAdmin.js" type="text/javascript"></script>
 </head>
 <body>
 <%@ include file="navbar.jsp"%>
@@ -171,77 +172,6 @@
         // con le informazioni contenute nella variabile `carrello`
         // Ad esempio, puoi aggiornare un contatore del carrello nella navbar
         document.getElementById('cart-count').innerText = carrello.length;
-    }
-
-    function aggiungiQuantita(idProdotto, taglia) {
-        var quantita = document.getElementById('quantita-' + taglia).value;
-
-        if (quantita === "" || quantita <= 0) {
-            alert("Inserisci una quantità valida.");
-            return;
-        }
-
-        $.ajax({
-            url: 'AdminControl',
-            type: 'POST',
-            data: {
-                action: 'incrementaQuantitaProdotto',
-                IDProd: idProdotto,
-                taglia: taglia,
-                quantita: quantita
-            },
-            success: function(response) {
-                alert(response.message);
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                alert("Errore durante l'aggiornamento della quantità: " + xhr.responseText);
-            }
-        });
-    }
-
-    function eliminaProdotto(idProdotto) {
-        if (!confirm("Sei sicuro di voler eliminare questo prodotto?")) {
-            return;
-        }
-
-        $.ajax({
-            url: 'AdminControl',
-            type: 'POST',
-            data: {
-                action: 'eliminaProdotto',
-                IDProd: idProdotto
-            },
-            success: function (response) {
-                alert(response.message);
-                window.location.href = 'catalogo.jsp';
-            },
-            error: function (xhr, status, error) {
-                alert("Errore durante l'eliminazione del prodotto: " + xhr.responseText);
-            }
-        });
-    }
-
-    function rendiIndisponibileProdotto(idProdotto) {
-        if (!confirm("Sei sicuro di voler rendere indisponibile questo prodotto?")) {
-            return;
-        }
-
-        $.ajax({
-            url: 'AdminControl',
-            type: 'POST',
-            data: {
-                action: 'rendiIndisponibileProdotto',
-                IDProd: idProdotto
-            },
-            success: function(response) {
-                alert(response.message);
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                alert("Errore durante l'operazione: " + xhr.responseText);
-            }
-        });
     }
 </script>
 
