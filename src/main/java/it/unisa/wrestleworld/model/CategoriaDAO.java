@@ -9,4 +9,6 @@ public interface CategoriaDAO {
     List<CategoriaBean> doRetrieveAllSuperstar() throws SQLException;
     List<CategoriaBean> doRetrieveAllPLE() throws SQLException;
 
+    void doSaveCategory (CategoriaBean categoria) throws SQLException;
+
 }

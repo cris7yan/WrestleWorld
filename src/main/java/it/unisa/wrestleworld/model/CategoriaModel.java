@@ -190,4 +190,44 @@ public class CategoriaModel implements CategoriaDAO {
         }
         return ple;
     }
+
+    // Metodi per la gestione dell'admin
+
+    public synchronized void doSaveCategory (CategoriaBean categoria) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "INSERT INTO " + TABLE_CATEGORIA + " (TipoCategoria, NomeCategoria, NomeImgCategoria) " +
+                "VALUES (?, ?, ?)";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, categoria.getTipo());
+            ps.setString(2, categoria.getNome());
+            ps.setString(3, categoria.getImg());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
 }
