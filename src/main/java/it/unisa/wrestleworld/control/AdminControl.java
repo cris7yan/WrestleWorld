@@ -25,8 +25,12 @@ public class AdminControl extends HttpServlet {
     static OrdineDAO ordineModel = new OrdineModel();
     static ProdottoDAO prodModel = new ProdottoModel();
 
+    private static final String ID_PROD_PARAM = "IDProd";
+    private static final String APPLICATION_JSON_PARAM = "application/json";
+
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
+    private static final String MSG_ERROR_NUMBER = "ID o quantità non validi";
 
 
     public AdminControl() {
@@ -177,7 +181,7 @@ public class AdminControl extends HttpServlet {
      */
     private void incrementaQuantitaProdotto (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String idProdStr = request.getParameter("IDProd");
+            String idProdStr = request.getParameter(ID_PROD_PARAM);
             String taglia = request.getParameter("taglia");
             String quantitaStr = request.getParameter("quantita");
 
@@ -186,7 +190,7 @@ public class AdminControl extends HttpServlet {
 
             prodModel.addQuantityProduct(idProd, taglia, quantita);
 
-            response.setContentType("application/json");
+            response.setContentType(APPLICATION_JSON_PARAM);
             PrintWriter out = response.getWriter();
             out.print("{\"message\": \"Quantità aggiornata con successo\"}");
             out.flush();
@@ -195,7 +199,7 @@ public class AdminControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID o quantità non validi");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, MSG_ERROR_NUMBER);
         }
     }
 
@@ -209,13 +213,13 @@ public class AdminControl extends HttpServlet {
      */
     private void eliminaProdotto (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String idProdStr = request.getParameter("IDProd");
+            String idProdStr = request.getParameter(ID_PROD_PARAM);
 
             int idProd = Integer.parseInt(idProdStr);
 
             prodModel.doDeleteProduct(idProd);
 
-            response.setContentType("application/json");
+            response.setContentType(APPLICATION_JSON_PARAM);
             PrintWriter out = response.getWriter();
             out.print("{\"message\": \"Prodotto eliminato con successo\"}");
             out.flush();
@@ -226,7 +230,7 @@ public class AdminControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID o quantità non validi");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, MSG_ERROR_NUMBER);
         }
     }
 
@@ -239,13 +243,13 @@ public class AdminControl extends HttpServlet {
      */
     private void rendiIndisponibileProdotto (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String idProdStr = request.getParameter("IDProd");
+            String idProdStr = request.getParameter(ID_PROD_PARAM);
 
             int idProd = Integer.parseInt(idProdStr);
 
             prodModel.makeProductUnavailable(idProd);
 
-            response.setContentType("application/json");
+            response.setContentType(APPLICATION_JSON_PARAM);
             PrintWriter out = response.getWriter();
             out.print("{\"message\": \"Prodotto reso indisponibile con successo\"}");
             out.flush();
@@ -254,7 +258,7 @@ public class AdminControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID o quantità non validi");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, MSG_ERROR_NUMBER);
         }
     }
 

@@ -38,6 +38,7 @@ public class ProdottoModel implements ProdottoDAO {
 
     private static final String SELECT_ALL_FROM = "SELECT * FROM ";
     private static final String WHERE_IDPROD = " WHERE ID_Prodotto = ?";
+    private static final String UPDATE = "UPDATE ";
 
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
@@ -548,7 +549,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "UPDATE " + TABLE_TAGLIAPRODOTTO + " SET Quantita = Quantita - ? WHERE ID_Prodotto = ? AND Taglia = ?";
+        String query = UPDATE + TABLE_TAGLIAPRODOTTO + " SET Quantita = Quantita - ? WHERE ID_Prodotto = ? AND Taglia = ?";
 
         try {
             conn = dataSource.getConnection();
@@ -790,7 +791,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "UPDATE " + TABLE_TAGLIAPRODOTTO + " SET Quantita = Quantita + ? WHERE ID_Prodotto = ? AND Taglia = ?";
+        String query = UPDATE + TABLE_TAGLIAPRODOTTO + " SET Quantita = Quantita + ? WHERE ID_Prodotto = ? AND Taglia = ?";
 
         try {
             conn = dataSource.getConnection();
@@ -827,7 +828,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "UPDATE " + TABLE_PRODOTTO + " SET Disponibilita = FALSE " + WHERE_IDPROD;
+        String query = UPDATE + TABLE_PRODOTTO + " SET Disponibilita = FALSE " + WHERE_IDPROD;
 
         try {
             conn = dataSource.getConnection();
