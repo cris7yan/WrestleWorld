@@ -26,6 +26,7 @@
 <div class="link-container">
     <% if ("Admin".equals(tipoUtente)) { %>
         <a href="./nuovoProdotto.jsp">Aggiungi un nuovo prodotto</a>
+        <a href="./nuovaCategoria.jsp">Aggiungi una nuova categoria</a>
         <a href="./adminUtenti.jsp">Visualizza utenti</a>
         <a href="./adminOrdini.jsp">Visualizza ordini</a>
     <% } else { %>

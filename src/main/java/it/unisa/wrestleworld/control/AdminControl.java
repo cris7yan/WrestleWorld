@@ -407,7 +407,6 @@ public class AdminControl extends HttpServlet {
     }
 
 
-
     /**
      * funzione che permette ad un admin di creare una nuova categoria
      * @param request
@@ -442,6 +441,8 @@ public class AdminControl extends HttpServlet {
 
             // Salva la categoria nel database
             catModel.doSaveCategory(categoria);
+
+            response.sendRedirect("categorie.jsp");
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, "Errore nella creazione della categoria", e);
         } catch (SQLException e) {

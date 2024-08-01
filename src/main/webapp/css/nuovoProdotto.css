@@ -1,4 +1,3 @@
-/* Reset di base */
 * {
     margin: 0;
     padding: 0;
@@ -40,6 +39,7 @@ label {
 input[type="text"],
 input[type="number"],
 input[type="file"],
+textarea,
 button {
     width: calc(100% - 22px); /* Spazio per padding e bordo */
     padding: 10px;

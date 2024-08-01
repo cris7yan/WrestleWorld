@@ -129,7 +129,7 @@
     <div>
         <label>Oggetti da Collezione:</label><br>
         <% if (categoriePerTipo.get("Oggetti da collezione") != null) {
-            for (CategoriaBean cat : categoriePerTipo.get("Oggetti da Collezione")) { %>
+            for (CategoriaBean cat : categoriePerTipo.get("Oggetti da collezione")) { %>
         <input type="checkbox" id="oggetti_da_collezione_<%= cat.getNome() %>" name="oggetti_da_collezione" value="<%= cat.getNome() %>">
         <label for="oggetti_da_collezione_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
         <% } } %>
