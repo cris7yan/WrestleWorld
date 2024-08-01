@@ -4,19 +4,26 @@ import it.unisa.wrestleworld.model.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebServlet("/AdminControl")
+@MultipartConfig
 public class AdminControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     static final Logger logger = Logger.getLogger(AdminControl.class.getName());
@@ -24,6 +31,7 @@ public class AdminControl extends HttpServlet {
     static UtenteDAO utModel = new UtenteModel();
     static OrdineDAO ordineModel = new OrdineModel();
     static ProdottoDAO prodModel = new ProdottoModel();
+    private static CategoriaModel catModel = new CategoriaModel();
 
     private static final String ID_PROD_PARAM = "IDProd";
     private static final String APPLICATION_JSON_PARAM = "application/json";
@@ -69,6 +77,9 @@ public class AdminControl extends HttpServlet {
                         break;
                     case "rendiIndisponibileProdotto":
                         rendiIndisponibileProdotto(request, response);
+                        break;
+                    case "creaNuovoProdotto":
+                        creaNuovoProdotto(request, response);
                         break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
@@ -259,6 +270,131 @@ public class AdminControl extends HttpServlet {
             logger.log(Level.WARNING, e.getMessage());
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, MSG_ERROR_NUMBER);
+        }
+    }
+
+
+    /**
+     * funzione che permette ad un admin di creare un nuovo prodotto
+     * @param request
+     * @param response
+     * @throws ServletException, IOException
+     */
+    private void creaNuovoProdotto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");  // Imposta la codifica della richiesta a UTF-8
+        try {
+            // Preleva i dati dal form
+            String nome = request.getParameter("nome");
+            String descrizione = request.getParameter("descrizione");
+            String materiale = request.getParameter("materiale");
+            String marca = request.getParameter("marca");
+            String modello = request.getParameter("modello");
+            BigDecimal prezzoBigDecimal = new BigDecimal(request.getParameter("prezzo"));
+            BigDecimal prezzoOffertaBigDecimal = new BigDecimal(request.getParameter("prezzo_offerta"));
+            boolean disponibilita = Boolean.parseBoolean(request.getParameter("disponibilita"));
+
+            // Preleva le immagini
+            List<String> immagini = new ArrayList<>();
+            for (Part part : request.getParts()) {
+                if ("immagini".equals(part.getName())) {
+                    String fileName = extractFileName(part);
+                    if (!fileName.isEmpty()) {
+                        String filePath = getServletContext().getRealPath("/") + "img/prodotti/" + fileName;
+                        salvaImmagine(filePath, part, response);
+                        immagini.add(fileName);
+                    }
+                }
+            }
+
+            // Preleva le taglie
+            String[] taglieArray = request.getParameterValues("taglie");
+            String[] quantitaArray = request.getParameterValues("quantita");
+            List<TagliaProdottoBean> taglie = new ArrayList<>();
+            if (taglieArray != null && quantitaArray != null && taglieArray.length == quantitaArray.length) {
+                for (int i = 0; i < taglieArray.length; i++) {
+                    TagliaProdottoBean taglia = new TagliaProdottoBean();
+                    taglia.setTaglia(taglieArray[i]);
+                    taglia.setQuantita(Integer.parseInt(quantitaArray[i]));
+                    taglie.add(taglia);
+                }
+            }
+
+            // Preleva le categorie
+            String[] categorieArray = request.getParameterValues("categorie");
+            List<CategoriaBean> categorie = new ArrayList<>();
+            if (categorieArray != null) {
+                for (String categoriaNome : categorieArray) {
+                    CategoriaBean categoria = new CategoriaBean();
+                    categoria.setNome(categoriaNome);
+                    categorie.add(categoria);
+                }
+            }
+
+            float prezzo = prezzoBigDecimal.floatValue();
+            float prezzoOfferta = prezzoOffertaBigDecimal.floatValue();
+
+            // Crea l'oggetto ProdottoBean
+            ProdottoBean prodotto = new ProdottoBean();
+            prodotto.setNomeProdotto(nome);
+            prodotto.setDescrizioneProdotto(descrizione);
+            prodotto.setMaterialeProdotto(materiale);
+            prodotto.setMarcaProdotto(marca);
+            prodotto.setModelloProdotto(modello);
+            prodotto.setPrezzoProdotto(prezzo);
+            prodotto.setPrezzoOffertaProdotto(prezzoOfferta);
+            prodotto.setDisponibilitaProdotto(disponibilita);
+
+            // Salva il prodotto nel database
+            prodModel.doSaveProduct(prodotto, immagini, taglie, categorie);
+
+            response.sendRedirect("catalogo.jsp");
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, "Errore nella creazione del prodotto", e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, "Errore nel database", e);
+        }
+    }
+
+
+
+    /**
+     * Estrae il nome del file dal part
+     * @param part
+     * @return
+     */
+    private String extractFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                String fileName = s.substring(s.indexOf("=") + 2, s.length() - 1).replace("\"", "");
+                System.out.println("File Name: " + fileName);  // Aggiungi log
+                return fileName;
+            }
+        }
+        return "";
+    }
+
+
+
+    /**
+     * Salva l'immagine nella posizione specificata
+     * @param path2
+     * @param imgFile
+     * @param response
+     * @throws IOException
+     */
+    private void salvaImmagine(String path2, Part imgFile, HttpServletResponse response) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(path2);
+             InputStream is = imgFile.getInputStream()) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Errore nel salvataggio dell'immagine", e);
+            throw e; // Rilancia l'eccezione se necessario
         }
     }
 

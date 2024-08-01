@@ -8,8 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -189,6 +191,62 @@ public class CategoriaModel implements CategoriaDAO {
             }
         }
         return ple;
+    }
+
+
+    /**
+     * funzione che restituisce tutte le categorie in base al tipo nel database
+     * @return
+     * @throws SQLException
+     */
+    public synchronized Map<String, List<CategoriaBean>> doRetrieveAllGroupedByType() throws SQLException {
+        Map<String, List<CategoriaBean>> categoriePerTipo = new LinkedHashMap<>();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT TipoCategoria, NomeCategoria, NomeImgCategoria FROM Categoria";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                CategoriaBean cat = new CategoriaBean();
+                String tipo = rs.getString(TIPO_CATEGORIA_ATTRIBUTE);
+
+                cat.setTipo(tipo);
+                cat.setNome(rs.getString(NOME_CATEGORIA_ATTRIBUTE));
+                cat.setImg(rs.getString(NOME_IMG_ATTRIBUTE));
+
+                if (!categoriePerTipo.containsKey(tipo)) {
+                    categoriePerTipo.put(tipo, new ArrayList<>());
+                }
+                categoriePerTipo.get(tipo).add(cat);
+            }
+
+            logger.info("Categorie per Tipo: " + categoriePerTipo);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return categoriePerTipo;
     }
 
     // Metodi per la gestione dell'admin

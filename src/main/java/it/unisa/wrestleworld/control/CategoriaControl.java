@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,6 +56,9 @@ public class CategoriaControl extends HttpServlet {
                         break;
                     case "visualizzaPremiumLiveEvent":
                         visualizzaPremiumLiveEvent(request, response);
+                        break;
+                    case "visualizzaCategoriePerTipo":
+                        visualizzaCategoriePerTipo(request, response);
                         break;
                     default:
                         visualizzaCategorie(request, response);
@@ -149,6 +153,24 @@ public class CategoriaControl extends HttpServlet {
             request.setAttribute(SUPERSTAR_PARAM, superstar);
 
             RequestDispatcher reqDispatcher = request.getRequestDispatcher(CATEGORIE_PAGE);
+            reqDispatcher.forward(request, response);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        }
+    }
+
+
+    private void visualizzaCategoriePerTipo (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            Map<String, List<CategoriaBean>> categoriePerTipo = catModel.doRetrieveAllGroupedByType();
+            request.setAttribute("categoriePerTipo", categoriePerTipo);
+
+            // Debug: Log the size of the map
+            logger.info("Categorie Per Tipo: " + categoriePerTipo);
+
+            RequestDispatcher reqDispatcher = request.getRequestDispatcher("nuovoProdotto.jsp");
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());

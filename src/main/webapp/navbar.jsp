@@ -81,7 +81,7 @@
                 if ("Admin".equals(tipoUtente)) { %>
 
             <li>
-                <a class="active" href="./index.jsp">Home Page</a>
+                <a class="active" href="./catalogo.jsp">Catalogo</a>
             </li>
 
             <li id="userLogin">

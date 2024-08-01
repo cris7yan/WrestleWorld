@@ -1,0 +1,98 @@
+/* Reset di base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Corpo della pagina */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Titolo della pagina */
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Contenitore del modulo */
+form {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* Etichette e input */
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"],
+button {
+    width: calc(100% - 22px); /* Spazio per padding e bordo */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Sezione delle taglie */
+#taglieContainer {
+    margin-bottom: 20px;
+}
+
+#taglieContainer div {
+    margin-bottom: 10px;
+}
+
+/* Sezioni delle categorie */
+div {
+    margin-bottom: 20px;
+}
+
+div label {
+    display: inline;
+    margin-right: 10px;
+}
+
+/* Bottone per aggiungere taglia */
+button[type="button"] {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="button"]:hover {
+    background-color: #218838;
+}
