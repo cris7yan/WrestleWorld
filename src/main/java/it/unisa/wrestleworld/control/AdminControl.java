@@ -81,6 +81,9 @@ public class AdminControl extends HttpServlet {
                     case "creaNuovoProdotto":
                         creaNuovoProdotto(request, response);
                         break;
+                    case "creaNuovaCategoria":
+                        creaNuovaCategoria(request, response);
+                        break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
                         break;
@@ -323,12 +326,57 @@ public class AdminControl extends HttpServlet {
             }
 
             // Preleva le categorie
-            String[] categorieArray = request.getParameterValues("categorie");
             List<CategoriaBean> categorie = new ArrayList<>();
-            if (categorieArray != null) {
-                for (String categoriaNome : categorieArray) {
+
+            String sesso = request.getParameter("sesso");
+            if (sesso != null) {
+                CategoriaBean categoria = new CategoriaBean();
+                categoria.setNome(sesso);
+                categorie.add(categoria);
+            }
+
+            String[] superstarArray = request.getParameterValues("superstar");
+            if (superstarArray != null) {
+                for (String superstar : superstarArray) {
                     CategoriaBean categoria = new CategoriaBean();
-                    categoria.setNome(categoriaNome);
+                    categoria.setNome(superstar);
+                    categorie.add(categoria);
+                }
+            }
+
+            String ple = request.getParameter("ple");
+            if (ple != null) {
+                CategoriaBean categoria = new CategoriaBean();
+                categoria.setNome(ple);
+                categorie.add(categoria);
+            }
+
+            String titleBelts = request.getParameter("title_belts");
+            if (titleBelts != null) {
+                CategoriaBean categoria = new CategoriaBean();
+                categoria.setNome(titleBelts);
+                categorie.add(categoria);
+            }
+
+            String abbigliamento = request.getParameter("abbigliamento");
+            if (abbigliamento != null) {
+                CategoriaBean categoria = new CategoriaBean();
+                categoria.setNome(abbigliamento);
+                categorie.add(categoria);
+            }
+
+            String accessori = request.getParameter("accessori");
+            if (accessori != null) {
+                CategoriaBean categoria = new CategoriaBean();
+                categoria.setNome(accessori);
+                categorie.add(categoria);
+            }
+
+            String[] oggettiDaCollezioneArray = request.getParameterValues("oggetti_da_collezione");
+            if (oggettiDaCollezioneArray != null) {
+                for (String oggetto : oggettiDaCollezioneArray) {
+                    CategoriaBean categoria = new CategoriaBean();
+                    categoria.setNome(oggetto);
                     categorie.add(categoria);
                 }
             }
@@ -361,6 +409,48 @@ public class AdminControl extends HttpServlet {
 
 
     /**
+     * funzione che permette ad un admin di creare una nuova categoria
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void creaNuovaCategoria(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");  // Imposta la codifica della richiesta a UTF-8
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        try {
+            // Preleva i dati dal form
+            String tipoCategoria = request.getParameter("tipo_categoria");
+            String nomeCategoria = request.getParameter("nome_categoria");
+
+            // Preleva l'immagine della categoria
+            Part part = request.getPart("immagine_categoria");
+            String fileName = extractFileName(part);
+            String filePath = "";
+            if (!fileName.isEmpty()) {
+                filePath = getServletContext().getRealPath("/") + "img/" + "categorie/" + fileName;
+                salvaImmagine(filePath, part, response);
+            }
+
+            // Crea l'oggetto CategoriaBean
+            CategoriaBean categoria = new CategoriaBean();
+            categoria.setTipo(tipoCategoria);
+            categoria.setNome(nomeCategoria);
+            categoria.setImg(fileName);
+
+            // Salva la categoria nel database
+            catModel.doSaveCategory(categoria);
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, "Errore nella creazione della categoria", e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, "Errore nel database", e);
+        }
+    }
+
+
+    /**
      * Estrae il nome del file dal part
      * @param part
      * @return
@@ -377,7 +467,6 @@ public class AdminControl extends HttpServlet {
         }
         return "";
     }
-
 
 
     /**

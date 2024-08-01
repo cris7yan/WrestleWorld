@@ -64,40 +64,76 @@
     <button type="button" onclick="addTaglia()">Aggiungi Taglia</button><br><br>
 
     <label for="categorie">Categorie:</label><br>
-    <%
-        if (categoriePerTipo != null) {
-            for (Map.Entry<String, List<CategoriaBean>> entry : categoriePerTipo.entrySet()) {
-                String tipo = entry.getKey();
-                List<CategoriaBean> categorie = entry.getValue();
-    %>
+
+    <!-- Sesso -->
     <div>
-        <label><%= tipo %>:</label><br>
-        <%
-            if ("Superstar".equals(tipo) || "Oggetti da collezione".equals(tipo)) {
-                for (CategoriaBean cat : categorie) {
-        %>
-        <input type="checkbox" id="<%= cat.getNome() %>" name="categorie" value="<%= cat.getNome() %>">
-        <label for="<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
-        <%
-            }
-        } else {
-            for (CategoriaBean cat : categorie) {
-        %>
-        <input type="radio" id="<%= cat.getNome() %>" name="categorie" value="<%= cat.getNome() %>">
-        <label for="<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
-        <%
-                }
-            }
-        %>
+        <label>Sesso:</label><br>
+        <% if (categoriePerTipo.get("Sesso") != null) {
+            for (CategoriaBean cat : categoriePerTipo.get("Sesso")) { %>
+        <input type="radio" id="sesso_<%= cat.getNome() %>" name="sesso" value="<%= cat.getNome() %>">
+        <label for="sesso_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+        <% } } %>
     </div><br>
-    <%
-        }
-    } else {
-    %>
-    <p>Nessuna categoria disponibile.</p>
-    <%
-        }
-    %>
+
+    <!-- Superstar -->
+    <div>
+        <label>Superstar:</label><br>
+        <% if (categoriePerTipo.get("Superstar") != null) {
+            for (CategoriaBean cat : categoriePerTipo.get("Superstar")) { %>
+        <input type="checkbox" id="superstar_<%= cat.getNome() %>" name="superstar" value="<%= cat.getNome() %>">
+        <label for="superstar_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+        <% } } %>
+    </div><br>
+
+    <!-- Premium Live Event -->
+    <div>
+        <label>Premium Live Event:</label><br>
+        <% if (categoriePerTipo.get("Premium Live Event") != null) {
+            for (CategoriaBean cat : categoriePerTipo.get("Premium Live Event")) { %>
+        <input type="radio" id="ple_<%= cat.getNome() %>" name="ple" value="<%= cat.getNome() %>">
+        <label for="ple_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+        <% } } %>
+    </div><br>
+
+    <!-- Title Belts -->
+    <div>
+        <label>Title Belts:</label><br>
+        <% if (categoriePerTipo.get("Title Belts") != null) {
+            for (CategoriaBean cat : categoriePerTipo.get("Title Belts")) { %>
+        <input type="radio" id="title_belts_<%= cat.getNome() %>" name="title_belts" value="<%= cat.getNome() %>">
+        <label for="title_belts_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+        <% } } %>
+    </div><br>
+
+    <!-- Abbigliamento -->
+    <div>
+        <label>Abbigliamento:</label><br>
+        <% if (categoriePerTipo.get("Abbigliamento") != null) {
+            for (CategoriaBean cat : categoriePerTipo.get("Abbigliamento")) { %>
+        <input type="radio" id="abbigliamento_<%= cat.getNome() %>" name="abbigliamento" value="<%= cat.getNome() %>">
+        <label for="abbigliamento_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+        <% } } %>
+    </div><br>
+
+    <!-- Accessori -->
+    <div>
+        <label>Accessori:</label><br>
+        <% if (categoriePerTipo.get("Accessori") != null) {
+            for (CategoriaBean cat : categoriePerTipo.get("Accessori")) { %>
+        <input type="radio" id="accessori_<%= cat.getNome() %>" name="accessori" value="<%= cat.getNome() %>">
+        <label for="accessori_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+        <% } } %>
+    </div><br>
+
+    <!-- Oggetti da Collezione -->
+    <div>
+        <label>Oggetti da Collezione:</label><br>
+        <% if (categoriePerTipo.get("Oggetti da collezione") != null) {
+            for (CategoriaBean cat : categoriePerTipo.get("Oggetti da Collezione")) { %>
+        <input type="checkbox" id="oggetti_da_collezione_<%= cat.getNome() %>" name="oggetti_da_collezione" value="<%= cat.getNome() %>">
+        <label for="oggetti_da_collezione_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+        <% } } %>
+    </div><br>
 
     <button type="submit">Conferma</button>
 </form>
