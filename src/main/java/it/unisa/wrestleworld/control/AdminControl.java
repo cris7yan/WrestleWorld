@@ -282,6 +282,9 @@ public class AdminControl extends HttpServlet {
      */
     private void creaNuovoProdotto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");  // Imposta la codifica della richiesta a UTF-8
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         try {
             // Preleva i dati dal form
             String nome = request.getParameter("nome");
@@ -299,7 +302,7 @@ public class AdminControl extends HttpServlet {
                 if ("immagini".equals(part.getName())) {
                     String fileName = extractFileName(part);
                     if (!fileName.isEmpty()) {
-                        String filePath = getServletContext().getRealPath("/") + "img/prodotti/" + fileName;
+                        String filePath = getServletContext().getRealPath("/") + "img/" + "prodotti/" + fileName;
                         salvaImmagine(filePath, part, response);
                         immagini.add(fileName);
                     }

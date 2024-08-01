@@ -162,6 +162,13 @@ public class CategoriaControl extends HttpServlet {
     }
 
 
+    /**
+     * funzione per visualizzare tutte le categorie in base al tipo
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void visualizzaCategoriePerTipo (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             Map<String, List<CategoriaBean>> categoriePerTipo = catModel.doRetrieveAllGroupedByType();
