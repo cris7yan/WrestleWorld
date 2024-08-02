@@ -115,6 +115,14 @@
                     }
                 %>
             </table>
+
+            <div class="admin-add-size-container">
+                <h3>Aggiungi una nuova taglia</h3>
+                <input type="text" id="nuova-taglia" placeholder="Nuova Taglia">
+                <input type="number" id="quantita-taglia" placeholder="Quantità">
+                <button onclick="aggiungiTaglia('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Taglia</button>
+            </div>
+
             <button id="delete-product-button" onclick="eliminaProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Elimina prodotto</button>
             <button id="make-unavailable-button" onclick="rendiIndisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Rendi indisponibile</button>
         </div>

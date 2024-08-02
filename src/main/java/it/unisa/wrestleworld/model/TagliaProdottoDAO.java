@@ -7,4 +7,6 @@ public interface TagliaProdottoDAO {
 
     List<TagliaProdottoBean> doRetrieveAllSizeByProduct (ProdottoBean prod) throws SQLException;
 
+    void doSaveTagliaProdotto (TagliaProdottoBean prod) throws SQLException;
+
 }

@@ -90,4 +90,48 @@ public class TagliaProdottoModel implements TagliaProdottoDAO {
         }
         return taglieProdotto;
     }
+
+    // Metodi per la gestione dell'admin
+
+    /**
+     * funzione che permette di salvare una nuova taglia per un prodotto
+     * @param prod
+     * @throws SQLException
+     */
+    public synchronized void doSaveTagliaProdotto (TagliaProdottoBean prod) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String queryTaglia = "INSERT INTO " + TABLE_TAGLIAPRODOTTO + " (ID_Prodotto, Taglia, Quantita) VALUES (?, ?, ?)";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(queryTaglia);
+
+            ps.setInt(1, prod.getIdProdotto());
+            ps.setString(2, prod.getTaglia());
+            ps.setInt(3, prod.getQuantita());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
 }

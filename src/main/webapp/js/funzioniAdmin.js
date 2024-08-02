@@ -68,3 +68,31 @@ function rendiIndisponibileProdotto(idProdotto) {
         }
     });
 }
+
+function aggiungiTaglia(idProdotto) {
+    const taglia = document.getElementById('nuova-taglia').value;
+    const quantita = document.getElementById('quantita-taglia').value;
+
+    if (!taglia || quantita === "" || quantita <= 0) {
+        alert("Inserisci una taglia e una quantità valide.");
+        return;
+    }
+
+    $.ajax({
+        url: 'AdminControl',
+        type: 'POST',
+        data: {
+            action: 'aggiungiTagliaProdotto',
+            IDProd: idProdotto,
+            taglia: taglia,
+            quantita: quantita
+        },
+        success: function(response) {
+            alert(response.message);
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            alert("Errore durante l'aggiunta della taglia: " + xhr.responseText);
+        }
+    });
+}

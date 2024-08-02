@@ -28,10 +28,11 @@ public class AdminControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     static final Logger logger = Logger.getLogger(AdminControl.class.getName());
 
-    static UtenteDAO utModel = new UtenteModel();
-    static OrdineDAO ordineModel = new OrdineModel();
-    static ProdottoDAO prodModel = new ProdottoModel();
-    private static CategoriaModel catModel = new CategoriaModel();
+    private static UtenteDAO utModel = new UtenteModel();
+    private static OrdineDAO ordineModel = new OrdineModel();
+    private static ProdottoDAO prodModel = new ProdottoModel();
+    private static CategoriaDAO catModel = new CategoriaModel();
+    private static TagliaProdottoDAO tagliaModel = new TagliaProdottoModel();
 
     private static final String ID_PROD_PARAM = "IDProd";
     private static final String APPLICATION_JSON_PARAM = "application/json";
@@ -83,6 +84,9 @@ public class AdminControl extends HttpServlet {
                         break;
                     case "creaNuovaCategoria":
                         creaNuovaCategoria(request, response);
+                        break;
+                    case "aggiungiTagliaProdotto":
+                        aggiungiTagliaProdotto(request, response);
                         break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
@@ -488,6 +492,38 @@ public class AdminControl extends HttpServlet {
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Errore nel salvataggio dell'immagine", e);
             throw e; // Rilancia l'eccezione se necessario
+        }
+    }
+
+
+    /**
+     * funzione che permette ad un admin di salvare una nuova taglia ad un prodotto
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void aggiungiTagliaProdotto (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int idProdotto = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
+            String taglia = request.getParameter("taglia");
+            int quantita = Integer.parseInt(request.getParameter("quantita"));
+
+            TagliaProdottoBean nuovaTaglia = new TagliaProdottoBean();
+            nuovaTaglia.setIdProdotto(idProdotto);
+            nuovaTaglia.setTaglia(taglia);
+            nuovaTaglia.setQuantita(quantita);
+
+            tagliaModel.doSaveTagliaProdotto(nuovaTaglia);
+
+            response.setContentType(APPLICATION_JSON_PARAM);
+            PrintWriter out = response.getWriter();
+            out.print("{\"message\": \"Taglia aggiunta con successo al prodotto.\"}");
+            out.flush();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, MSG_ERROR_NUMBER);
         }
     }
 
