@@ -69,6 +69,15 @@ function rendiIndisponibileProdotto(idProdotto) {
     });
 }
 
+function mostraAggiungiTaglia() {
+    var divTaglia = document.getElementById('aggiungi-taglia');
+    if (divTaglia.style.display === 'none') {
+        divTaglia.style.display = 'block';
+    } else {
+        divTaglia.style.display = 'none';
+    }
+}
+
 function aggiungiTaglia(idProdotto) {
     const taglia = document.getElementById('nuova-taglia').value;
     const quantita = document.getElementById('quantita-taglia').value;
@@ -93,6 +102,66 @@ function aggiungiTaglia(idProdotto) {
         },
         error: function(xhr, status, error) {
             alert("Errore durante l'aggiunta della taglia: " + xhr.responseText);
+        }
+    });
+}
+
+function mostraModificaPrezzo() {
+    document.getElementById('modifica-prezzo').style.display = 'block';
+}
+
+function mostraModificaPrezzoOfferta() {
+    document.getElementById('modifica-prezzo-offerta').style.display = 'block';
+}
+
+function modificaPrezzo(idProdotto) {
+    const nuovoPrezzo = document.getElementById('nuovo-prezzo').value;
+
+    if (nuovoPrezzo === "" || nuovoPrezzo <= 0) {
+        alert("Inserisci un prezzo valido.");
+        return;
+    }
+
+    $.ajax({
+        url: 'AdminControl',
+        type: 'POST',
+        data: {
+            action: 'modificaPrezzo',
+            IDProd: idProdotto,
+            prezzo: nuovoPrezzo
+        },
+        success: function(response) {
+            alert(response.message);
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            alert("Errore durante l'aggiornamento del prezzo: " + xhr.responseText);
+        }
+    });
+}
+
+function modificaPrezzoOfferta(idProdotto) {
+    const nuovoPrezzoOfferta = document.getElementById('nuovo-prezzo-offerta').value;
+
+    if (nuovoPrezzoOfferta === "" || nuovoPrezzoOfferta < 0) {
+        alert("Inserisci un prezzo offerta valido.");
+        return;
+    }
+
+    $.ajax({
+        url: 'AdminControl',
+        type: 'POST',
+        data: {
+            action: 'modificaPrezzoOfferta',
+            IDProd: idProdotto,
+            prezzoOfferta: nuovoPrezzoOfferta
+        },
+        success: function(response) {
+            alert(response.message);
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            alert("Errore durante l'aggiornamento del prezzo offerta: " + xhr.responseText);
         }
     });
 }

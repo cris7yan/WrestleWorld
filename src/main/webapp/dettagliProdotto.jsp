@@ -4,6 +4,7 @@
 --%>
 <%@ page import="it.unisa.wrestleworld.model.ProdottoBean" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Arrays" %>
 <%@ page import="it.unisa.wrestleworld.model.TagliaProdottoBean" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
@@ -12,6 +13,13 @@
     Object prod = request.getAttribute("prodotto");
     List<String> imgProd = (List<String>) request.getAttribute("imgProd");
     List<TagliaProdottoBean> taglieProd = (List<TagliaProdottoBean>) request.getAttribute("taglieProd");
+
+    List<String> ordineTaglie = Arrays.asList("XS", "S", "M", "L", "XL", "XXL", "XXXL");
+    taglieProd.sort((taglia1, taglia2) -> {
+        int index1 = ordineTaglie.indexOf(taglia1.getTaglia());
+        int index2 = ordineTaglie.indexOf(taglia2.getTaglia());
+        return Integer.compare(index1, index2);
+    });
 %>
 
 <!DOCTYPE html>
@@ -29,10 +37,10 @@
 <div class="product-container">
     <div class="product-img">
         <%
-            if(prod instanceof ProdottoBean) {
-                for(String img : imgProd) {
+            if (prod instanceof ProdottoBean) {
+                for (String img : imgProd) {
         %>
-        <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
+        <img src="img/prodotti/<%= img %>" alt="IMG Error" class="product-img">
         <%
                 }
             }
@@ -40,8 +48,8 @@
     </div>
 
     <div class="product-details">
-        <p class="product-name"> <%=((ProdottoBean) prod).getNomeProdotto()%>  <br></p>
-        <p class="product-description"><%=((ProdottoBean) prod).getDescrizioneProdotto()%>  <br></p>
+        <p class="product-name"><%= ((ProdottoBean) prod).getNomeProdotto() %>  <br></p>
+        <p class="product-description"><%= ((ProdottoBean) prod).getDescrizioneProdotto() %>  <br></p>
 
         <%
             BigDecimal prezzoOriginale = new BigDecimal(((ProdottoBean) prod).getPrezzoProdotto());
@@ -76,23 +84,37 @@
 
         <input type="hidden" id="prezzo-da-usare" value="<%= prezzoDaUsare %>">
 
-        <p class="product-marca">Marca: <%=((ProdottoBean) prod).getMarcaProdotto()%>  <br></p>
-        <p class="product-materiale">Materiale: <%=((ProdottoBean) prod).getMaterialeProdotto()%>  <br></p>
-        <p class="product-modello">Modello: <%=((ProdottoBean) prod).getModelloProdotto()%>  <br></p>
+        <%-- Sezione per l'Admin --%>
+        <% if ("Admin".equals(tipoUtente)) { %>
+        <div class="admin-price-update-container">
+            <button onclick="mostraModificaPrezzo()">Modifica Prezzo</button>
+            <button onclick="mostraModificaPrezzoOfferta()">Modifica Prezzo Offerta</button>
+        </div>
+        <div id="modifica-prezzo" style="display:none;">
+            <input type="number" id="nuovo-prezzo" placeholder="Nuovo Prezzo">
+            <button onclick="modificaPrezzo('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiorna Prezzo</button>
+        </div>
+        <div id="modifica-prezzo-offerta" style="display:none;">
+            <input type="number" id="nuovo-prezzo-offerta" placeholder="Nuovo Prezzo Offerta">
+            <button onclick="modificaPrezzoOfferta('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiorna Prezzo Offerta</button>
+        </div>
+        <% } %>
+
+        <p class="product-marca">Marca: <%= ((ProdottoBean) prod).getMarcaProdotto() %>  <br></p>
+        <p class="product-materiale">Materiale: <%= ((ProdottoBean) prod).getMaterialeProdotto() %>  <br></p>
+        <p class="product-modello">Modello: <%= ((ProdottoBean) prod).getModelloProdotto() %>  <br></p>
 
         <%
             boolean disponibilita = ((ProdottoBean) prod).getDisponibilitaProdotto();
             if (!disponibilita) {
         %>
-            <p class="out-of-stock">Questo prodotto non è attualmente disponibile.</p>
+        <p class="out-of-stock">Questo prodotto non è attualmente disponibile.</p>
         <%
             }
         %>
 
         <p class="product-sizes">Taglie disponibili:</p>
-        <%
-            if("Admin".equals(tipoUtente)) {
-        %>
+        <% if ("Admin".equals(tipoUtente)) { %>
         <div class="admin-quantita-container">
             <table>
                 <tr>
@@ -101,7 +123,7 @@
                     <th>Aggiungi quantità</th>
                 </tr>
                 <%
-                    for(TagliaProdottoBean taglia : taglieProd) {
+                    for (TagliaProdottoBean taglia : taglieProd) {
                 %>
                 <tr>
                     <td><%= taglia.getTaglia() %></td>
@@ -117,6 +139,9 @@
             </table>
 
             <div class="admin-add-size-container">
+                <button onclick="mostraAggiungiTaglia()">Aggiungi una nuova taglia</button>
+            </div>
+            <div id="aggiungi-taglia" style="display:none;">
                 <h3>Aggiungi una nuova taglia</h3>
                 <input type="text" id="nuova-taglia" placeholder="Nuova Taglia">
                 <input type="number" id="quantita-taglia" placeholder="Quantità">
@@ -126,14 +151,12 @@
             <button id="delete-product-button" onclick="eliminaProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Elimina prodotto</button>
             <button id="make-unavailable-button" onclick="rendiIndisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Rendi indisponibile</button>
         </div>
-        <%
-        } else {
-        %>
+        <% } else { %>
         <div class="select-container">
             <select name="taglie" id="taglia-select" required>
                 <option value="" disabled selected>--Seleziona una taglia--</option>
                 <%
-                    for(TagliaProdottoBean taglia : taglieProd) {
+                    for (TagliaProdottoBean taglia : taglieProd) {
                 %>
                 <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %></option>
                 <%
@@ -143,9 +166,7 @@
         </div>
         <br><br>
         <button id="add-to-cart-button">Aggiungi al carrello</button>
-        <%
-            }
-        %>
+        <% } %>
     </div>
 </div>
 
@@ -176,9 +197,6 @@
     });
 
     function aggiornaVisualizzazioneCarrello(carrello) {
-        // Implementa la logica per aggiornare la visualizzazione del carrello
-        // con le informazioni contenute nella variabile `carrello`
-        // Ad esempio, puoi aggiornare un contatore del carrello nella navbar
         document.getElementById('cart-count').innerText = carrello.length;
     }
 </script>

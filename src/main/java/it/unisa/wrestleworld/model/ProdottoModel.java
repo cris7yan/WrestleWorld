@@ -939,6 +939,11 @@ public class ProdottoModel implements ProdottoDAO {
     }
 
 
+    /**
+     * funzione che gestisce l'operazione di modificare la disponibiltà di un prodotto
+     * @param id
+     * @throws SQLException
+     */
     public synchronized void makeProductUnavailable (int id) throws SQLException {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -950,6 +955,90 @@ public class ProdottoModel implements ProdottoDAO {
             ps = conn.prepareStatement(query);
 
             ps.setInt(1, id);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
+
+    /**
+     * funzione che gestisce l'operazione di modificare il prezzo di un prodotto
+     * @param id
+     * @param newPrice
+     * @throws SQLException
+     */
+    public synchronized void doUpdateProductPrice (int id, float newPrice) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = UPDATE + TABLE_PRODOTTO + " SET Prezzo = ? WHERE ID_Prodotto = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setFloat(1, newPrice);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
+
+    /**
+     * funzione che gestisce l'operazione di modificare il prezzo di offerta di un prodotto
+     * @param id
+     * @param newOfferPrice
+     * @throws SQLException
+     */
+    public synchronized void doUpdateProductOfferPrice (int id, float newOfferPrice) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = UPDATE + TABLE_PRODOTTO + " SET Prezzo_Offerta = ? WHERE ID_Prodotto = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setFloat(1, newOfferPrice);
+            ps.setInt(2, id);
 
             ps.executeUpdate();
         } catch (SQLException e) {

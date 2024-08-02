@@ -88,6 +88,12 @@ public class AdminControl extends HttpServlet {
                     case "aggiungiTagliaProdotto":
                         aggiungiTagliaProdotto(request, response);
                         break;
+                    case "modificaPrezzo":
+                        modificaPrezzo(request, response);
+                        break;
+                    case "modificaPrezzoOfferta":
+                        modificaPrezzoOfferta(request, response);
+                        break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
                         break;
@@ -524,6 +530,60 @@ public class AdminControl extends HttpServlet {
             logger.log(Level.WARNING, e.getMessage());
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, MSG_ERROR_NUMBER);
+        }
+    }
+
+
+    /**
+     * funzione che permette ad un admin di modificare il prezzo ad un prodotto
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void modificaPrezzo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int idProdotto = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
+            float nuovoPrezzo = Float.parseFloat(request.getParameter("prezzo"));
+
+            prodModel.doUpdateProductPrice(idProdotto, nuovoPrezzo);
+
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"message\": \"Prezzo aggiornato con successo.\"}");
+            out.flush();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante l'aggiornamento del prezzo.");
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parametri non validi.");
+        }
+    }
+
+
+    /**
+     * funzione che permette ad un admin di modificare il prezzo di offerta ad un prodotto
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    private void modificaPrezzoOfferta(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int idProdotto = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
+            float nuovoPrezzoOfferta = Float.parseFloat(request.getParameter("prezzoOfferta"));
+
+            prodModel.doUpdateProductOfferPrice(idProdotto, nuovoPrezzoOfferta);
+
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"message\": \"Prezzo offerta aggiornato con successo.\"}");
+            out.flush();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore durante l'aggiornamento del prezzo offerta.");
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parametri non validi.");
         }
     }
 
