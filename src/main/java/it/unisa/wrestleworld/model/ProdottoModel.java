@@ -980,6 +980,46 @@ public class ProdottoModel implements ProdottoDAO {
 
 
     /**
+     * funzione che gestisce l'operazione di modificare la disponibiltà di un prodotto
+     * @param id
+     * @throws SQLException
+     */
+    public synchronized void makeProductAvailable (int id) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = UPDATE + TABLE_PRODOTTO + " SET Disponibilita = TRUE " + WHERE_IDPROD;
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, id);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
+
+    /**
      * funzione che gestisce l'operazione di modificare il prezzo di un prodotto
      * @param id
      * @param newPrice

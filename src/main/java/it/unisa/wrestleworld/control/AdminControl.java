@@ -79,6 +79,9 @@ public class AdminControl extends HttpServlet {
                     case "rendiIndisponibileProdotto":
                         rendiIndisponibileProdotto(request, response);
                         break;
+                    case "rendiDisponibileProdotto":
+                        rendiDisponibileProdotto(request, response);
+                        break;
                     case "creaNuovoProdotto":
                         creaNuovoProdotto(request, response);
                         break;
@@ -276,6 +279,34 @@ public class AdminControl extends HttpServlet {
             response.setContentType(APPLICATION_JSON_PARAM);
             PrintWriter out = response.getWriter();
             out.print("{\"message\": \"Prodotto reso indisponibile con successo\"}");
+            out.flush();
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, MSG_ERROR_NUMBER);
+        }
+    }
+
+
+    /**
+     * funzione che permette ad un admin di aggiornare la disponibilità di un prodotto
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    private void rendiDisponibileProdotto (HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String idProdStr = request.getParameter(ID_PROD_PARAM);
+
+            int idProd = Integer.parseInt(idProdStr);
+
+            prodModel.makeProductAvailable(idProd);
+
+            response.setContentType(APPLICATION_JSON_PARAM);
+            PrintWriter out = response.getWriter();
+            out.print("{\"message\": \"Prodotto reso disponibile con successo\"}");
             out.flush();
         } catch (IOException e) {
             logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);

@@ -69,6 +69,28 @@ function rendiIndisponibileProdotto(idProdotto) {
     });
 }
 
+function rendiDisponibileProdotto(idProdotto) {
+    if (!confirm("Sei sicuro di voler rendere disponibile questo prodotto?")) {
+        return;
+    }
+
+    $.ajax({
+        url: 'AdminControl',
+        type: 'POST',
+        data: {
+            action: 'rendiDisponibileProdotto',
+            IDProd: idProdotto
+        },
+        success: function(response) {
+            alert(response.message);
+            location.reload();  // Ricarica la pagina per aggiornare la visualizzazione dei pulsanti
+        },
+        error: function(xhr, status, error) {
+            alert("Errore durante l'operazione: " + xhr.responseText);
+        }
+    });
+}
+
 function mostraAggiungiTaglia() {
     var divTaglia = document.getElementById('aggiungi-taglia');
     if (divTaglia.style.display === 'none') {

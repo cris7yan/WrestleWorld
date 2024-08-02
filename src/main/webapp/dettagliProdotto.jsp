@@ -149,7 +149,8 @@
             </div>
 
             <button id="delete-product-button" onclick="eliminaProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Elimina prodotto</button>
-            <button id="make-unavailable-button" onclick="rendiIndisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Rendi indisponibile</button>
+            <button id="make-unavailable-button" onclick="rendiIndisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')" style="<%= disponibilita ? "display: inline;" : "display: none;" %>">Rendi indisponibile</button>
+            <button id="make-available-button" onclick="rendiDisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')" style="<%= !disponibilita ? "display: inline;" : "display: none;" %>">Rendi disponibile</button>
         </div>
         <% } else { %>
         <div class="select-container">
