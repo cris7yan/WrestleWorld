@@ -23,5 +23,6 @@ public interface ProdottoDAO {
     void makeProductAvailable (int id) throws SQLException;
     void doUpdateProductPrice (int id, float newPrice) throws SQLException;
     void doUpdateProductOfferPrice (int id, float newOfferPrice) throws SQLException;
+    void doAddProductCategory(int idProdotto, String nomeCategoria) throws SQLException;
 
 }

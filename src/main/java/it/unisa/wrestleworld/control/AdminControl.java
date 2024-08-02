@@ -97,6 +97,9 @@ public class AdminControl extends HttpServlet {
                     case "modificaPrezzoOfferta":
                         modificaPrezzoOfferta(request, response);
                         break;
+                    case "aggiungiAppartenenzaProdotto":
+                        aggiungiAppartenenzaProdotto(request, response);
+                        break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
                         break;
@@ -617,5 +620,31 @@ public class AdminControl extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parametri non validi.");
         }
     }
+
+
+    private void aggiungiAppartenenzaProdotto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int idProdotto = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
+            String categoria = request.getParameter("categoria");
+
+            if (idProdotto <= 0 || categoria == null || categoria.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parametri mancanti o non validi.");
+                return;
+            }
+
+            prodModel.doAddProductCategory(idProdotto, categoria);
+
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            out.print("{\"message\": \"Appartenenza alla categoria aggiunta con successo.\"}");
+            out.flush();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore del server.");
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Formato numero non valido.");
+        }
+    }
+
 
 }

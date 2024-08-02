@@ -1102,4 +1102,46 @@ public class ProdottoModel implements ProdottoDAO {
         }
     }
 
+
+    /**
+     * funzione che gestisce l'operazione di aggiungere ad un prodotto l'appartenenza ad una categoria
+     * @param idProdotto
+     * @param nomeCategoria
+     * @throws SQLException
+     */
+    public synchronized void doAddProductCategory(int idProdotto, String nomeCategoria) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "INSERT INTO " + TABLE_APPARTENENZA + " (NomeCategoria, ID_Prodotto) VALUES (?, ?)";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setString(1, nomeCategoria);
+            ps.setInt(2, idProdotto);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+    }
+
 }

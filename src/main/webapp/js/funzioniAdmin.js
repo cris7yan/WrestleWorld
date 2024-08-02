@@ -187,3 +187,33 @@ function modificaPrezzoOfferta(idProdotto) {
         }
     });
 }
+
+function mostraAggiungiCategoria() {
+    document.getElementById('aggiungi-categoria').style.display = 'block';
+}
+
+function aggiungiAppartenenza(idProdotto) {
+    const categoria = document.getElementById('nuova-categoria').value;
+
+    if (!categoria) {
+        alert("Inserisci una categoria valida.");
+        return;
+    }
+
+    $.ajax({
+        url: 'AdminControl',
+        type: 'POST',
+        data: {
+            action: 'aggiungiAppartenenzaProdotto',
+            IDProd: idProdotto,
+            categoria: categoria
+        },
+        success: function(response) {
+            alert(response.message);
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            alert("Errore durante l'aggiunta dell'appartenenza: " + xhr.responseText);
+        }
+    });
+}

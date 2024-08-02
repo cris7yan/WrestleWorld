@@ -113,6 +113,15 @@
             }
         %>
 
+        <div class="admin-add-category-container">
+            <button onclick="mostraAggiungiCategoria()">Aggiungi Categoria</button>
+        </div>
+        <div id="aggiungi-categoria" style="display:none;">
+            <h3>Aggiungi una nuova appartenenza</h3>
+            <input type="text" id="nuova-categoria" placeholder="Nome Categoria">
+            <button onclick="aggiungiAppartenenza('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Appartenenza</button>
+        </div>
+
         <p class="product-sizes">Taglie disponibili:</p>
         <% if ("Admin".equals(tipoUtente)) { %>
         <div class="admin-quantita-container">
