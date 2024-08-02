@@ -483,7 +483,7 @@ public class AdminControl extends HttpServlet {
             // Salva la categoria nel database
             catModel.doSaveCategory(categoria);
 
-            response.sendRedirect("categorie.jsp");
+            response.sendRedirect("CategoriaControl?action=visualizzaCategorie");
         } catch (ServletException | IOException e) {
             logger.log(Level.SEVERE, "Errore nella creazione della categoria", e);
         } catch (SQLException e) {

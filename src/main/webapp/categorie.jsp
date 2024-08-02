@@ -1,7 +1,8 @@
-<%@ page import="java.util.Iterator" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: cristyanesposito
 --%>
+<%@ page import="java.util.Iterator" %>
 <%@ page import="it.unisa.wrestleworld.model.CategoriaBean" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.net.URLEncoder" %>

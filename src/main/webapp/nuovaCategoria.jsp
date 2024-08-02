@@ -30,7 +30,7 @@
     <input type="text" id="nome_categoria" name="nome_categoria" required><br><br>
 
     <label for="immagine_categoria">Immagine Categoria:</label>
-    <input type="file" id="immagine_categoria" name="immagine_categoria" required><br><br>
+    <input type="file" id="immagine_categoria" name="immagine_categoria"><br><br>
 
     <button type="submit">Conferma</button>
 </form>
