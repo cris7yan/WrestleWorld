@@ -501,7 +501,9 @@ public class AdminControl extends HttpServlet {
         for (String s : items) {
             if (s.trim().startsWith("filename")) {
                 String fileName = s.substring(s.indexOf("=") + 2, s.length() - 1).replace("\"", "");
-                logger.info(String.format("File Name: %s", fileName));
+                if (logger.isLoggable(Level.INFO)) {
+                    logger.info(String.format("File Name: %s", fileName));
+                }
                 return fileName;
             }
         }
@@ -522,8 +524,9 @@ public class AdminControl extends HttpServlet {
         File file = path.toFile();
 
         // Verifica che il file sia all'interno della directory prevista
-        if (!file.getCanonicalPath().startsWith(getServletContext().getRealPath("/"))) {
-            String errorMessage = "Percorso non valido: " + path2;
+        String realPath = getServletContext().getRealPath("/");
+        if (!file.getCanonicalPath().startsWith(realPath)) {
+            String errorMessage = String.format("Percorso non valido: %s", path2);
             logger.log(Level.SEVERE, errorMessage);
             throw new IOException(errorMessage);
         }
@@ -544,7 +547,6 @@ public class AdminControl extends HttpServlet {
             throw new IOException(errorMessage, e);
         }
     }
-
 
 
     /**

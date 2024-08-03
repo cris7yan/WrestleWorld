@@ -92,7 +92,7 @@ function rendiDisponibileProdotto(idProdotto) {
 }
 
 function mostraAggiungiTaglia() {
-    var divTaglia = document.getElementById('aggiungi-taglia');
+    const divTaglia = document.getElementById('aggiungi-taglia');
     if (divTaglia.style.display === 'none') {
         divTaglia.style.display = 'block';
     } else {
