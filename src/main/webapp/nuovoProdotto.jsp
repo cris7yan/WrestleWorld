@@ -65,13 +65,13 @@
 
     <label for="categorie">Categorie:</label><br>
 
-    <!-- Sesso -->
     <div>
         <label>Sesso:</label><br>
         <% if (categoriePerTipo.get("Sesso") != null) {
-            for (CategoriaBean cat : categoriePerTipo.get("Sesso")) { %>
-        <input type="radio" id="sesso_<%= cat.getNome() %>" name="sesso" value="<%= cat.getNome() %>">
-        <label for="sesso_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+            for (CategoriaBean cat : categoriePerTipo.get("Sesso")) {
+                String id = "sesso_" + cat.getNome().replaceAll("\\s+", "_"); // Genera un ID univoco %>
+        <input type="radio" id="<%= id %>" name="sesso" value="<%= cat.getNome() %>">
+        <label for="<%= id %>"><%= cat.getNome() %></label><br>
         <% } } %>
     </div><br>
 
@@ -79,9 +79,10 @@
     <div>
         <label>Superstar:</label><br>
         <% if (categoriePerTipo.get("Superstar") != null) {
-            for (CategoriaBean cat : categoriePerTipo.get("Superstar")) { %>
-        <input type="checkbox" id="superstar_<%= cat.getNome() %>" name="superstar" value="<%= cat.getNome() %>">
-        <label for="superstar_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+            for (CategoriaBean cat : categoriePerTipo.get("Superstar")) {
+                String id = "superstar_" + cat.getNome().replaceAll("\\s+", "_"); %>
+        <input type="checkbox" id="<%= id %>" name="superstar" value="<%= cat.getNome() %>">
+        <label for="<%= id %>"><%= cat.getNome() %></label><br>
         <% } } %>
     </div><br>
 
@@ -89,9 +90,10 @@
     <div>
         <label>Premium Live Event:</label><br>
         <% if (categoriePerTipo.get("Premium Live Event") != null) {
-            for (CategoriaBean cat : categoriePerTipo.get("Premium Live Event")) { %>
-        <input type="radio" id="ple_<%= cat.getNome() %>" name="ple" value="<%= cat.getNome() %>">
-        <label for="ple_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+            for (CategoriaBean cat : categoriePerTipo.get("Premium Live Event")) {
+                String id = "ple_" + cat.getNome().replaceAll("\\s+", "_"); %>
+        <input type="radio" id="<%= id %>" name="ple" value="<%= cat.getNome() %>">
+        <label for="<%= id %>"><%= cat.getNome() %></label><br>
         <% } } %>
     </div><br>
 
@@ -99,9 +101,10 @@
     <div>
         <label>Title Belts:</label><br>
         <% if (categoriePerTipo.get("Title Belts") != null) {
-            for (CategoriaBean cat : categoriePerTipo.get("Title Belts")) { %>
-        <input type="radio" id="title_belts_<%= cat.getNome() %>" name="title_belts" value="<%= cat.getNome() %>">
-        <label for="title_belts_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+            for (CategoriaBean cat : categoriePerTipo.get("Title Belts")) {
+                String id = "title_belts_" + cat.getNome().replaceAll("\\s+", "_"); %>
+        <input type="radio" id="<%= id %>" name="title_belts" value="<%= cat.getNome() %>">
+        <label for="<%= id %>"><%= cat.getNome() %></label><br>
         <% } } %>
     </div><br>
 
@@ -109,9 +112,10 @@
     <div>
         <label>Abbigliamento:</label><br>
         <% if (categoriePerTipo.get("Abbigliamento") != null) {
-            for (CategoriaBean cat : categoriePerTipo.get("Abbigliamento")) { %>
-        <input type="radio" id="abbigliamento_<%= cat.getNome() %>" name="abbigliamento" value="<%= cat.getNome() %>">
-        <label for="abbigliamento_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+            for (CategoriaBean cat : categoriePerTipo.get("Abbigliamento")) {
+                String id = "abbigliamento_" + cat.getNome().replaceAll("\\s+", "_"); %>
+        <input type="radio" id="<%= id %>" name="abbigliamento" value="<%= cat.getNome() %>">
+        <label for="<%= id %>"><%= cat.getNome() %></label><br>
         <% } } %>
     </div><br>
 
@@ -119,9 +123,10 @@
     <div>
         <label>Accessori:</label><br>
         <% if (categoriePerTipo.get("Accessori") != null) {
-            for (CategoriaBean cat : categoriePerTipo.get("Accessori")) { %>
-        <input type="radio" id="accessori_<%= cat.getNome() %>" name="accessori" value="<%= cat.getNome() %>">
-        <label for="accessori_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+            for (CategoriaBean cat : categoriePerTipo.get("Accessori")) {
+                String id = "accessori_" + cat.getNome().replaceAll("\\s+", "_"); %>
+        <input type="radio" id="<%= id %>" name="accessori" value="<%= cat.getNome() %>">
+        <label for="<%= id %>"><%= cat.getNome() %></label><br>
         <% } } %>
     </div><br>
 
@@ -129,9 +134,10 @@
     <div>
         <label>Oggetti da Collezione:</label><br>
         <% if (categoriePerTipo.get("Oggetti da collezione") != null) {
-            for (CategoriaBean cat : categoriePerTipo.get("Oggetti da collezione")) { %>
-        <input type="checkbox" id="oggetti_da_collezione_<%= cat.getNome() %>" name="oggetti_da_collezione" value="<%= cat.getNome() %>">
-        <label for="oggetti_da_collezione_<%= cat.getNome() %>"><%= cat.getNome() %></label><br>
+            for (CategoriaBean cat : categoriePerTipo.get("Oggetti da collezione")) {
+                String id = "oggetti_da_collezione_" + cat.getNome().replaceAll("\\s+", "_"); %>
+        <input type="checkbox" id="<%= id %>" name="oggetti_da_collezione" value="<%= cat.getNome() %>">
+        <label for="<%= id %>"><%= cat.getNome() %></label><br>
         <% } } %>
     </div><br>
 

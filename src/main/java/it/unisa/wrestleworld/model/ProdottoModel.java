@@ -745,112 +745,75 @@ public class ProdottoModel implements ProdottoDAO {
      * @param categorie le categorie a cui appartiene
      * @throws SQLException
      */
-    public synchronized void doSaveProduct (ProdottoBean prod, List<String> immagini, List<TagliaProdottoBean> taglie, List<CategoriaBean> categorie) throws SQLException {
-        Connection conn = null;
-        PreparedStatement psProdotto = null;
-        PreparedStatement psImmagine = null;
-        PreparedStatement psTaglia = null;
-        PreparedStatement psCategoria = null;
-
-        String queryProdotto = "INSERT INTO " + TABLE_PRODOTTO + " (Nome, Descrizione, Materiale, Marca, Modello, Prezzo, Prezzo_Offerta, Disponibilita)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
+    public synchronized void doSaveProduct(ProdottoBean prod, List<String> immagini, List<TagliaProdottoBean> taglie, List<CategoriaBean> categorie) throws SQLException {
+        String queryProdotto = "INSERT INTO " + TABLE_PRODOTTO + " (Nome, Descrizione, Materiale, Marca, Modello, Prezzo, Prezzo_Offerta, Disponibilita) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         String queryImmagine = "INSERT INTO " + TABLE_IMMAGINE + " (NomeImg, ID_Prodotto) VALUES (?, ?)";
-
         String queryTaglia = "INSERT INTO " + TABLE_TAGLIAPRODOTTO + " (ID_Prodotto, Taglia, Quantita) VALUES (?, ?, ?)";
-
         String queryCategoria = "INSERT INTO " + TABLE_APPARTENENZA + " (NomeCategoria, ID_Prodotto) VALUES (?, ?)";
 
-        try {
-            conn = dataSource.getConnection();
+        try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false); // Avvia la transazione
 
-            // Inserisci il prodotto
-            psProdotto = conn.prepareStatement(queryProdotto, Statement.RETURN_GENERATED_KEYS);
-            psProdotto.setString(1, prod.getNomeProdotto());
-            psProdotto.setString(2, prod.getDescrizioneProdotto());
-            psProdotto.setString(3, prod.getMaterialeProdotto());
-            psProdotto.setString(4, prod.getMarcaProdotto());
-            psProdotto.setString(5, prod.getModelloProdotto());
-            psProdotto.setFloat(6, prod.getPrezzoProdotto());
-            psProdotto.setFloat(7, prod.getPrezzoOffertaProdotto());
-            psProdotto.setBoolean(8, prod.getDisponibilitaProdotto());
+            try (PreparedStatement psProdotto = conn.prepareStatement(queryProdotto, Statement.RETURN_GENERATED_KEYS);
+                 PreparedStatement psImmagine = conn.prepareStatement(queryImmagine);
+                 PreparedStatement psTaglia = conn.prepareStatement(queryTaglia);
+                 PreparedStatement psCategoria = conn.prepareStatement(queryCategoria)) {
 
-            psProdotto.executeUpdate();
+                // Inserisci il prodotto
+                psProdotto.setString(1, prod.getNomeProdotto());
+                psProdotto.setString(2, prod.getDescrizioneProdotto());
+                psProdotto.setString(3, prod.getMaterialeProdotto());
+                psProdotto.setString(4, prod.getMarcaProdotto());
+                psProdotto.setString(5, prod.getModelloProdotto());
+                psProdotto.setFloat(6, prod.getPrezzoProdotto());
+                psProdotto.setFloat(7, prod.getPrezzoOffertaProdotto());
+                psProdotto.setBoolean(8, prod.getDisponibilitaProdotto());
 
-            // Ottieni l'ID generato per il prodotto
-            ResultSet generatedKeys = psProdotto.getGeneratedKeys();
-            int idProdotto;
-            if (generatedKeys.next()) {
-                idProdotto = generatedKeys.getInt(1);
-            } else {
-                throw new SQLException("Inserimento del prodotto fallito, nessun ID ottenuto.");
+                psProdotto.executeUpdate();
+
+                // Ottieni l'ID generato per il prodotto
+                ResultSet generatedKeys = psProdotto.getGeneratedKeys();
+                int idProdotto;
+                if (generatedKeys.next()) {
+                    idProdotto = generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Inserimento del prodotto fallito, nessun ID ottenuto.");
+                }
+
+                // Inserisci le immagini del prodotto
+                for (String immagine : immagini) {
+                    psImmagine.setString(1, immagine);
+                    psImmagine.setInt(2, idProdotto);
+                    psImmagine.addBatch();
+                }
+                psImmagine.executeBatch();
+
+                // Inserisci le taglie del prodotto
+                for (TagliaProdottoBean taglia : taglie) {
+                    psTaglia.setInt(1, idProdotto);
+                    psTaglia.setString(2, taglia.getTaglia());
+                    psTaglia.setInt(3, taglia.getQuantita());
+                    psTaglia.addBatch();
+                }
+                psTaglia.executeBatch();
+
+                // Inserisci le categorie del prodotto
+                for (CategoriaBean categoria : categorie) {
+                    psCategoria.setString(1, categoria.getNome());
+                    psCategoria.setInt(2, idProdotto);
+                    psCategoria.addBatch();
+                }
+                psCategoria.executeBatch();
+
+                conn.commit(); // Commit della transazione
+            } catch (SQLException e) {
+                conn.rollback(); // Rollback in caso di errore
+                logger.log(Level.WARNING, e.getMessage(), e);
+                throw e;
             }
-
-            // Inserisci le immagini del prodotto
-            psImmagine = conn.prepareStatement(queryImmagine);
-            for (String immagine : immagini) {
-                psImmagine.setString(1, immagine);
-                psImmagine.setInt(2, idProdotto);
-                psImmagine.addBatch();
-            }
-            psImmagine.executeBatch();
-
-            // Inserisci le taglie del prodotto
-            psTaglia = conn.prepareStatement(queryTaglia);
-            for (TagliaProdottoBean taglia : taglie) {
-                psTaglia.setInt(1, idProdotto);
-                psTaglia.setString(2, taglia.getTaglia());
-                psTaglia.setInt(3, taglia.getQuantita());
-                psTaglia.addBatch();
-            }
-            psTaglia.executeBatch();
-
-            // Inserisci le categorie del prodotto
-            psCategoria = conn.prepareStatement(queryCategoria);
-            for (CategoriaBean categoria : categorie) {
-                psCategoria.setString(1, categoria.getNome());
-                psCategoria.setInt(2, idProdotto);
-                psCategoria.addBatch();
-            }
-            psCategoria.executeBatch();
-
-            conn.commit(); // Commit della transazione
         } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback(); // Rollback in caso di errore
-                } catch (SQLException ex) {
-                    logger.log(Level.WARNING, "Rollback fallito", ex);
-                }
-            }
-            logger.log(Level.WARNING, e.getMessage(), e);
+            logger.log(Level.WARNING, "Errore nella connessione al database", e);
             throw e;
-        } finally {
-            // Chiusura PreparedStatement e Connection
-            try {
-                if (psProdotto != null) {
-                    psProdotto.close();
-                }
-                if (psImmagine != null) {
-                    psImmagine.close();
-                }
-                if (psTaglia != null) {
-                    psTaglia.close();
-                }
-                if (psCategoria != null) {
-                    psCategoria.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
-            }
         }
     }
 

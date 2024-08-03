@@ -622,6 +622,13 @@ public class AdminControl extends HttpServlet {
     }
 
 
+    /**
+     * funzione che permette ad un admin di aggiungere l'appartenenza ad una categoria ad un prodotto
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     private void aggiungiAppartenenzaProdotto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int idProdotto = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
