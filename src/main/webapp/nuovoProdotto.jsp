@@ -67,7 +67,7 @@
 
     <!-- Sesso -->
     <div>
-        <label>Sesso:</label><br>
+        <p>Sesso:</p><br>
         <% if (categoriePerTipo.get("Sesso") != null) {
             for (CategoriaBean cat : categoriePerTipo.get("Sesso")) { %>
         <label>
@@ -79,7 +79,7 @@
 
     <!-- Superstar -->
     <div>
-        <label>Superstar:</label><br>
+        <p>Superstar:</p><br>
         <% if (categoriePerTipo.get("Superstar") != null) {
             for (CategoriaBean cat : categoriePerTipo.get("Superstar")) { %>
         <label>
@@ -91,7 +91,7 @@
 
     <!-- Premium Live Event -->
     <div>
-        <label>Premium Live Event:</label><br>
+        <p>Premium Live Event:</p><br>
         <% if (categoriePerTipo.get("Premium Live Event") != null) {
             for (CategoriaBean cat : categoriePerTipo.get("Premium Live Event")) { %>
         <label>
@@ -103,7 +103,7 @@
 
     <!-- Title Belts -->
     <div>
-        <label>Title Belts:</label><br>
+        <p>Title Belts:</p><br>
         <% if (categoriePerTipo.get("Title Belts") != null) {
             for (CategoriaBean cat : categoriePerTipo.get("Title Belts")) { %>
         <label>
@@ -115,7 +115,7 @@
 
     <!-- Abbigliamento -->
     <div>
-        <label>Abbigliamento:</label><br>
+        <p>Abbigliamento:</p><br>
         <% if (categoriePerTipo.get("Abbigliamento") != null) {
             for (CategoriaBean cat : categoriePerTipo.get("Abbigliamento")) { %>
         <label>
@@ -127,7 +127,7 @@
 
     <!-- Accessori -->
     <div>
-        <label>Accessori:</label><br>
+        <p>Accessori:</p><br>
         <% if (categoriePerTipo.get("Accessori") != null) {
             for (CategoriaBean cat : categoriePerTipo.get("Accessori")) { %>
         <label>
@@ -139,7 +139,7 @@
 
     <!-- Oggetti da Collezione -->
     <div>
-        <label>Oggetti da Collezione:</label><br>
+        <p>Oggetti da Collezione:</p><br>
         <% if (categoriePerTipo.get("Oggetti da collezione") != null) {
             for (CategoriaBean cat : categoriePerTipo.get("Oggetti da collezione")) { %>
         <label>
