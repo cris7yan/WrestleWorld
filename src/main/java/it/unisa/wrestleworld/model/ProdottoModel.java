@@ -762,9 +762,24 @@ public class ProdottoModel implements ProdottoDAO {
 
             conn.commit(); // Commit della transazione
         } catch (SQLException e) {
-            conn.rollback(); // Rollback in caso di errore
-            logger.log(Level.WARNING, "Errore nella connessione al database", e);
-            throw e;
+            if (conn != null) {
+                try {
+                    conn.rollback(); // Rollback in caso di errore
+                } catch (SQLException rollbackEx) {
+                    logger.log(Level.SEVERE, "Rollback failed after error in transaction", rollbackEx);
+                }
+            }
+            String contextInfo = String.format("Failed to save product [ID: %d, Nome: %s]", prod.getIDProdotto(), prod.getNomeProdotto());
+            logger.log(Level.SEVERE, contextInfo, e);
+            throw new SQLException("Error while saving product: " + contextInfo, e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException closeEx) {
+                    logger.log(Level.WARNING, "Failed to close connection", closeEx);
+                }
+            }
         }
     }
 

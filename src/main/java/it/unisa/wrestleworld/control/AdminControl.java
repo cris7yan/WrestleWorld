@@ -525,19 +525,35 @@ public class AdminControl extends HttpServlet {
 
         // Verifica che il file sia all'interno della directory prevista
         String realPath = getServletContext().getRealPath("/");
-        if (!file.getCanonicalPath().startsWith(realPath)) {
-            String errorMessage = String.format("Percorso non valido: %s. Il percorso reale è: %s", path2, file.getCanonicalPath());
-            logger.log(Level.SEVERE, errorMessage);
-            throw new IOException(errorMessage);
+        try {
+            if (!file.getCanonicalPath().startsWith(realPath)) {
+                String errorMessage = String.format(
+                        "Percorso non valido: %s. Il percorso reale è: %s",
+                        path2, file.getCanonicalPath()
+                );
+                logger.log(Level.SEVERE, errorMessage);
+                throw new IOException(errorMessage);
+            }
+        } catch (IOException e) {
+            // Log dell'eccezione se non riesce a ottenere il percorso canonico
+            String errorMessage = String.format(
+                    "Errore nella verifica del percorso per: %s",
+                    path2
+            );
+            logger.log(Level.SEVERE, errorMessage, e);
+            throw e; // Rilancia l'eccezione originale
         }
 
+        // Salvataggio dell'immagine
         try (FileOutputStream fos = new FileOutputStream(file);
              InputStream is = imgFile.getInputStream()) {
+
             byte[] buffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, bytesRead);
             }
+
         } catch (IOException e) {
             String errorMessage = String.format(
                     "Errore nel salvataggio dell'immagine. Percorso: %s, File: %s",
@@ -547,6 +563,7 @@ public class AdminControl extends HttpServlet {
             throw new IOException(errorMessage, e);
         }
     }
+
 
 
     /**
