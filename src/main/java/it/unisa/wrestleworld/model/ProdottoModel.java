@@ -795,21 +795,28 @@ public class ProdottoModel implements ProdottoDAO {
 
     private void inserisciImmagini(Connection conn, int idProdotto, List<String> immagini) throws SQLException {
         String queryImmagine = INSERT_INTO + TABLE_IMMAGINE + " (NomeImg, ID_Prodotto) VALUES (?, ?)";
+
         try (PreparedStatement psImmagine = conn.prepareStatement(queryImmagine)) {
+            // Imposta il valore del parametro ID_Prodotto al di fuori del ciclo
+            psImmagine.setInt(2, idProdotto);
+
             for (String immagine : immagini) {
                 psImmagine.setString(1, immagine);
-                psImmagine.setInt(2, idProdotto);
                 psImmagine.addBatch();
             }
             psImmagine.executeBatch();
         }
     }
 
+
     private void inserisciTaglie(Connection conn, int idProdotto, List<TagliaProdottoBean> taglie) throws SQLException {
         String queryTaglia = INSERT_INTO + TABLE_TAGLIAPRODOTTO + " (ID_Prodotto, Taglia, Quantita) VALUES (?, ?, ?)";
+
         try (PreparedStatement psTaglia = conn.prepareStatement(queryTaglia)) {
+            // Imposta il valore del parametro ID_Prodotto al di fuori del ciclo
+            psTaglia.setInt(1, idProdotto);
+
             for (TagliaProdottoBean taglia : taglie) {
-                psTaglia.setInt(1, idProdotto);
                 psTaglia.setString(2, taglia.getTaglia());
                 psTaglia.setInt(3, taglia.getQuantita());
                 psTaglia.addBatch();
@@ -818,18 +825,21 @@ public class ProdottoModel implements ProdottoDAO {
         }
     }
 
+
     private void inserisciCategorie(Connection conn, int idProdotto, List<CategoriaBean> categorie) throws SQLException {
         String queryCategoria = INSERT_INTO + TABLE_APPARTENENZA + " (NomeCategoria, ID_Prodotto) VALUES (?, ?)";
+
         try (PreparedStatement psCategoria = conn.prepareStatement(queryCategoria)) {
+            // Imposta il valore del parametro ID_Prodotto al di fuori del ciclo
+            psCategoria.setInt(2, idProdotto);
+
             for (CategoriaBean categoria : categorie) {
                 psCategoria.setString(1, categoria.getNome());
-                psCategoria.setInt(2, idProdotto);
                 psCategoria.addBatch();
             }
             psCategoria.executeBatch();
         }
     }
-
 
 
     /**

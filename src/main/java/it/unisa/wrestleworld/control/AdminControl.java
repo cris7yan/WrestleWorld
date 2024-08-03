@@ -21,10 +21,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import javax.servlet.http.Part;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 
@@ -345,7 +342,7 @@ public class AdminControl extends HttpServlet {
             ProdottoBean prodotto = prelevaDatiProdotto(request);
 
             // Preleva le immagini
-            List<String> immagini = prelevaImmagini(request, response);
+            List<String> immagini = prelevaImmagini(request);
 
             // Preleva le taglie
             List<TagliaProdottoBean> taglie = prelevaTaglie(request);
@@ -390,7 +387,7 @@ public class AdminControl extends HttpServlet {
         return prodotto;
     }
 
-    private List<String> prelevaImmagini(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private List<String> prelevaImmagini(HttpServletRequest request) throws IOException, ServletException {
         List<String> immagini = new ArrayList<>();
         for (Part part : request.getParts()) {
             if ("immagini".equals(part.getName())) {
@@ -504,7 +501,7 @@ public class AdminControl extends HttpServlet {
         for (String s : items) {
             if (s.trim().startsWith("filename")) {
                 String fileName = s.substring(s.indexOf("=") + 2, s.length() - 1).replace("\"", "");
-                logger.info("File Name: " + fileName);  // Usa logger invece di System.out.println
+                logger.info(String.format("File Name: %s", fileName));
                 return fileName;
             }
         }
@@ -526,7 +523,9 @@ public class AdminControl extends HttpServlet {
 
         // Verifica che il file sia all'interno della directory prevista
         if (!file.getCanonicalPath().startsWith(getServletContext().getRealPath("/"))) {
-            throw new IOException("Percorso non valido: " + path2);
+            String errorMessage = "Percorso non valido: " + path2;
+            logger.log(Level.SEVERE, errorMessage);
+            throw new IOException(errorMessage);
         }
 
         try (FileOutputStream fos = new FileOutputStream(file);
@@ -537,10 +536,15 @@ public class AdminControl extends HttpServlet {
                 fos.write(buffer, 0, bytesRead);
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Errore nel salvataggio dell'immagine. Percorso: " + path2 + ", File: " + file.getAbsolutePath(), e);
-            throw e; // Rilancia l'eccezione con dettagli contestuali
+            String errorMessage = String.format(
+                    "Errore nel salvataggio dell'immagine. Percorso: %s, File: %s",
+                    path2, file.getAbsolutePath()
+            );
+            logger.log(Level.SEVERE, errorMessage, e);
+            throw new IOException(errorMessage, e);
         }
     }
+
 
 
     /**
