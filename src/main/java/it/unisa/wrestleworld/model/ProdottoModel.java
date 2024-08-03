@@ -36,6 +36,7 @@ public class ProdottoModel implements ProdottoDAO {
     private static final String SELECT_ALL_FROM = "SELECT * FROM ";
     private static final String WHERE_IDPROD = " WHERE ID_Prodotto = ?";
     private static final String UPDATE = "UPDATE ";
+    private static final String INSERT_INTO = "INSERT INTO ";
 
     private static final String MSG_ERROR_PS = "Errore durante la chiusura del PreparedStatement";
     private static final String MSG_ERROR_CONN = "Errore durante la chiusura della connessione";
@@ -746,64 +747,16 @@ public class ProdottoModel implements ProdottoDAO {
      * @throws SQLException
      */
     public synchronized void doSaveProduct(ProdottoBean prod, List<String> immagini, List<TagliaProdottoBean> taglie, List<CategoriaBean> categorie) throws SQLException {
-        String queryProdotto = "INSERT INTO " + TABLE_PRODOTTO + " (Nome, Descrizione, Materiale, Marca, Modello, Prezzo, Prezzo_Offerta, Disponibilita) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        String queryImmagine = "INSERT INTO " + TABLE_IMMAGINE + " (NomeImg, ID_Prodotto) VALUES (?, ?)";
-        String queryTaglia = "INSERT INTO " + TABLE_TAGLIAPRODOTTO + " (ID_Prodotto, Taglia, Quantita) VALUES (?, ?, ?)";
-        String queryCategoria = "INSERT INTO " + TABLE_APPARTENENZA + " (NomeCategoria, ID_Prodotto) VALUES (?, ?)";
+        String queryProdotto = INSERT_INTO + TABLE_PRODOTTO + " (Nome, Descrizione, Materiale, Marca, Modello, Prezzo, Prezzo_Offerta, Disponibilita) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false); // Avvia la transazione
 
-            try (PreparedStatement psProdotto = conn.prepareStatement(queryProdotto, Statement.RETURN_GENERATED_KEYS);
-                 PreparedStatement psImmagine = conn.prepareStatement(queryImmagine);
-                 PreparedStatement psTaglia = conn.prepareStatement(queryTaglia);
-                 PreparedStatement psCategoria = conn.prepareStatement(queryCategoria)) {
-
-                // Inserisci il prodotto
-                psProdotto.setString(1, prod.getNomeProdotto());
-                psProdotto.setString(2, prod.getDescrizioneProdotto());
-                psProdotto.setString(3, prod.getMaterialeProdotto());
-                psProdotto.setString(4, prod.getMarcaProdotto());
-                psProdotto.setString(5, prod.getModelloProdotto());
-                psProdotto.setFloat(6, prod.getPrezzoProdotto());
-                psProdotto.setFloat(7, prod.getPrezzoOffertaProdotto());
-                psProdotto.setBoolean(8, prod.getDisponibilitaProdotto());
-
-                psProdotto.executeUpdate();
-
-                // Ottieni l'ID generato per il prodotto
-                ResultSet generatedKeys = psProdotto.getGeneratedKeys();
-                int idProdotto;
-                if (generatedKeys.next()) {
-                    idProdotto = generatedKeys.getInt(1);
-                } else {
-                    throw new SQLException("Inserimento del prodotto fallito, nessun ID ottenuto.");
-                }
-
-                // Inserisci le immagini del prodotto
-                for (String immagine : immagini) {
-                    psImmagine.setString(1, immagine);
-                    psImmagine.setInt(2, idProdotto);
-                    psImmagine.addBatch();
-                }
-                psImmagine.executeBatch();
-
-                // Inserisci le taglie del prodotto
-                for (TagliaProdottoBean taglia : taglie) {
-                    psTaglia.setInt(1, idProdotto);
-                    psTaglia.setString(2, taglia.getTaglia());
-                    psTaglia.setInt(3, taglia.getQuantita());
-                    psTaglia.addBatch();
-                }
-                psTaglia.executeBatch();
-
-                // Inserisci le categorie del prodotto
-                for (CategoriaBean categoria : categorie) {
-                    psCategoria.setString(1, categoria.getNome());
-                    psCategoria.setInt(2, idProdotto);
-                    psCategoria.addBatch();
-                }
-                psCategoria.executeBatch();
+            try {
+                int idProdotto = inserisciProdotto(conn, queryProdotto, prod);
+                inserisciImmagini(conn, idProdotto, immagini);
+                inserisciTaglie(conn, idProdotto, taglie);
+                inserisciCategorie(conn, idProdotto, categorie);
 
                 conn.commit(); // Commit della transazione
             } catch (SQLException e) {
@@ -816,6 +769,67 @@ public class ProdottoModel implements ProdottoDAO {
             throw e;
         }
     }
+
+    private int inserisciProdotto(Connection conn, String queryProdotto, ProdottoBean prod) throws SQLException {
+        try (PreparedStatement psProdotto = conn.prepareStatement(queryProdotto, Statement.RETURN_GENERATED_KEYS)) {
+            psProdotto.setString(1, prod.getNomeProdotto());
+            psProdotto.setString(2, prod.getDescrizioneProdotto());
+            psProdotto.setString(3, prod.getMaterialeProdotto());
+            psProdotto.setString(4, prod.getMarcaProdotto());
+            psProdotto.setString(5, prod.getModelloProdotto());
+            psProdotto.setFloat(6, prod.getPrezzoProdotto());
+            psProdotto.setFloat(7, prod.getPrezzoOffertaProdotto());
+            psProdotto.setBoolean(8, prod.getDisponibilitaProdotto());
+
+            psProdotto.executeUpdate();
+
+            // Ottieni l'ID generato per il prodotto
+            ResultSet generatedKeys = psProdotto.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Inserimento del prodotto fallito, nessun ID ottenuto.");
+            }
+        }
+    }
+
+    private void inserisciImmagini(Connection conn, int idProdotto, List<String> immagini) throws SQLException {
+        String queryImmagine = INSERT_INTO + TABLE_IMMAGINE + " (NomeImg, ID_Prodotto) VALUES (?, ?)";
+        try (PreparedStatement psImmagine = conn.prepareStatement(queryImmagine)) {
+            for (String immagine : immagini) {
+                psImmagine.setString(1, immagine);
+                psImmagine.setInt(2, idProdotto);
+                psImmagine.addBatch();
+            }
+            psImmagine.executeBatch();
+        }
+    }
+
+    private void inserisciTaglie(Connection conn, int idProdotto, List<TagliaProdottoBean> taglie) throws SQLException {
+        String queryTaglia = INSERT_INTO + TABLE_TAGLIAPRODOTTO + " (ID_Prodotto, Taglia, Quantita) VALUES (?, ?, ?)";
+        try (PreparedStatement psTaglia = conn.prepareStatement(queryTaglia)) {
+            for (TagliaProdottoBean taglia : taglie) {
+                psTaglia.setInt(1, idProdotto);
+                psTaglia.setString(2, taglia.getTaglia());
+                psTaglia.setInt(3, taglia.getQuantita());
+                psTaglia.addBatch();
+            }
+            psTaglia.executeBatch();
+        }
+    }
+
+    private void inserisciCategorie(Connection conn, int idProdotto, List<CategoriaBean> categorie) throws SQLException {
+        String queryCategoria = INSERT_INTO + TABLE_APPARTENENZA + " (NomeCategoria, ID_Prodotto) VALUES (?, ?)";
+        try (PreparedStatement psCategoria = conn.prepareStatement(queryCategoria)) {
+            for (CategoriaBean categoria : categorie) {
+                psCategoria.setString(1, categoria.getNome());
+                psCategoria.setInt(2, idProdotto);
+                psCategoria.addBatch();
+            }
+            psCategoria.executeBatch();
+        }
+    }
+
 
 
     /**
@@ -1076,7 +1090,7 @@ public class ProdottoModel implements ProdottoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "INSERT INTO " + TABLE_APPARTENENZA + " (NomeCategoria, ID_Prodotto) VALUES (?, ?)";
+        String query = INSERT_INTO + TABLE_APPARTENENZA + " (NomeCategoria, ID_Prodotto) VALUES (?, ?)";
 
         try {
             conn = dataSource.getConnection();

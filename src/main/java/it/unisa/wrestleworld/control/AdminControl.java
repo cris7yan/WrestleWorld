@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -328,119 +327,25 @@ public class AdminControl extends HttpServlet {
      * @throws ServletException, IOException
      */
     private void creaNuovoProdotto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");  // Imposta la codifica della richiesta a UTF-8
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
 
         try {
             // Preleva i dati dal form
-            String nome = request.getParameter("nome");
-            String descrizione = request.getParameter("descrizione");
-            String materiale = request.getParameter("materiale");
-            String marca = request.getParameter("marca");
-            String modello = request.getParameter("modello");
-            BigDecimal prezzoBigDecimal = new BigDecimal(request.getParameter("prezzo"));
-            BigDecimal prezzoOffertaBigDecimal = new BigDecimal(request.getParameter("prezzo_offerta"));
-            boolean disponibilita = Boolean.parseBoolean(request.getParameter("disponibilita"));
+            ProdottoBean prodotto = prelevaDatiProdotto(request);
 
             // Preleva le immagini
-            List<String> immagini = new ArrayList<>();
-            for (Part part : request.getParts()) {
-                if ("immagini".equals(part.getName())) {
-                    String fileName = extractFileName(part);
-                    if (!fileName.isEmpty()) {
-                        String filePath = getServletContext().getRealPath("/") + "img/" + "prodotti/" + fileName;
-                        salvaImmagine(filePath, part, response);
-                        immagini.add(fileName);
-                    }
-                }
-            }
+            List<String> immagini = prelevaImmagini(request, response);
 
             // Preleva le taglie
-            String[] taglieArray = request.getParameterValues("taglie");
-            String[] quantitaArray = request.getParameterValues("quantita");
-            List<TagliaProdottoBean> taglie = new ArrayList<>();
-            if (taglieArray != null && quantitaArray != null && taglieArray.length == quantitaArray.length) {
-                for (int i = 0; i < taglieArray.length; i++) {
-                    TagliaProdottoBean taglia = new TagliaProdottoBean();
-                    taglia.setTaglia(taglieArray[i]);
-                    taglia.setQuantita(Integer.parseInt(quantitaArray[i]));
-                    taglie.add(taglia);
-                }
-            }
+            List<TagliaProdottoBean> taglie = prelevaTaglie(request);
 
             // Preleva le categorie
-            List<CategoriaBean> categorie = new ArrayList<>();
-
-            String sesso = request.getParameter("sesso");
-            if (sesso != null) {
-                CategoriaBean categoria = new CategoriaBean();
-                categoria.setNome(sesso);
-                categorie.add(categoria);
-            }
-
-            String[] superstarArray = request.getParameterValues("superstar");
-            if (superstarArray != null) {
-                for (String superstar : superstarArray) {
-                    CategoriaBean categoria = new CategoriaBean();
-                    categoria.setNome(superstar);
-                    categorie.add(categoria);
-                }
-            }
-
-            String ple = request.getParameter("ple");
-            if (ple != null) {
-                CategoriaBean categoria = new CategoriaBean();
-                categoria.setNome(ple);
-                categorie.add(categoria);
-            }
-
-            String titleBelts = request.getParameter("title_belts");
-            if (titleBelts != null) {
-                CategoriaBean categoria = new CategoriaBean();
-                categoria.setNome(titleBelts);
-                categorie.add(categoria);
-            }
-
-            String abbigliamento = request.getParameter("abbigliamento");
-            if (abbigliamento != null) {
-                CategoriaBean categoria = new CategoriaBean();
-                categoria.setNome(abbigliamento);
-                categorie.add(categoria);
-            }
-
-            String accessori = request.getParameter("accessori");
-            if (accessori != null) {
-                CategoriaBean categoria = new CategoriaBean();
-                categoria.setNome(accessori);
-                categorie.add(categoria);
-            }
-
-            String[] oggettiDaCollezioneArray = request.getParameterValues("oggetti_da_collezione");
-            if (oggettiDaCollezioneArray != null) {
-                for (String oggetto : oggettiDaCollezioneArray) {
-                    CategoriaBean categoria = new CategoriaBean();
-                    categoria.setNome(oggetto);
-                    categorie.add(categoria);
-                }
-            }
-
-            float prezzo = prezzoBigDecimal.floatValue();
-            float prezzoOfferta = prezzoOffertaBigDecimal.floatValue();
-
-            // Crea l'oggetto ProdottoBean
-            ProdottoBean prodotto = new ProdottoBean();
-            prodotto.setNomeProdotto(nome);
-            prodotto.setDescrizioneProdotto(descrizione);
-            prodotto.setMaterialeProdotto(materiale);
-            prodotto.setMarcaProdotto(marca);
-            prodotto.setModelloProdotto(modello);
-            prodotto.setPrezzoProdotto(prezzo);
-            prodotto.setPrezzoOffertaProdotto(prezzoOfferta);
-            prodotto.setDisponibilitaProdotto(disponibilita);
+            List<CategoriaBean> categorie = prelevaCategorie(request);
 
             // Salva il prodotto nel database
-            prodModel.doSaveProduct(prodotto, immagini, taglie, categorie);
+            salvaProdottoNelDatabase(prodotto, immagini, taglie, categorie);
 
             response.sendRedirect("catalogo.jsp");
         } catch (ServletException | IOException e) {
@@ -448,6 +353,90 @@ public class AdminControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, "Errore nel database", e);
         }
+    }
+
+    private ProdottoBean prelevaDatiProdotto(HttpServletRequest request) {
+        String nome = request.getParameter("nome");
+        String descrizione = request.getParameter("descrizione");
+        String materiale = request.getParameter("materiale");
+        String marca = request.getParameter("marca");
+        String modello = request.getParameter("modello");
+        BigDecimal prezzoBigDecimal = new BigDecimal(request.getParameter("prezzo"));
+        BigDecimal prezzoOffertaBigDecimal = new BigDecimal(request.getParameter("prezzo_offerta"));
+        boolean disponibilita = Boolean.parseBoolean(request.getParameter("disponibilita"));
+
+        float prezzo = prezzoBigDecimal.floatValue();
+        float prezzoOfferta = prezzoOffertaBigDecimal.floatValue();
+
+        ProdottoBean prodotto = new ProdottoBean();
+        prodotto.setNomeProdotto(nome);
+        prodotto.setDescrizioneProdotto(descrizione);
+        prodotto.setMaterialeProdotto(materiale);
+        prodotto.setMarcaProdotto(marca);
+        prodotto.setModelloProdotto(modello);
+        prodotto.setPrezzoProdotto(prezzo);
+        prodotto.setPrezzoOffertaProdotto(prezzoOfferta);
+        prodotto.setDisponibilitaProdotto(disponibilita);
+
+        return prodotto;
+    }
+
+    private List<String> prelevaImmagini(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        List<String> immagini = new ArrayList<>();
+        for (Part part : request.getParts()) {
+            if ("immagini".equals(part.getName())) {
+                String fileName = extractFileName(part);
+                if (!fileName.isEmpty()) {
+                    String filePath = getServletContext().getRealPath("/") + "img/" + "prodotti/" + fileName;
+                    salvaImmagine(filePath, part, response);
+                    immagini.add(fileName);
+                }
+            }
+        }
+        return immagini;
+    }
+
+    private List<TagliaProdottoBean> prelevaTaglie(HttpServletRequest request) {
+        String[] taglieArray = request.getParameterValues("taglie");
+        String[] quantitaArray = request.getParameterValues("quantita");
+        List<TagliaProdottoBean> taglie = new ArrayList<>();
+        if (taglieArray != null && quantitaArray != null && taglieArray.length == quantitaArray.length) {
+            for (int i = 0; i < taglieArray.length; i++) {
+                TagliaProdottoBean taglia = new TagliaProdottoBean();
+                taglia.setTaglia(taglieArray[i]);
+                taglia.setQuantita(Integer.parseInt(quantitaArray[i]));
+                taglie.add(taglia);
+            }
+        }
+        return taglie;
+    }
+
+    private List<CategoriaBean> prelevaCategorie(HttpServletRequest request) {
+        List<CategoriaBean> categorie = new ArrayList<>();
+        String[] categorieParametri = {"sesso", "superstar", "ple", "title_belts", "abbigliamento", "accessori", "oggetti_da_collezione"};
+
+        for (String parametro : categorieParametri) {
+            String[] valori = request.getParameterValues(parametro);
+            if (valori != null) {
+                for (String valore : valori) {
+                    CategoriaBean categoria = new CategoriaBean();
+                    categoria.setNome(valore);
+                    categorie.add(categoria);
+                }
+            } else {
+                String valoreSingolo = request.getParameter(parametro);
+                if (valoreSingolo != null) {
+                    CategoriaBean categoria = new CategoriaBean();
+                    categoria.setNome(valoreSingolo);
+                    categorie.add(categoria);
+                }
+            }
+        }
+        return categorie;
+    }
+
+    private void salvaProdottoNelDatabase(ProdottoBean prodotto, List<String> immagini, List<TagliaProdottoBean> taglie, List<CategoriaBean> categorie) throws SQLException {
+        prodModel.doSaveProduct(prodotto, immagini, taglie, categorie);
     }
 
 
@@ -543,7 +532,7 @@ public class AdminControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void aggiungiTagliaProdotto (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void aggiungiTagliaProdotto (HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int idProdotto = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
             String taglia = request.getParameter("taglia");
@@ -575,7 +564,7 @@ public class AdminControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void modificaPrezzo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void modificaPrezzo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int idProdotto = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
             float nuovoPrezzo = Float.parseFloat(request.getParameter("prezzo"));
@@ -602,7 +591,7 @@ public class AdminControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void modificaPrezzoOfferta(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void modificaPrezzoOfferta(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int idProdotto = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
             float nuovoPrezzoOfferta = Float.parseFloat(request.getParameter("prezzoOfferta"));
@@ -629,7 +618,7 @@ public class AdminControl extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-    private void aggiungiAppartenenzaProdotto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void aggiungiAppartenenzaProdotto(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int idProdotto = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
             String categoria = request.getParameter("categoria");
