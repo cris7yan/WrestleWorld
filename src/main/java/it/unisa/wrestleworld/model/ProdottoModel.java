@@ -747,24 +747,22 @@ public class ProdottoModel implements ProdottoDAO {
      * @throws SQLException
      */
     public synchronized void doSaveProduct(ProdottoBean prod, List<String> immagini, List<TagliaProdottoBean> taglie, List<CategoriaBean> categorie) throws SQLException {
+        Connection conn = null;
+
         String queryProdotto = INSERT_INTO + TABLE_PRODOTTO + " (Nome, Descrizione, Materiale, Marca, Modello, Prezzo, Prezzo_Offerta, Disponibilita) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = dataSource.getConnection()) {
+        try {
+            conn = dataSource.getConnection();
             conn.setAutoCommit(false); // Avvia la transazione
 
-            try {
-                int idProdotto = inserisciProdotto(conn, queryProdotto, prod);
-                inserisciImmagini(conn, idProdotto, immagini);
-                inserisciTaglie(conn, idProdotto, taglie);
-                inserisciCategorie(conn, idProdotto, categorie);
+            int idProdotto = inserisciProdotto(conn, queryProdotto, prod);
+            inserisciImmagini(conn, idProdotto, immagini);
+            inserisciTaglie(conn, idProdotto, taglie);
+            inserisciCategorie(conn, idProdotto, categorie);
 
-                conn.commit(); // Commit della transazione
-            } catch (SQLException e) {
-                conn.rollback(); // Rollback in caso di errore
-                logger.log(Level.WARNING, e.getMessage(), e);
-                throw e;
-            }
+            conn.commit(); // Commit della transazione
         } catch (SQLException e) {
+            conn.rollback(); // Rollback in caso di errore
             logger.log(Level.WARNING, "Errore nella connessione al database", e);
             throw e;
         }

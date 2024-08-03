@@ -174,9 +174,6 @@ public class CategoriaControl extends HttpServlet {
             Map<String, List<CategoriaBean>> categoriePerTipo = catModel.doRetrieveAllGroupedByType();
             request.setAttribute("categoriePerTipo", categoriePerTipo);
 
-            // Debug: Log the size of the map
-            logger.info("Categorie Per Tipo: " + categoriePerTipo);
-
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("nuovoProdotto.jsp");
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {

@@ -526,7 +526,7 @@ public class AdminControl extends HttpServlet {
         // Verifica che il file sia all'interno della directory prevista
         String realPath = getServletContext().getRealPath("/");
         if (!file.getCanonicalPath().startsWith(realPath)) {
-            String errorMessage = String.format("Percorso non valido: %s", path2);
+            String errorMessage = String.format("Percorso non valido: %s. Il percorso reale è: %s", path2, file.getCanonicalPath());
             logger.log(Level.SEVERE, errorMessage);
             throw new IOException(errorMessage);
         }

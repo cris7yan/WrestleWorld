@@ -225,8 +225,6 @@ public class CategoriaModel implements CategoriaDAO {
                 }
                 categoriePerTipo.get(tipo).add(cat);
             }
-
-            logger.info("Categorie per Tipo: " + categoriePerTipo);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } finally {
