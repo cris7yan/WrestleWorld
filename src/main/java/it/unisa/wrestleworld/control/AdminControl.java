@@ -20,6 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.servlet.http.Part;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 
 @WebServlet("/AdminControl")
 @MultipartConfig
@@ -34,6 +41,8 @@ public class AdminControl extends HttpServlet {
     private static TagliaProdottoDAO tagliaModel = new TagliaProdottoModel();
 
     private static final String ID_PROD_PARAM = "IDProd";
+    private static final String QUANTITA_PARAM = "quantita";
+    private static final String UTF_PARAM = "UTF-8";
     private static final String APPLICATION_JSON_PARAM = "application/json";
 
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
@@ -212,7 +221,7 @@ public class AdminControl extends HttpServlet {
         try {
             String idProdStr = request.getParameter(ID_PROD_PARAM);
             String taglia = request.getParameter("taglia");
-            String quantitaStr = request.getParameter("quantita");
+            String quantitaStr = request.getParameter(QUANTITA_PARAM);
 
             int idProd = Integer.parseInt(idProdStr);
             int quantita = Integer.parseInt(quantitaStr);
@@ -327,9 +336,9 @@ public class AdminControl extends HttpServlet {
      * @throws ServletException, IOException
      */
     private void creaNuovoProdotto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding(UTF_PARAM);
         response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding(UTF_PARAM);
 
         try {
             // Preleva i dati dal form
@@ -388,7 +397,7 @@ public class AdminControl extends HttpServlet {
                 String fileName = extractFileName(part);
                 if (!fileName.isEmpty()) {
                     String filePath = getServletContext().getRealPath("/") + "img/" + "prodotti/" + fileName;
-                    salvaImmagine(filePath, part, response);
+                    salvaImmagine(filePath, part);
                     immagini.add(fileName);
                 }
             }
@@ -398,7 +407,7 @@ public class AdminControl extends HttpServlet {
 
     private List<TagliaProdottoBean> prelevaTaglie(HttpServletRequest request) {
         String[] taglieArray = request.getParameterValues("taglie");
-        String[] quantitaArray = request.getParameterValues("quantita");
+        String[] quantitaArray = request.getParameterValues(QUANTITA_PARAM);
         List<TagliaProdottoBean> taglie = new ArrayList<>();
         if (taglieArray != null && quantitaArray != null && taglieArray.length == quantitaArray.length) {
             for (int i = 0; i < taglieArray.length; i++) {
@@ -448,9 +457,9 @@ public class AdminControl extends HttpServlet {
      * @throws IOException
      */
     private void creaNuovaCategoria(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");  // Imposta la codifica della richiesta a UTF-8
+        request.setCharacterEncoding(UTF_PARAM);  // Imposta la codifica della richiesta a UTF-8
         response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding(UTF_PARAM);
 
         try {
             // Preleva i dati dal form
@@ -463,7 +472,7 @@ public class AdminControl extends HttpServlet {
             String filePath = "";
             if (!fileName.isEmpty()) {
                 filePath = getServletContext().getRealPath("/") + "img/" + "categorie/" + fileName;
-                salvaImmagine(filePath, part, response);
+                salvaImmagine(filePath, part);
             }
 
             // Crea l'oggetto CategoriaBean
@@ -495,7 +504,7 @@ public class AdminControl extends HttpServlet {
         for (String s : items) {
             if (s.trim().startsWith("filename")) {
                 String fileName = s.substring(s.indexOf("=") + 2, s.length() - 1).replace("\"", "");
-                System.out.println("File Name: " + fileName);  // Aggiungi log
+                logger.info("File Name: " + fileName);  // Usa logger invece di System.out.println
                 return fileName;
             }
         }
@@ -510,8 +519,17 @@ public class AdminControl extends HttpServlet {
      * @param response
      * @throws IOException
      */
-    private void salvaImmagine(String path2, Part imgFile, HttpServletResponse response) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(path2);
+    private void salvaImmagine(String path2, Part imgFile) throws IOException {
+        // Sanitizzazione del percorso
+        Path path = Paths.get(path2).normalize();
+        File file = path.toFile();
+
+        // Verifica che il file sia all'interno della directory prevista
+        if (!file.getCanonicalPath().startsWith(getServletContext().getRealPath("/"))) {
+            throw new IOException("Percorso non valido: " + path2);
+        }
+
+        try (FileOutputStream fos = new FileOutputStream(file);
              InputStream is = imgFile.getInputStream()) {
             byte[] buffer = new byte[1024];
             int bytesRead;
@@ -519,8 +537,8 @@ public class AdminControl extends HttpServlet {
                 fos.write(buffer, 0, bytesRead);
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Errore nel salvataggio dell'immagine", e);
-            throw e; // Rilancia l'eccezione se necessario
+            logger.log(Level.SEVERE, "Errore nel salvataggio dell'immagine. Percorso: " + path2 + ", File: " + file.getAbsolutePath(), e);
+            throw e; // Rilancia l'eccezione con dettagli contestuali
         }
     }
 
@@ -536,7 +554,7 @@ public class AdminControl extends HttpServlet {
         try {
             int idProdotto = Integer.parseInt(request.getParameter(ID_PROD_PARAM));
             String taglia = request.getParameter("taglia");
-            int quantita = Integer.parseInt(request.getParameter("quantita"));
+            int quantita = Integer.parseInt(request.getParameter(QUANTITA_PARAM));
 
             TagliaProdottoBean nuovaTaglia = new TagliaProdottoBean();
             nuovaTaglia.setIdProdotto(idProdotto);
@@ -571,7 +589,7 @@ public class AdminControl extends HttpServlet {
 
             prodModel.doUpdateProductPrice(idProdotto, nuovoPrezzo);
 
-            response.setContentType("application/json");
+            response.setContentType(APPLICATION_JSON_PARAM);
             PrintWriter out = response.getWriter();
             out.print("{\"message\": \"Prezzo aggiornato con successo.\"}");
             out.flush();
@@ -598,7 +616,7 @@ public class AdminControl extends HttpServlet {
 
             prodModel.doUpdateProductOfferPrice(idProdotto, nuovoPrezzoOfferta);
 
-            response.setContentType("application/json");
+            response.setContentType(APPLICATION_JSON_PARAM);
             PrintWriter out = response.getWriter();
             out.print("{\"message\": \"Prezzo offerta aggiornato con successo.\"}");
             out.flush();
@@ -630,7 +648,7 @@ public class AdminControl extends HttpServlet {
 
             prodModel.doAddProductCategory(idProdotto, categoria);
 
-            response.setContentType("application/json");
+            response.setContentType(APPLICATION_JSON_PARAM);
             PrintWriter out = response.getWriter();
             out.print("{\"message\": \"Appartenenza alla categoria aggiunta con successo.\"}");
             out.flush();
@@ -641,6 +659,5 @@ public class AdminControl extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Formato numero non valido.");
         }
     }
-
 
 }
