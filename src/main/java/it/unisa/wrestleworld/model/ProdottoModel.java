@@ -5,8 +5,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -580,6 +582,82 @@ public class ProdottoModel implements ProdottoDAO {
     }
 
     // Metodi per la gestione dei filtri
+
+    public synchronized List<ProdottoBean> getProdottiOrdinatiPerCategoria() throws SQLException {
+        List<ProdottoBean> prodotti = new ArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT p.*, c.NomeCategoria FROM Prodotto p " +
+                "JOIN Appartenenza a ON p.ID_Prodotto = a.ID_Prodotto " +
+                "JOIN Categoria c ON a.NomeCategoria = c.NomeCategoria " +
+                "ORDER BY CASE " +
+                "WHEN c.NomeCategoria = 'T-Shirt' THEN 1 " +
+                "WHEN c.NomeCategoria = 'Canotte' THEN 2 " +
+                "WHEN c.NomeCategoria = 'Felpe con cappuccio e Felpe' THEN 3 " +
+                "WHEN c.NomeCategoria = 'Giacche' THEN 4 " +
+                "WHEN c.NomeCategoria = 'Occhiali' THEN 5 " +
+                "WHEN c.NomeCategoria = 'Pantaloncini' THEN 6 " +
+                "WHEN c.NomeCategoria = 'Cappelli' THEN 7 " +
+                "WHEN c.NomeCategoria = 'Title Belts Replica' THEN 8 " +
+                "WHEN c.NomeCategoria = 'Side Plates' THEN 9 " +
+                "WHEN c.NomeCategoria = 'Memorabilia' THEN 10 " +
+                "WHEN c.NomeCategoria = 'Foto' THEN 11 " +
+                "WHEN c.NomeCategoria = 'Figure' THEN 12 " +
+                "WHEN c.NomeCategoria = 'Orologi' THEN 13 " +
+                "WHEN c.NomeCategoria = 'Cover Phone' THEN 14 " +
+                "WHEN c.NomeCategoria = 'Zaini e borse' THEN 15 " +
+                "ELSE 16 END";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            // HashSet per tenere traccia degli ID dei prodotti già aggiunti
+            Set<Integer> aggiunti = new HashSet<>();
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int idProdotto = rs.getInt("ID_Prodotto");
+                if (!aggiunti.contains(idProdotto)) {
+                    ProdottoBean prod = new ProdottoBean();
+                    prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
+                    prod.setNomeProdotto(rs.getString(NOME_PARAM));
+                    prod.setDescrizioneProdotto(rs.getString(DESCRIZIONE_PARAM));
+                    prod.setPrezzoProdotto(rs.getFloat(PREZZO_PARAM));
+                    prod.setPrezzoOffertaProdotto(rs.getFloat(PREZZO_OFFERTA_PARAM));
+                    prod.setMarcaProdotto(rs.getString(MARCA_PARAM));
+                    prod.setModelloProdotto(rs.getString(MODELLO_PARAM));
+                    prod.setMaterialeProdotto(rs.getString(MATERIALE_PARAM));
+                    prod.setDisponibilitaProdotto(rs.getBoolean(DISPONIBILITA_PARAM));
+
+                    prodotti.add(prod);
+                    aggiunti.add(idProdotto);
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // Chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return prodotti;
+    }
+
 
     /**
      * funzione che restituisce il tipo di categoria a cui appartiene un prodotto

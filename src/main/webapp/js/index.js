@@ -1,8 +1,8 @@
 // Carousels
 const carousels = document.querySelectorAll('.carousel');
-carousels.forEach((carousel, index) => {
+carousels.forEach((carousel) => {
     let currentSlide = 0;
-    const slides = carousel.querySelectorAll('.slider img');
+    const slides = carousel.querySelectorAll('.slider .slide');
     const totalSlides = slides.length;
 
     function updateSlidePosition() {

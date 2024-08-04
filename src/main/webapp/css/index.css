@@ -194,10 +194,14 @@ h1 {
     transition: transform 1.0s ease-in-out;
 }
 
-.carousel .slider img {
+.carousel .slide {
     min-width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.carousel .slide img {
+    width: 100%;
+    display: block;
 }
 
 .carousel .slider-nav {
@@ -212,7 +216,7 @@ h1 {
 .carousel .slider-nav-btn {
     background-color: transparent;
     color: white;
-    border: white;
+    border: none;
     padding: 10px;
     cursor: pointer;
     user-select: none;

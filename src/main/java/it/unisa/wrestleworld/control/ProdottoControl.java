@@ -184,7 +184,7 @@ public class ProdottoControl extends HttpServlet {
     private void visualizzaCatalogo (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // Liste per prelevare dal database i prodotti ed i prodotti piu venduti
-            List<ProdottoBean> prodotti = prodModel.doRetrieveAll();
+            List<ProdottoBean> prodotti = prodModel.getProdottiOrdinatiPerCategoria();
             request.setAttribute("prodotti", prodotti);
 
             // prelevo le immagini dei vari prodotti

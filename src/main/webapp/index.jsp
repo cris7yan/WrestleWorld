@@ -48,9 +48,21 @@
     <section id="carousel1" class="carousel">
         <div class="slider-wrapper">
             <div class="slider">
-                <img src="img/sitoweb/posterReigns.jpeg" alt="First Slide">
-                <img src="img/sitoweb/posterBloodLine.jpeg" alt="Second Slide">
-                <img src="img/sitoweb/posterTheRock.jpeg" alt="Third Slide">
+                <div class="slide">
+                    <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Roman Reigns">
+                        <img src="img/sitoweb/PosterRomanReignsOTC.png" alt="First Slide">
+                    </a>
+                </div>
+                <div class="slide">
+                    <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=The BloodLine">
+                        <img src="img/sitoweb/posterBloodLine.jpeg" alt="Second Slide">
+                    </a>
+                </div>
+                <div class="slide">
+                    <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=The Rock">
+                        <img src="img/sitoweb/posterTheRock.jpeg" alt="Third Slide">
+                    </a>
+                </div>
             </div>
             <div class="slider-nav">
                 <button class="slider-nav-btn" onclick="prevSlide(1)">&#10094;</button>
@@ -145,11 +157,31 @@
     <section id="carousel2" class="carousel">
         <div class="slider-wrapper">
             <div class="slider">
-                <img src="img/sitoweb/posterCMPunk.jpeg" alt="First Slide">
-                <img src="img/sitoweb/posterCody.jpeg" alt="Second Slide">
-                <img src="img/sitoweb/posterRollins.jpeg" alt="Third Slide">
-                <img src="img/sitoweb/posterOrton.jpeg" alt="Fourth Slide">
-                <img src="img/sitoweb/posterLesnar.jpeg" alt="Fifth Slide">
+                <div class="slide">
+                    <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=CM Punk">
+                        <img src="img/sitoweb/posterCMPunk.jpeg" alt="First Slide">
+                    </a>
+                </div>
+                <div class="slide">
+                    <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Cody Rhodes">
+                        <img src="img/sitoweb/posterCody.jpeg" alt="Second Slide">
+                    </a>
+                </div>
+                <div class="slide">
+                    <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Seth%20%22Freakin%22%20Rollins">
+                        <img src="img/sitoweb/posterRollins.jpeg" alt="Third Slide">
+                    </a>
+                </div>
+                <div class="slide">
+                    <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Randy Orton">
+                        <img src="img/sitoweb/posterOrton.jpeg" alt="Fourth Slide">
+                    </a>
+                </div>
+                <div class="slide">
+                    <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Brock Lesnar">
+                        <img src="img/sitoweb/posterLesnar.jpeg" alt="Fifth Slide">
+                    </a>
+                </div>
             </div>
             <div class="slider-nav">
                 <button class="slider-nav-btn" onclick="prevSlide(2)">&#10094;</button>
@@ -157,6 +189,7 @@
             </div>
         </div>
     </section>
+
 
     <script src="js/index.js"></script>
 
