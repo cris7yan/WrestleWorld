@@ -422,8 +422,7 @@ public class OrdineControl extends HttpServlet {
      * @return
      */
     private int quantitaForProd(ProdottoBean prod) {
-        int quantita = prod.getQuantitaCarrello();
-        return quantita;
+        return prod.getQuantitaCarrello();
     }
 
     /**
@@ -431,9 +430,8 @@ public class OrdineControl extends HttpServlet {
      * @param prod
      * @return
      */
-    private float prezzoForProd (ProdottoBean prod, int id) throws SQLException {
-        float prezzo = prodModel.doRetrievePrezzoOrdine(prod.getIDProdotto(), id);
-        return prezzo;
+    private float prezzoForProd(ProdottoBean prod, int id) throws SQLException {
+        return prodModel.doRetrievePrezzoOrdine(prod.getIDProdotto(), id);
     }
 
     /**
@@ -441,10 +439,8 @@ public class OrdineControl extends HttpServlet {
      * @param prod
      * @return
      */
-    private float prezzoTotaleForProd (ProdottoBean prod, int id) throws SQLException {
-        float prezzo = prodModel.doRetrievePrezzoOrdine(prod.getIDProdotto(), id);
-        float prezzoTotale = prezzo * prod.getQuantitaCarrello();
-        return prezzoTotale;
+    private float prezzoTotaleForProd(ProdottoBean prod, int id) throws SQLException {
+        return prodModel.doRetrievePrezzoOrdine(prod.getIDProdotto(), id) * prod.getQuantitaCarrello();
     }
 
     /**
