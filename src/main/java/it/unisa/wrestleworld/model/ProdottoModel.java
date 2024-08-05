@@ -624,7 +624,7 @@ public class ProdottoModel implements ProdottoDAO {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int idProdotto = rs.getInt("ID_Prodotto");
+                int idProdotto = rs.getInt(IDPROD_PARAM);
                 if (!aggiunti.contains(idProdotto)) {
                     ProdottoBean prod = new ProdottoBean();
                     prod.setIDProdotto(rs.getInt(IDPROD_PARAM));
@@ -688,7 +688,7 @@ public class ProdottoModel implements ProdottoDAO {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                prezzo = rs.getFloat("Prezzo");
+                prezzo = rs.getFloat(PREZZO_PARAM);
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
@@ -892,25 +892,17 @@ public class ProdottoModel implements ProdottoDAO {
             inserisciTaglie(conn, idProdotto, taglie);
             inserisciCategorie(conn, idProdotto, categorie);
 
-            conn.commit(); // Commit della transazione
+            conn.commit();
         } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback(); // Rollback in caso di errore
-                } catch (SQLException rollbackEx) {
-                    logger.log(Level.SEVERE, "Rollback failed after error in transaction", rollbackEx);
-                }
-            }
-            String contextInfo = String.format("Failed to save product [ID: %d, Nome: %s]", prod.getIDProdotto(), prod.getNomeProdotto());
-            logger.log(Level.SEVERE, contextInfo, e);
-            throw new SQLException("Error while saving product: " + contextInfo, e);
+            logger.log(Level.WARNING, e.getMessage());
         } finally {
-            if (conn != null) {
-                try {
+            // chiusura Connection
+            try {
+                if (conn != null) {
                     conn.close();
-                } catch (SQLException closeEx) {
-                    logger.log(Level.WARNING, "Failed to close connection", closeEx);
                 }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
             }
         }
     }

@@ -19,6 +19,8 @@ public class OrdineModel implements OrdineDAO {
     private static final String TABLE_PRODOTTO = "Prodotto";
 
     private static final String IDORDINE_PARAM = "ID_Ordine";
+    private static final String DATA_ORDINE_PARAM = "Data_ordine";
+    private static final String TOTALE_ORDINE_PARAM = "Totale";
 
     static final ProdottoDAO prodModel = new ProdottoModel();
 
@@ -133,7 +135,7 @@ public class OrdineModel implements OrdineDAO {
      * @return
      * @throws SQLException
      */
-    public synchronized OrdineBean doRetrieveOrdineById (int idOrdine) throws SQLException {
+    public synchronized OrdineBean doRetrieveOrdineByOrderId(int idOrdine) throws SQLException {
         OrdineBean ordine = null;
 
         Connection conn = null;
@@ -153,8 +155,8 @@ public class OrdineModel implements OrdineDAO {
             if (rs.next()) {
                 ordine = new OrdineBean();
                 ordine.setIdOrdine(rs.getInt(IDORDINE_PARAM));
-                ordine.setDataOrdine(rs.getDate("Data_ordine"));
-                ordine.setPrezzoTotaleOrdine(rs.getFloat("Totale"));
+                ordine.setDataOrdine(rs.getDate(DATA_ORDINE_PARAM));
+                ordine.setPrezzoTotaleOrdine(rs.getFloat(TOTALE_ORDINE_PARAM));
 
                 UtenteBean utente = new UtenteBean();
                 utente.setEmail(rs.getString("Email"));
@@ -211,8 +213,8 @@ public class OrdineModel implements OrdineDAO {
                 OrdineBean ordine = new OrdineBean();
 
                 ordine.setIdOrdine(rs.getInt(IDORDINE_PARAM));
-                ordine.setDataOrdine(rs.getDate("Data_ordine"));
-                ordine.setPrezzoTotaleOrdine(rs.getFloat("Totale"));
+                ordine.setDataOrdine(rs.getDate(DATA_ORDINE_PARAM));
+                ordine.setPrezzoTotaleOrdine(rs.getFloat(TOTALE_ORDINE_PARAM));
 
                 ordini.add(ordine);
             }
@@ -363,8 +365,8 @@ public class OrdineModel implements OrdineDAO {
             while (rs.next()) {
                 OrdineBean ordine = new OrdineBean();
                 ordine.setIdOrdine(rs.getInt(IDORDINE_PARAM));
-                ordine.setDataOrdine(rs.getDate("Data_ordine"));
-                ordine.setPrezzoTotaleOrdine(rs.getFloat("Totale"));
+                ordine.setDataOrdine(rs.getDate(DATA_ORDINE_PARAM));
+                ordine.setPrezzoTotaleOrdine(rs.getFloat(TOTALE_ORDINE_PARAM));
 
                 UtenteBean utente = new UtenteBean();
                 utente.setEmail(rs.getString("Email"));

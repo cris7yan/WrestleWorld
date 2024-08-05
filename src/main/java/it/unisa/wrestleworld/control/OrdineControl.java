@@ -252,10 +252,10 @@ public class OrdineControl extends HttpServlet {
     private void generaFattura(HttpServletRequest request, HttpServletResponse response) {
         try {
             int id = Integer.parseInt(request.getParameter("IdOrdine"));
-            String email = ordineModel.doRetrieveOrdineById(id).getUtenteOrdine().getEmail();
+            String email = ordineModel.doRetrieveOrdineByOrderId(id).getUtenteOrdine().getEmail();
 
             String nomeCognome = utModel.doRetrieveByEmail(email).getNome() + " " + utModel.doRetrieveByEmail(email).getCognome();
-            Date data = ordineModel.doRetrieveOrdineById(id).getDataOrdine();
+            Date data = ordineModel.doRetrieveOrdineByOrderId(id).getDataOrdine();
 
             List<ProdottoBean> prodotti = ordineModel.doRetrieveOrdineByID(id);
             int limit = 21;
@@ -432,8 +432,7 @@ public class OrdineControl extends HttpServlet {
      * @return
      */
     private float prezzoForProd (ProdottoBean prod, int id) throws SQLException {
-        float prezzo = 0;
-        prezzo = prodModel.doRetrievePrezzoOrdine(prod.getIDProdotto(), id);
+        float prezzo = prodModel.doRetrievePrezzoOrdine(prod.getIDProdotto(), id);
         return prezzo;
     }
 
@@ -443,10 +442,8 @@ public class OrdineControl extends HttpServlet {
      * @return
      */
     private float prezzoTotaleForProd (ProdottoBean prod, int id) throws SQLException {
-        float prezzo = 0;
-        float prezzoTotale = 0;
-        prezzo = prodModel.doRetrievePrezzoOrdine(prod.getIDProdotto(), id);
-        prezzoTotale = prezzo * prod.getQuantitaCarrello();
+        float prezzo = prodModel.doRetrievePrezzoOrdine(prod.getIDProdotto(), id);
+        float prezzoTotale = prezzo * prod.getQuantitaCarrello();
         return prezzoTotale;
     }
 
