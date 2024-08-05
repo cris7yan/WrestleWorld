@@ -361,6 +361,8 @@ public class AdminControl extends HttpServlet {
         }
     }
 
+    // Sotto funzioni per la funzione creaNuovoProdotto
+
     private ProdottoBean prelevaDatiProdotto(HttpServletRequest request) {
         String nome = request.getParameter("nome");
         String descrizione = request.getParameter("descrizione");
@@ -519,51 +521,18 @@ public class AdminControl extends HttpServlet {
      * @throws IOException
      */
     private void salvaImmagine(String path2, Part imgFile) throws IOException {
-        // Sanitizzazione del percorso
-        Path path = Paths.get(path2).normalize();
-        File file = path.toFile();
-
-        // Verifica che il file sia all'interno della directory prevista
-        String realPath = getServletContext().getRealPath("/");
-        try {
-            if (!file.getCanonicalPath().startsWith(realPath)) {
-                String errorMessage = String.format(
-                        "Percorso non valido: %s. Il percorso reale è: %s",
-                        path2, file.getCanonicalPath()
-                );
-                logger.log(Level.SEVERE, errorMessage);
-                throw new IOException(errorMessage);
-            }
-        } catch (IOException e) {
-            // Log dell'eccezione se non riesce a ottenere il percorso canonico
-            String errorMessage = String.format(
-                    "Errore nella verifica del percorso per: %s",
-                    path2
-            );
-            logger.log(Level.SEVERE, errorMessage, e);
-            throw e; // Rilancia l'eccezione originale
-        }
-
-        // Salvataggio dell'immagine
-        try (FileOutputStream fos = new FileOutputStream(file);
+        try (FileOutputStream fos = new FileOutputStream(path2);
              InputStream is = imgFile.getInputStream()) {
-
             byte[] buffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = is.read(buffer)) != -1) {
                 fos.write(buffer, 0, bytesRead);
             }
-
         } catch (IOException e) {
-            String errorMessage = String.format(
-                    "Errore nel salvataggio dell'immagine. Percorso: %s, File: %s",
-                    path2, file.getAbsolutePath()
-            );
-            logger.log(Level.SEVERE, errorMessage, e);
-            throw new IOException(errorMessage, e);
+            logger.log(Level.SEVERE, "Errore nel salvataggio dell'immagine", e);
+            throw e;
         }
     }
-
 
 
     /**
