@@ -44,7 +44,6 @@
             <a href="./OrdineControl?action=visualizzaDettagliOrdine&idOrdine=<%= ordine.getIdOrdine() %>">
                 <button>Visualizza dettagli</button>
             </a>
-            <button>Scarica fattura</button>
         </div>
 
         <%

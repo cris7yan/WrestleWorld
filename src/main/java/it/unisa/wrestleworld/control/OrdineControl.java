@@ -2,6 +2,10 @@ package it.unisa.wrestleworld.control;
 
 import it.unisa.wrestleworld.model.*;
 import it.unisa.wrestleworld.util.Carrello;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,12 +14,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,10 +33,14 @@ public class OrdineControl extends HttpServlet {
 
     private static final String EMAIL_PARAM = "email";
 
+    private static String fatturePath = "fatture";
+    private static String templateFatturePath = "templatefattura";
+
     static OrdineDAO ordineModel = new OrdineModel();
     static ProdottoDAO prodModel = new ProdottoModel();
     static IndirizzoDAO indirizzoModel = new IndirizzoModel();
     static MetodoPagamentoDAO metodoPagamentoModel = new MetodoPagamentoModel();
+    static UtenteDAO utModel = new UtenteModel();
 
     private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
     private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
@@ -64,6 +75,9 @@ public class OrdineControl extends HttpServlet {
                         break;
                     case "checkout":
                         checkout(request, response);
+                        break;
+                    case "generaFattura":
+                        generaFattura(request, response);
                         break;
                     default:
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
@@ -227,6 +241,222 @@ public class OrdineControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
+    }
+
+
+    /**
+     * funzione che genera una fattura di un ordine ad un utente
+     * @param request
+     * @param response
+     */
+    private void generaFattura(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = Integer.parseInt(request.getParameter("IdOrdine"));
+            String email = ordineModel.doRetrieveOrdineById(id).getUtenteOrdine().getEmail();
+
+            String nomeCognome = utModel.doRetrieveByEmail(email).getNome() + " " + utModel.doRetrieveByEmail(email).getCognome();
+            Date data = ordineModel.doRetrieveOrdineById(id).getDataOrdine();
+
+            List<ProdottoBean> prodotti = ordineModel.doRetrieveOrdineByID(id);
+            int limit = 21;
+            int numProd = 0;
+
+            String servletPath = request.getServletContext().getRealPath("");
+            String totalPath = servletPath + File.separator  + fatturePath + File.separator  + "WrestleWorldFattura" + id + ".pdf";
+
+            File file = new File(servletPath + templateFatturePath + File.separator  + "WrestleWordFatturapagina1.pdf");
+            PDDocument fattura = PDDocument.load(file);
+            PDPage page = fattura.getDocumentCatalog().getPages().get(0);
+            PDPageContentStream contentStream = new PDPageContentStream(fattura, page, PDPageContentStream.AppendMode.APPEND, true, true);
+            PDType1Font font = PDType1Font.TIMES_ROMAN;
+
+            //Coordinate
+
+            //Nome e cognome cliente
+            float coordinataX1 = 422;
+            float coordinataY1 = 718.50f;
+
+            //Numero fattura
+            float coordinataX2 = 450;
+            float coordinataY2 = 761.55f;
+
+            //Data ordine
+            float coordinataX3 = 450;
+            float coordinataY3 = 749.5f;
+
+            //Prodotto
+            float coordinataProdottoX = 83;
+            float coordinataProdottoY = 611.8f;
+
+            contentStream.beginText();
+            contentStream.setFont(font, 12);
+            contentStream.newLineAtOffset(coordinataX2, coordinataY2);
+            contentStream.showText(String.valueOf(id));
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 12);
+            contentStream.newLineAtOffset(coordinataX3, coordinataY3);
+            contentStream.showText(String.valueOf(data));
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 12);
+            contentStream.newLineAtOffset(coordinataX1, coordinataY1);
+            contentStream.showText(nomeCognome);
+            contentStream.endText();
+
+            int quantita = 0;
+            float prezzo = 0;
+            float prezzoTotale = 0;
+            String descrizione = "";
+
+            float prezzoSpesa = 0;
+
+            for(ProdottoBean prod : prodotti) {
+                numProd++;
+                if(numProd > limit ) {
+                    file = new File(servletPath + templateFatturePath +  File.separator  + "WrestleWordFatturapagina2.pdf");
+                    page = PDDocument.load(file).getDocumentCatalog().getPages().get(0);
+
+                    fattura.addPage(page);
+
+                    contentStream.close();
+
+                    coordinataProdottoY = 731.7f;
+                    contentStream = new PDPageContentStream(fattura, page, PDPageContentStream.AppendMode.APPEND, true, true);
+                    numProd = 1;
+                    limit = 26;
+                }
+
+                //Definisci il prodotto da scrivere
+
+                quantita = quantitaForProd(prod);
+                prezzo = prezzoForProd(prod, id);
+                prezzoTotale = prezzoTotaleForProd(prod, id);
+                descrizione = getNomeProd(prod);
+                prezzoSpesa += prezzoTotale;
+
+                contentStream.beginText();
+                contentStream.setFont(font, 12);
+                contentStream.newLineAtOffset(coordinataProdottoX, coordinataProdottoY);
+                contentStream.showText(String.valueOf(quantita));
+                contentStream.endText();
+                coordinataProdottoX = 126.5f;
+
+                contentStream.beginText();
+                contentStream.setFont(font, 12);
+                contentStream.newLineAtOffset(coordinataProdottoX, coordinataProdottoY);
+                contentStream.showText(descrizione);
+                contentStream.endText();
+                coordinataProdottoX = 360;
+
+                contentStream.beginText();
+                contentStream.setFont(font, 12);
+                contentStream.newLineAtOffset(coordinataProdottoX, coordinataProdottoY);
+                contentStream.showText(String.valueOf(prezzo + " €"));
+                contentStream.endText();
+                coordinataProdottoX = 455.5f;
+
+                contentStream.beginText();
+                contentStream.setFont(font, 12);
+                contentStream.newLineAtOffset(coordinataProdottoX, coordinataProdottoY);
+                contentStream.showText(String.valueOf(prezzoTotale + " €"));
+                contentStream.endText();
+
+                coordinataProdottoX = 83;
+                coordinataProdottoY = coordinataProdottoY - 24.9f;
+
+            }
+
+            coordinataProdottoX = 360;
+            contentStream.beginText();
+            contentStream.setFont(font, 12);
+            contentStream.setNonStrokingColor(new Color(255, 0, 0));
+            contentStream.newLineAtOffset(coordinataProdottoX, coordinataProdottoY);
+            contentStream.showText(String.valueOf("TOTALE"));
+            contentStream.endText();
+
+            coordinataProdottoX = 455.5f;
+
+            Locale.setDefault(Locale.US);
+            String prezzoArrotondato;
+            Locale.setDefault(Locale.ITALY);
+
+            prezzoSpesa = prezzoSpesa + 5.0f; //spedizione
+
+            prezzoArrotondato = String.format("%.2f", prezzoSpesa);
+
+            contentStream.beginText();
+            contentStream.setFont(font, 12);
+            contentStream.setNonStrokingColor(new Color(255, 0, 0));
+            contentStream.newLineAtOffset(coordinataProdottoX, coordinataProdottoY);
+            contentStream.showText(String.valueOf(prezzoArrotondato + " €"));
+            contentStream.endText();
+
+            contentStream.close();
+            fattura.save(totalPath);
+            fattura.close();
+
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.OPEN)) {
+                    desktop.open(new File(totalPath));
+                }
+            }
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("ordini.jsp");
+            dispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
+            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+    // Metodi utili per la generazione della fattura
+
+    /**
+     * restituisce la quantità del prodotto acquistato
+     * @param prod
+     * @return
+     */
+    private int quantitaForProd(ProdottoBean prod) {
+        int quantita = prod.getQuantitaCarrello();
+        return quantita;
+    }
+
+    /**
+     * restituisce il prezzo del prodotto acquistato
+     * @param prod
+     * @return
+     */
+    private float prezzoForProd (ProdottoBean prod, int id) throws SQLException {
+        float prezzo = 0;
+        prezzo = prodModel.doRetrievePrezzoOrdine(prod.getIDProdotto(), id);
+        return prezzo;
+    }
+
+    /**
+     * restituisce il prezzo totale del prodotto per la quantità acquistato
+     * @param prod
+     * @return
+     */
+    private float prezzoTotaleForProd (ProdottoBean prod, int id) throws SQLException {
+        float prezzo = 0;
+        float prezzoTotale = 0;
+        prezzo = prodModel.doRetrievePrezzoOrdine(prod.getIDProdotto(), id);
+        prezzoTotale = prezzo * prod.getQuantitaCarrello();
+        return prezzoTotale;
+    }
+
+    /**
+     * restituisce il nome del prodotto acquistato
+     * @param prod
+     * @return
+     */
+    private String getNomeProd (ProdottoBean prod) {
+        return prod.getNomeProdotto();
     }
 
 }

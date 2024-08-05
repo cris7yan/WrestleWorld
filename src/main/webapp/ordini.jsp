@@ -52,7 +52,9 @@
             <a href="./OrdineControl?action=visualizzaDettagliOrdine&idOrdine=<%=ordine.getIdOrdine()%>">
                 <button>Visualizza dettagli</button>
             </a>
-            <button>Scarica fattura</button>
+            <%  if("Utente".equals(tipoUtente)) { %>
+                <button onclick="location.href='OrdineControl?action=generaFattura&IdOrdine=<%=ordine.getIdOrdine()%>'">Scarica fattura</button>
+            <%  }  %>
         </div>
 
         <%

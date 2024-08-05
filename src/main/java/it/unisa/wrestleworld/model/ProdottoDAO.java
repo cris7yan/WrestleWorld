@@ -16,6 +16,7 @@ public interface ProdottoDAO {
     List<ProdottoBean> doRetrieveBestOnOffer () throws SQLException;
     void doDecreaseProductQuantity (int id, String taglia, int quantity) throws SQLException;
     List<ProdottoBean> getProdottiOrdinatiPerCategoria() throws SQLException;
+    float doRetrievePrezzoOrdine(int idProd, int idOrdine) throws SQLException;
 
     void doSaveProduct (ProdottoBean prod, List<String> immagini, List<TagliaProdottoBean> taglie, List<CategoriaBean> categorie) throws SQLException;
     void doDeleteProduct (int id) throws SQLException;

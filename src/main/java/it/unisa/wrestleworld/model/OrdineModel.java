@@ -128,6 +128,65 @@ public class OrdineModel implements OrdineDAO {
 
 
     /**
+     * funzione che restituisce un determinato ordine
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public synchronized OrdineBean doRetrieveOrdineById (int idOrdine) throws SQLException {
+        OrdineBean ordine = null;
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT o.*, u.Email, u.Nome, u.Cognome FROM " + TABLE_ORDINE + " o " +
+                "JOIN Utente u ON o.EmailUtente = u.Email " +
+                "WHERE o.ID_Ordine = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, idOrdine);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                ordine = new OrdineBean();
+                ordine.setIdOrdine(rs.getInt(IDORDINE_PARAM));
+                ordine.setDataOrdine(rs.getDate("Data_ordine"));
+                ordine.setPrezzoTotaleOrdine(rs.getFloat("Totale"));
+
+                UtenteBean utente = new UtenteBean();
+                utente.setEmail(rs.getString("Email"));
+                utente.setNome(rs.getString("Nome"));
+                utente.setCognome(rs.getString("Cognome"));
+
+                ordine.setUtenteOrdine(utente);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return ordine;
+    }
+
+
+    /**
      * funzione che recupera tutti gli ordini di un utente
      * @param email
      * @return

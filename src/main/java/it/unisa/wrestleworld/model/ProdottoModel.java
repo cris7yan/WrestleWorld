@@ -583,6 +583,11 @@ public class ProdottoModel implements ProdottoDAO {
 
     // Metodi per la gestione dei filtri
 
+    /**
+     * restituisce una lista di prodotti ordinata in base al nome di categoria
+     * @return
+     * @throws SQLException
+     */
     public synchronized List<ProdottoBean> getProdottiOrdinatiPerCategoria() throws SQLException {
         List<ProdottoBean> prodotti = new ArrayList<>();
 
@@ -656,6 +661,55 @@ public class ProdottoModel implements ProdottoDAO {
             }
         }
         return prodotti;
+    }
+
+
+    /**
+     * ritorna il prezzo del prodotto appartenente ad un ordine
+     * @param idProd
+     * @param idOrdine
+     * @return
+     * @throws SQLException
+     */
+    public synchronized float doRetrievePrezzoOrdine(int idProd, int idOrdine) throws SQLException {
+        float prezzo = 0;
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String query = "SELECT Prezzo FROM ComposizioneOrdine WHERE ID_Prodotto = ? AND ID_Ordine = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(query);
+
+            ps.setInt(1, idProd);
+            ps.setInt(2, idOrdine);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                prezzo = rs.getFloat("Prezzo");
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        } finally {
+            // Chiusura PreparedStatement e Connection
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_PS, e);
+            }
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
+            }
+        }
+        return prezzo;
     }
 
 
