@@ -67,6 +67,8 @@ public class CategoriaControl extends HttpServlet {
                         errorDispatcher.forward(request, response);
                         break;
                 }
+            } else {
+                visualizzaCategorie(request, response);
             }
         } catch (ServletException | IOException e) {
             request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);

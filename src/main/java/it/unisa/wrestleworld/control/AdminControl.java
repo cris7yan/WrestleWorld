@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigDecimal;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -586,7 +585,33 @@ public class AdminControl extends HttpServlet {
      * @throws IOException
      */
     private void salvaImmagine(String path2, Part imgFile, HttpServletResponse response) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(path2);
+        // Sanitizzazione del percorso
+        Path path = Paths.get(path2).normalize();
+        File file = path.toFile();
+
+        // Verifica che il file sia all'interno della directory prevista
+        String realPath = getServletContext().getRealPath("/");
+        try {
+            if (!file.getCanonicalPath().startsWith(realPath)) {
+                String errorMessage = String.format(
+                        "Percorso non valido: %s. Il percorso reale è: %s",
+                        path2, file.getCanonicalPath()
+                );
+                logger.log(Level.SEVERE, errorMessage);
+                throw new IOException(errorMessage);
+            }
+        } catch (IOException e) {
+            // Log dell'eccezione se non riesce a ottenere il percorso canonico
+            String errorMessage = String.format(
+                    "Errore nella verifica del percorso per: %s",
+                    path2
+            );
+            logger.log(Level.SEVERE, errorMessage, e);
+            throw e; // Rilancia l'eccezione originale
+        }
+
+        // Salvataggio dell'immagine
+        try (FileOutputStream fos = new FileOutputStream(file);
              InputStream is = imgFile.getInputStream()) {
             byte[] buffer = new byte[1024];
             int bytesRead;
