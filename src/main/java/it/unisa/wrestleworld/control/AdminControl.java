@@ -601,13 +601,7 @@ public class AdminControl extends HttpServlet {
                 throw new IOException(errorMessage);
             }
         } catch (IOException e) {
-            // Log dell'eccezione se non riesce a ottenere il percorso canonico
-            String errorMessage = String.format(
-                    "Errore nella verifica del percorso per: %s",
-                    path2
-            );
-            logger.log(Level.SEVERE, errorMessage, e);
-            throw e; // Rilancia l'eccezione originale
+            response.sendRedirect(ERROR_PAGE);
         }
 
         // Salvataggio dell'immagine
