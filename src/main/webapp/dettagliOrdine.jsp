@@ -7,6 +7,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
+    session = request.getSession();
+    String tipoUtente = (String) session.getAttribute("tipo");
+    if (tipoUtente == null) {
+        response.sendRedirect("page403.jsp");
+        return;
+    }
+%>
+
+<%
     List<ProdottoBean> prodottiOrdine = (List<ProdottoBean>) request.getAttribute("prodottiOrdine");
 %>
 

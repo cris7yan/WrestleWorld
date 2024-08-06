@@ -6,6 +6,16 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page errorPage="pageError.jsp" %>
+
+<%
+    session = request.getSession();
+    String tipoUtente = (String) session.getAttribute("tipo");
+    if (tipoUtente == null) {
+        response.sendRedirect("page403.jsp");
+        return;
+    }
+%>
 
 <%
     List<IndirizzoBean> indirizzi = (List<IndirizzoBean>) request.getAttribute("indirizzi");

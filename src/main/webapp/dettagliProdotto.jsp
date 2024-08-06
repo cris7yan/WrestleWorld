@@ -8,6 +8,7 @@
 <%@ page import="it.unisa.wrestleworld.model.TagliaProdottoBean" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page errorPage="pageError.jsp" %>
 
 <%
     Object prod = request.getAttribute("prodotto");
@@ -113,6 +114,8 @@
             }
         %>
 
+        <p class="product-sizes">Taglie disponibili:</p>
+        <% if ("Admin".equals(tipoUtente)) { %>
         <div class="admin-add-category-container">
             <button onclick="mostraAggiungiCategoria()">Aggiungi Categoria</button>
         </div>
@@ -122,8 +125,6 @@
             <button onclick="aggiungiAppartenenza('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Appartenenza</button>
         </div>
 
-        <p class="product-sizes">Taglie disponibili:</p>
-        <% if ("Admin".equals(tipoUtente)) { %>
         <div class="admin-quantita-container">
             <table>
                 <tr>

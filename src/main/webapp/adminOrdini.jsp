@@ -6,6 +6,16 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page errorPage="pageError.jsp" %>
+
+<%
+    session = request.getSession();
+    String tipoUtente = (String) session.getAttribute("tipo");
+    if (tipoUtente == null || tipoUtente.equals("Utente")) {
+        response.sendRedirect("page403.jsp");
+        return;
+    }
+%>
 
 <%
     List<OrdineBean> ordini = (List<OrdineBean>) request.getAttribute("ordini");

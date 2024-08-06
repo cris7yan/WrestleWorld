@@ -6,6 +6,16 @@
 <%@ page import="java.util.List" %>
 <%@ page import="it.unisa.wrestleworld.model.MetodoPagamentoBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page errorPage="pageError.jsp" %>
+
+<%
+    session = request.getSession();
+    String tipoUtente = (String) session.getAttribute("tipo");
+    if (tipoUtente == null) {
+        response.sendRedirect("page403.jsp");
+        return;
+    }
+%>
 
 <%
     List<IndirizzoBean> indirizziUtente = (List<IndirizzoBean>) request.getAttribute("indirizziUtente");

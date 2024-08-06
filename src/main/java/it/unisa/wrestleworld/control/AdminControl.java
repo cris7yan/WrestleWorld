@@ -20,10 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.nio.file.Path;
 
 @WebServlet("/AdminControl")
 @MultipartConfig
@@ -41,10 +38,13 @@ public class AdminControl extends HttpServlet {
     private static final String QUANTITA_PARAM = "quantita";
     private static final String UTF_PARAM = "UTF-8";
     private static final String APPLICATION_JSON_PARAM = "application/json";
+    private static final String ERROR_PARAM = "error";
 
-    private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
-    private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
+    private static final String ERROR_PAGE = "/pageError.jsp";
+
     private static final String MSG_ERROR_NUMBER = "ID o quantità non validi";
+    private static final String ERROR_MESSAGE = "Si è verificato un errore: ";
+    private static final String ERROR_MESSAGE_PAGE_ERROR = "Errore durante il reindirizzamento alla pagina di errore";
 
 
     public AdminControl() {
@@ -106,14 +106,19 @@ public class AdminControl extends HttpServlet {
                         aggiungiAppartenenzaProdotto(request, response);
                         break;
                     default:
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+                        RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+                        errorDispatcher.forward(request, response);
                         break;
                 }
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione mancante");
             }
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -129,7 +134,13 @@ public class AdminControl extends HttpServlet {
         try {
             doGet(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -150,7 +161,13 @@ public class AdminControl extends HttpServlet {
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/adminUtenti.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -177,7 +194,13 @@ public class AdminControl extends HttpServlet {
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/ordini.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -200,7 +223,13 @@ public class AdminControl extends HttpServlet {
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/adminOrdini.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -230,7 +259,13 @@ public class AdminControl extends HttpServlet {
             out.print("{\"message\": \"Quantità aggiornata con successo\"}");
             out.flush();
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (NumberFormatException e) {
@@ -261,7 +296,13 @@ public class AdminControl extends HttpServlet {
 
             response.sendRedirect("catalogo.jsp");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (NumberFormatException e) {
@@ -289,7 +330,13 @@ public class AdminControl extends HttpServlet {
             out.print("{\"message\": \"Prodotto reso indisponibile con successo\"}");
             out.flush();
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (NumberFormatException e) {
@@ -317,7 +364,13 @@ public class AdminControl extends HttpServlet {
             out.print("{\"message\": \"Prodotto reso disponibile con successo\"}");
             out.flush();
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (NumberFormatException e) {
@@ -342,7 +395,7 @@ public class AdminControl extends HttpServlet {
             ProdottoBean prodotto = prelevaDatiProdotto(request);
 
             // Preleva le immagini
-            List<String> immagini = prelevaImmagini(request);
+            List<String> immagini = prelevaImmagini(request, response);
 
             // Preleva le taglie
             List<TagliaProdottoBean> taglie = prelevaTaglie(request);
@@ -355,7 +408,13 @@ public class AdminControl extends HttpServlet {
 
             response.sendRedirect("catalogo.jsp");
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, "Errore nella creazione del prodotto", e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, "Errore nel database", e);
         }
@@ -389,14 +448,14 @@ public class AdminControl extends HttpServlet {
         return prodotto;
     }
 
-    private List<String> prelevaImmagini(HttpServletRequest request) throws IOException, ServletException {
+    private List<String> prelevaImmagini(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<String> immagini = new ArrayList<>();
         for (Part part : request.getParts()) {
             if ("immagini".equals(part.getName())) {
                 String fileName = extractFileName(part);
                 if (!fileName.isEmpty()) {
                     String filePath = getServletContext().getRealPath("/") + "img/" + "prodotti/" + fileName;
-                    salvaImmagine(filePath, part);
+                    salvaImmagine(filePath, part, response);
                     immagini.add(fileName);
                 }
             }
@@ -471,7 +530,7 @@ public class AdminControl extends HttpServlet {
             String filePath = "";
             if (!fileName.isEmpty()) {
                 filePath = getServletContext().getRealPath("/") + "img/" + "categorie/" + fileName;
-                salvaImmagine(filePath, part);
+                salvaImmagine(filePath, part, response);
             }
 
             // Crea l'oggetto CategoriaBean
@@ -485,7 +544,13 @@ public class AdminControl extends HttpServlet {
 
             response.sendRedirect("CategoriaControl?action=visualizzaCategorie");
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, "Errore nella creazione della categoria", e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, "Errore nel database", e);
         }
@@ -520,7 +585,7 @@ public class AdminControl extends HttpServlet {
      * @param response
      * @throws IOException
      */
-    private void salvaImmagine(String path2, Part imgFile) throws IOException {
+    private void salvaImmagine(String path2, Part imgFile, HttpServletResponse response) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(path2);
              InputStream is = imgFile.getInputStream()) {
             byte[] buffer = new byte[1024];
@@ -529,8 +594,7 @@ public class AdminControl extends HttpServlet {
                 fos.write(buffer, 0, bytesRead);
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Errore nel salvataggio dell'immagine", e);
-            throw e;
+            response.sendRedirect(ERROR_PAGE);
         }
     }
 

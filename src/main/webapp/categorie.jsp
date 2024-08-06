@@ -7,6 +7,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page errorPage="pageError.jsp" %>
 
 <%
     List<CategoriaBean> superstar = (List<CategoriaBean>) request.getAttribute("superstar");

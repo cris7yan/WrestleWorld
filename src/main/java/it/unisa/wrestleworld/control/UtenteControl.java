@@ -27,17 +27,18 @@ public class UtenteControl extends HttpServlet {
     static IndirizzoDAO indirizzoModel = new IndirizzoModel();
     static MetodoPagamentoDAO metodoPagamentoModel = new MetodoPagamentoModel();
 
-    private static final String MSG_ERROR_INDEXPAGE = "Errore durante il reindirizzamento alla pagina principale";
-    private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
-    private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
-
     private static final String EMAIL_PARAM = "email";
     private static final String PASSWORD_PARAM = "password";
     private static final String NOME_PARAM = "nome";
     private static final String COGNOME_PARAM = "cognome";
     private static final String DATA_NASCITA_PARAM = "dataNascita";
+    private static final String ERROR_PARAM = "error";
 
+    private static final String ERROR_PAGE = "/pageError.jsp";
     private static final String INDEX_PAGE = "./index.jsp";
+
+    private static final String ERROR_MESSAGE = "Si è verificato un errore: ";
+    private static final String ERROR_MESSAGE_PAGE_ERROR = "Errore durante il reindirizzamento alla pagina di errore";
 
 
     public UtenteControl() {
@@ -97,16 +98,21 @@ public class UtenteControl extends HttpServlet {
                         aggiungiMetodoPagamento(request, response);
                         break;
                     default:
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+                        RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+                        errorDispatcher.forward(request, response);
                         break;
                 }
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione mancante");
             }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -122,7 +128,13 @@ public class UtenteControl extends HttpServlet {
         try {
             doGet(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -164,7 +176,13 @@ public class UtenteControl extends HttpServlet {
                 }
             }
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -181,8 +199,14 @@ public class UtenteControl extends HttpServlet {
         request.getSession().invalidate();
         try {
             response.sendRedirect(INDEX_PAGE);
-        } catch (IOException ex) {
-            logger.log(Level.WARNING, MSG_ERROR_INDEXPAGE, ex);
+        } catch (IOException e) {
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -231,7 +255,13 @@ public class UtenteControl extends HttpServlet {
             session.setAttribute(COGNOME_PARAM, utente.getCognome());
             session.setAttribute(DATA_NASCITA_PARAM, utente.getDataNascita());
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -258,7 +288,13 @@ public class UtenteControl extends HttpServlet {
             }
             out.flush();
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -290,7 +326,13 @@ public class UtenteControl extends HttpServlet {
                 out.flush();
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -326,7 +368,13 @@ public class UtenteControl extends HttpServlet {
             // Reindirizza alla pagina del profilo
             response.sendRedirect("./profiloUtente.jsp");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -356,7 +404,13 @@ public class UtenteControl extends HttpServlet {
             RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/indirizzi.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -394,7 +448,13 @@ public class UtenteControl extends HttpServlet {
             indirizzoModel.doSave(indirizzo, utente);
             response.sendRedirect("./indirizzi.jsp");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -414,7 +474,13 @@ public class UtenteControl extends HttpServlet {
             indirizzoModel.doDelete(idIndirizzo);
             response.sendRedirect("./indirizzi.jsp");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -444,7 +510,13 @@ public class UtenteControl extends HttpServlet {
             RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/metodiPagamento.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -478,7 +550,13 @@ public class UtenteControl extends HttpServlet {
             metodoPagamentoModel.doSave(metodo, utente);
             response.sendRedirect("./metodiPagamento.jsp");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -498,7 +576,13 @@ public class UtenteControl extends HttpServlet {
             metodoPagamentoModel.doDelete(idMetodo);
             response.sendRedirect("./metodiPagamento.jsp");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }

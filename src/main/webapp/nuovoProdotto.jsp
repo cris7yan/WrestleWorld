@@ -6,6 +6,16 @@
 <%@ page import="java.util.List" %>
 <%@ page import="it.unisa.wrestleworld.model.CategoriaBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page errorPage="pageError.jsp" %>
+
+<%
+    session = request.getSession();
+    String tipoUtente = (String) session.getAttribute("tipo");
+    if (tipoUtente == null || tipoUtente.equals("Utente")) {
+        response.sendRedirect("page403.jsp");
+        return;
+    }
+%>
 
 <%
     Map<String, List<CategoriaBean>> categoriePerTipo = (Map<String, List<CategoriaBean>>) request.getAttribute("categoriePerTipo");

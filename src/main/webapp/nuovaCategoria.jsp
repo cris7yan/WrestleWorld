@@ -3,6 +3,16 @@
   User: cristyanesposito
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page errorPage="pageError.jsp" %>
+
+<%
+    session = request.getSession();
+    String tipoUtente = (String) session.getAttribute("tipo");
+    if (tipoUtente == null || tipoUtente.equals("Utente")) {
+        response.sendRedirect("page403.jsp");
+        return;
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="it">

@@ -30,10 +30,13 @@ public class ProdottoControl extends HttpServlet {
     private static final String CARRELLO_PARAM = "carrello";
     private static final String ID_PROD_PARAM = "IDProd";
     private static final String RICERCA_PARAM = "ricerca";
+    private static final String ERROR_PARAM = "error";
 
-    private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
-    private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
+    private static final String ERROR_PAGE = "/pageError.jsp";
+
     private static final String MSG_ERROR_RECUPERO_DATI_HOMEPAGE = "Errore durante il recupero dei dati per la HomePage ";
+    private static final String ERROR_MESSAGE = "Si è verificato un errore: ";
+    private static final String ERROR_MESSAGE_PAGE_ERROR = "Errore durante il reindirizzamento alla pagina di errore";
 
     public ProdottoControl () {
         super();
@@ -88,14 +91,21 @@ public class ProdottoControl extends HttpServlet {
                         visualizzaProdottiCategoria(request, response);
                         break;
                     default:
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+                        RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+                        errorDispatcher.forward(request, response);
                         break;
                 }
             } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione mancante");
+                visualizzaHomePage(request, response);
             }
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -112,7 +122,13 @@ public class ProdottoControl extends HttpServlet {
         try {
             doGet(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -150,8 +166,13 @@ public class ProdottoControl extends HttpServlet {
             logger.log(Level.SEVERE, MSG_ERROR_RECUPERO_DATI_HOMEPAGE, e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, MSG_ERROR_RECUPERO_DATI_HOMEPAGE);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, MSG_ERROR_FORWARD);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -199,7 +220,13 @@ public class ProdottoControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -229,7 +256,13 @@ public class ProdottoControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -264,7 +297,13 @@ public class ProdottoControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -286,7 +325,13 @@ public class ProdottoControl extends HttpServlet {
             RequestDispatcher reqDispatcher = request.getRequestDispatcher("/carrello.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -323,7 +368,13 @@ public class ProdottoControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -349,7 +400,13 @@ public class ProdottoControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -377,8 +434,14 @@ public class ProdottoControl extends HttpServlet {
             reqDispatcher.forward(request, response);
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+        } catch (ServletException | IOException e) {
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 

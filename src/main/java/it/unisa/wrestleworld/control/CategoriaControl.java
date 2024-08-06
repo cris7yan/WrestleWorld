@@ -25,11 +25,13 @@ public class CategoriaControl extends HttpServlet {
 
     private static final String SUPERSTAR_PARAM = "superstar";
     private static final String PLE_PARAM = "ple";
+    private static final String ERROR_PARAM = "error";
 
+    private static final String ERROR_PAGE = "/pageError.jsp";
     private static final String CATEGORIE_PAGE = "/categorie.jsp";
 
-    private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
-    private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
+    private static final String ERROR_MESSAGE = "Si è verificato un errore: ";
+    private static final String ERROR_MESSAGE_PAGE_ERROR = "Errore durante il reindirizzamento alla pagina di errore";
 
     public CategoriaControl() {
         super();
@@ -61,14 +63,19 @@ public class CategoriaControl extends HttpServlet {
                         visualizzaCategoriePerTipo(request, response);
                         break;
                     default:
-                        visualizzaCategorie(request, response);
+                        RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+                        errorDispatcher.forward(request, response);
                         break;
                 }
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione mancante");
             }
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -85,7 +92,13 @@ public class CategoriaControl extends HttpServlet {
         try {
             doGet(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -109,7 +122,13 @@ public class CategoriaControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -133,7 +152,13 @@ public class CategoriaControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -157,7 +182,13 @@ public class CategoriaControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -179,7 +210,13 @@ public class CategoriaControl extends HttpServlet {
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 

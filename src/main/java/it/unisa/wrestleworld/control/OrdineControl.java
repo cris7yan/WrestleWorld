@@ -32,9 +32,11 @@ public class OrdineControl extends HttpServlet {
     static final Logger logger = Logger.getLogger(OrdineControl.class.getName());
 
     private static final String EMAIL_PARAM = "email";
-
+    private static final String ERROR_PARAM = "error";
     private static String fatturePath = "fatture";
     private static String templateFatturePath = "templatefattura";
+
+    private static final String ERROR_PAGE = "/pageError.jsp";
 
     static OrdineDAO ordineModel = new OrdineModel();
     static ProdottoDAO prodModel = new ProdottoModel();
@@ -42,8 +44,8 @@ public class OrdineControl extends HttpServlet {
     static MetodoPagamentoDAO metodoPagamentoModel = new MetodoPagamentoModel();
     static UtenteDAO utModel = new UtenteModel();
 
-    private static final String MSG_ERROR_FORWARD = "Errore durante il forward della richiesta";
-    private static final String MSG_ERROR_DOPOST = "Errore durante l'esecuzione di doPost";
+    private static final String ERROR_MESSAGE = "Si è verificato un errore: ";
+    private static final String ERROR_MESSAGE_PAGE_ERROR = "Errore durante il reindirizzamento alla pagina di errore";
 
     public OrdineControl () {
         super();
@@ -80,14 +82,19 @@ public class OrdineControl extends HttpServlet {
                         generaFattura(request, response);
                         break;
                     default:
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione non valida");
+                        RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+                        errorDispatcher.forward(request, response);
                         break;
                 }
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Azione mancante");
             }
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -104,7 +111,13 @@ public class OrdineControl extends HttpServlet {
         try {
             doGet(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_DOPOST, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         }
     }
 
@@ -126,7 +139,13 @@ public class OrdineControl extends HttpServlet {
             RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/ordini.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -149,7 +168,13 @@ public class OrdineControl extends HttpServlet {
             RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/dettagliOrdine.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -191,7 +216,13 @@ public class OrdineControl extends HttpServlet {
             RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/paginaAcquisto.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -237,7 +268,13 @@ public class OrdineControl extends HttpServlet {
             RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/index.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
@@ -408,7 +445,13 @@ public class OrdineControl extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("ordini.jsp");
             dispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.log(Level.SEVERE, MSG_ERROR_FORWARD, e);
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
         }
