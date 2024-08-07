@@ -39,7 +39,7 @@ public class AdminControl extends HttpServlet {
     private static final String APPLICATION_JSON_PARAM = "application/json";
     private static final String ERROR_PARAM = "error";
 
-    private static final String ERROR_PAGE = "/pageError.jsp";
+    private static final String ERROR_PAGE = "/page500.jsp";
 
     private static final String MSG_ERROR_NUMBER = "ID o quantità non validi";
     private static final String ERROR_MESSAGE = "Si è verificato un errore: ";

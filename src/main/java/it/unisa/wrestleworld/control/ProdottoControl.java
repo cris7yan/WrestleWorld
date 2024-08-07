@@ -32,7 +32,7 @@ public class ProdottoControl extends HttpServlet {
     private static final String RICERCA_PARAM = "ricerca";
     private static final String ERROR_PARAM = "error";
 
-    private static final String ERROR_PAGE = "/pageError.jsp";
+    private static final String ERROR_PAGE = "/page500.jsp";
 
     private static final String MSG_ERROR_RECUPERO_DATI_HOMEPAGE = "Errore durante il recupero dei dati per la HomePage ";
     private static final String ERROR_MESSAGE = "Si è verificato un errore: ";

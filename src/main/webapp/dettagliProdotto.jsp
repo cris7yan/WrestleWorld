@@ -8,7 +8,7 @@
 <%@ page import="it.unisa.wrestleworld.model.TagliaProdottoBean" %>
 <%@ page import="java.math.BigDecimal" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ page errorPage="pageError.jsp" %>
+<%@ page errorPage="page500.jsp" %>
 
 <%
     Object prod = request.getAttribute("prodotto");

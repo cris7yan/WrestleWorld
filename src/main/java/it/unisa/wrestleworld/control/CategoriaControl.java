@@ -27,7 +27,7 @@ public class CategoriaControl extends HttpServlet {
     private static final String PLE_PARAM = "ple";
     private static final String ERROR_PARAM = "error";
 
-    private static final String ERROR_PAGE = "/pageError.jsp";
+    private static final String ERROR_PAGE = "/page500.jsp";
     private static final String CATEGORIE_PAGE = "/categorie.jsp";
 
     private static final String ERROR_MESSAGE = "Si è verificato un errore: ";

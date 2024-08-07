@@ -6,7 +6,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page errorPage="pageError.jsp" %>
+<%@ page errorPage="page500.jsp" %>
 
 <%
     session = request.getSession();

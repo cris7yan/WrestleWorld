@@ -9,13 +9,13 @@
 <html lang="it" xml:lang="it">
 <head>
   <link href="css/pageError.css" rel="stylesheet" type="text/css">
-  <title>WrestleWorld | Error Page</title>
+  <title>WrestleWorld | Pagina 500</title>
 </head>
 <body>
 <%@ include file="navbar.jsp"%>
 
     <div class="text-error">
-      <span>Page Error</span><br>
+      <span>Pagina 500</span><br>
       <span>Attenzione!</span><br>
       <span><%= request.getAttribute("error") %></span>
     </div>

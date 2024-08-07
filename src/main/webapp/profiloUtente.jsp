@@ -3,7 +3,7 @@
   User: cristyanesposito
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ page errorPage="pageError.jsp" %>
+<%@ page errorPage="page500.jsp" %>
 
 <!DOCTYPE html>
 <html lang="it" xml:lang="it">
@@ -31,7 +31,8 @@
         <a href="./adminUtenti.jsp">Visualizza utenti</a>
         <a href="./adminOrdini.jsp">Visualizza ordini</a>
     <% } else { %>
-        <a href="./modificaDati.jsp">Modifica i tuoi dati</a>
+        <a href="./modificaDatiAccesso.jsp">Modifica i tuoi dati di accesso</a>
+        <a href="./modificaDatiPersonali.jsp">Modifica i tuoi dati personali</a>
         <a href="./indirizzi.jsp">Visualizza i tuoi indirizzi</a>
         <a href="./ordini.jsp">Visualizza i tuoi ordini</a>
         <a href="./metodiPagamento.jsp">Visualizza i tuoi metodi di pagamento</a>

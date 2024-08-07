@@ -34,7 +34,7 @@ public class UtenteControl extends HttpServlet {
     private static final String DATA_NASCITA_PARAM = "dataNascita";
     private static final String ERROR_PARAM = "error";
 
-    private static final String ERROR_PAGE = "/pageError.jsp";
+    private static final String ERROR_PAGE = "/page500.jsp";
     private static final String INDEX_PAGE = "./index.jsp";
 
     private static final String ERROR_MESSAGE = "Si è verificato un errore: ";
@@ -78,6 +78,9 @@ public class UtenteControl extends HttpServlet {
                         break;
                     case "modificaDati":
                         modificaDatiPersonali(request, response);
+                        break;
+                    case "modificaDatiAccesso":
+                        modificaDatiAccesso(request, response);
                         break;
                     case "visualizzaIndirizzi":
                         visualizzaIndirizzi(request, response);
@@ -341,7 +344,7 @@ public class UtenteControl extends HttpServlet {
 
 
     /**
-     * funzione che gestisce l'operazione della modifica dei dati di un utente
+     * funzione che gestisce l'operazione della modifica dei dati personali di un utente
      * @param request
      * @param response
      * @throws SQLException
@@ -364,6 +367,45 @@ public class UtenteControl extends HttpServlet {
             session.setAttribute(NOME_PARAM, updatedUtente.getNome());
             session.setAttribute(COGNOME_PARAM, updatedUtente.getCognome());
             session.setAttribute(DATA_NASCITA_PARAM, updatedUtente.getDataNascita());
+
+            // Reindirizza alla pagina del profilo
+            response.sendRedirect("./profiloUtente.jsp");
+        } catch (IOException e) {
+            request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
+            RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
+            try {
+                errorDispatcher.forward(request, response);
+            } catch (ServletException | IOException ex) {
+                log(ERROR_MESSAGE_PAGE_ERROR, ex);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.WARNING, e.getMessage());
+        }
+    }
+
+
+    /**
+     * funzione che gestisce l'operazione della modifica dei dati di accesso di un utente
+     * @param request
+     * @param response
+     * @throws SQLException
+     * @throws IOException
+     */
+    private void modificaDatiAccesso (HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        try {
+            HttpSession session = request.getSession();
+            String email = (String) session.getAttribute(EMAIL_PARAM);
+
+            String newEmail = request.getParameter(EMAIL_PARAM);
+            String newPassword = request.getParameter(PASSWORD_PARAM);
+
+            utModel.doUpdateEmail(email, newEmail);
+            utModel.doUpdatePassword(email, newPassword);
+
+            UtenteBean updatedUtente = utModel.doRetrieveByEmail(newEmail);
+
+            session.setAttribute(EMAIL_PARAM, updatedUtente.getEmail());
+            session.setAttribute(PASSWORD_PARAM, updatedUtente.getPassword());
 
             // Reindirizza alla pagina del profilo
             response.sendRedirect("./profiloUtente.jsp");

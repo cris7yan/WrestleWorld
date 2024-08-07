@@ -5,7 +5,7 @@
 <%@ page import="it.unisa.wrestleworld.model.UtenteBean" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ page errorPage="pageError.jsp" %>
+<%@ page errorPage="page500.jsp" %>
 
 <%
     session = request.getSession();

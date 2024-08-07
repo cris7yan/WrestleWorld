@@ -36,7 +36,7 @@ public class OrdineControl extends HttpServlet {
     private static String fatturePath = "fatture";
     private static String templateFatturePath = "templatefattura";
 
-    private static final String ERROR_PAGE = "/pageError.jsp";
+    private static final String ERROR_PAGE = "/page500.jsp";
 
     static OrdineDAO ordineModel = new OrdineModel();
     static ProdottoDAO prodModel = new ProdottoModel();
