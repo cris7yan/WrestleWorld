@@ -30,6 +30,7 @@
         <a href="./nuovaCategoria.jsp">Aggiungi una nuova categoria</a>
         <a href="./adminUtenti.jsp">Visualizza utenti</a>
         <a href="./adminOrdini.jsp">Visualizza ordini</a>
+        <a href="./modificaDatiPersonali.jsp">Modifica i tuoi dati personali</a>
     <% } else { %>
         <a href="./modificaDatiAccesso.jsp">Modifica i tuoi dati di accesso</a>
         <a href="./modificaDatiPersonali.jsp">Modifica i tuoi dati personali</a>
