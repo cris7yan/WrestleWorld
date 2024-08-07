@@ -11,7 +11,7 @@
 <%
     session = request.getSession();
     String tipoUtente = (String) session.getAttribute("tipo");
-    if (tipoUtente == null || tipoUtente.equals("Utente")) {
+    if (tipoUtente == null) {
         response.sendRedirect("page403.jsp");
         return;
     }

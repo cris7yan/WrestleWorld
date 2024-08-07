@@ -62,13 +62,14 @@ public class CategoriaControl extends HttpServlet {
                     case "visualizzaCategoriePerTipo":
                         visualizzaCategoriePerTipo(request, response);
                         break;
+                    case "visualizzaCategorie":
+                        visualizzaCategorie(request, response);
+                        break;
                     default:
                         RequestDispatcher errorDispatcher = getServletContext().getRequestDispatcher(ERROR_PAGE);
                         errorDispatcher.forward(request, response);
                         break;
                 }
-            } else {
-                visualizzaCategorie(request, response);
             }
         } catch (ServletException | IOException e) {
             request.setAttribute(ERROR_PARAM, ERROR_MESSAGE + e);
