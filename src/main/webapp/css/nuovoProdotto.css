@@ -6,7 +6,7 @@
 
 /* Corpo della pagina */
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Avenir Next", sans-serif;
     background-color: #f4f4f4;
     color: #333;
     line-height: 1.6;
@@ -95,4 +95,16 @@ button[type="button"] {
 
 button[type="button"]:hover {
     background-color: #218838;
+}
+
+p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+}
+
+span {
+    font-size: 12px;
 }

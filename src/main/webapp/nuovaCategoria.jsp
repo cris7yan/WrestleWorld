@@ -45,5 +45,9 @@
     <button type="submit">Conferma</button>
 </form>
 
+<span>
+    <p><a href="./profiloUtente.jsp"><- Torna alla pagina profilo</a></p>
+</span>
+
 </body>
 </html>

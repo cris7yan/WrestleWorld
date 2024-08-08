@@ -159,10 +159,28 @@
         <% } } %>
     </div><br>
 
+    <button type="reset" id="reset-form">Resetta</button>
+
     <button type="submit">Conferma</button>
 </form>
 
+<span>
+    <p><a href="./profiloUtente.jsp"><- Torna alla pagina profilo</a></p>
+</span>
+
 <script>
+    document.getElementById('reset-form').addEventListener('click', function() {
+        var container = document.getElementById('taglieContainer');
+        // Rimuove tutte le taglie aggiunte
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+        // Aggiungi una taglia di default
+        var defaultTaglia = document.createElement('div');
+        defaultTaglia.innerHTML = '<input type="text" name="taglie" placeholder="Taglia" required> <input type="number" name="quantita" placeholder="Quantità" required><br>';
+        container.appendChild(defaultTaglia);
+    });
+
     function addTaglia() {
         var container = document.getElementById('taglieContainer');
         var newTaglia = document.createElement('div');

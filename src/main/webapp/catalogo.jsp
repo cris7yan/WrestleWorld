@@ -150,6 +150,7 @@
 
         <div class="filter-apply">
             <button id="apply-filters">Applica filtri</button>
+            <button id="reset-filters">Resetta filtri</button>
         </div>
     </div>
 
@@ -224,6 +225,20 @@
 </div>
 
 <script src="js/gestioneFiltro.js"></script>
+
+<script>
+    document.getElementById('reset-filters').addEventListener('click', function() {
+        // Resetta i radio button
+        document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+            radio.checked = false;
+        });
+
+        // Resetta le checkbox
+        document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+            checkbox.checked = false;
+        });
+    });
+</script>
 
 <%@ include file="footer.jsp"%>
 </body>
