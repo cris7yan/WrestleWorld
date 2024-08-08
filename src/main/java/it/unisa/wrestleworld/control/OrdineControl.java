@@ -299,29 +299,29 @@ public class OrdineControl extends HttpServlet {
             int numProd = 0;
 
             String servletPath = request.getServletContext().getRealPath("");
-            String totalPath = servletPath + File.separator  + fatturePath + File.separator  + "WrestleWorldFattura" + id + ".pdf";
+            String totalPath = servletPath + File.separator + fatturePath + File.separator + "WrestleWorldFattura" + id + ".pdf";
 
-            File file = new File(servletPath + templateFatturePath + File.separator  + "WrestleWordFatturapagina1.pdf");
+            File file = new File(servletPath + templateFatturePath + File.separator + "WrestleWordFatturapagina1.pdf");
             PDDocument fattura = PDDocument.load(file);
             PDPage page = fattura.getDocumentCatalog().getPages().get(0);
             PDPageContentStream contentStream = new PDPageContentStream(fattura, page, PDPageContentStream.AppendMode.APPEND, true, true);
             PDType1Font font = PDType1Font.TIMES_ROMAN;
 
-            //Coordinate
+            // Coordinate
 
-            //Nome e cognome cliente
+            // Nome e cognome cliente
             float coordinataX1 = 422;
             float coordinataY1 = 718.50f;
 
-            //Numero fattura
+            // Numero fattura
             float coordinataX2 = 450;
             float coordinataY2 = 761.55f;
 
-            //Data ordine
+            // Data ordine
             float coordinataX3 = 450;
             float coordinataY3 = 749.5f;
 
-            //Prodotto
+            // Prodotto
             float coordinataProdottoX = 83;
             float coordinataProdottoY = 611.8f;
 
@@ -350,10 +350,10 @@ public class OrdineControl extends HttpServlet {
 
             float prezzoSpesa = 0;
 
-            for(ProdottoBean prod : prodotti) {
+            for (ProdottoBean prod : prodotti) {
                 numProd++;
-                if(numProd > limit ) {
-                    file = new File(servletPath + templateFatturePath +  File.separator  + "WrestleWordFatturapagina2.pdf");
+                if (numProd > limit) {
+                    file = new File(servletPath + templateFatturePath + File.separator + "WrestleWordFatturapagina2.pdf");
                     page = PDDocument.load(file).getDocumentCatalog().getPages().get(0);
 
                     fattura.addPage(page);
@@ -366,14 +366,14 @@ public class OrdineControl extends HttpServlet {
                     limit = 26;
                 }
 
-                //Definisci il prodotto da scrivere
-
+                // Definisci il prodotto da scrivere
                 quantita = quantitaForProd(prod);
                 prezzo = prezzoForProd(prod, id);
                 prezzoTotale = prezzoTotaleForProd(prod, id);
                 descrizione = getNomeProd(prod);
                 prezzoSpesa += prezzoTotale;
 
+                // Scrivi la quantità del prodotto
                 contentStream.beginText();
                 contentStream.setFont(font, 12);
                 contentStream.newLineAtOffset(coordinataProdottoX, coordinataProdottoY);
@@ -381,13 +381,15 @@ public class OrdineControl extends HttpServlet {
                 contentStream.endText();
                 coordinataProdottoX = 126.5f;
 
-                contentStream.beginText();
-                contentStream.setFont(font, 12);
-                contentStream.newLineAtOffset(coordinataProdottoX, coordinataProdottoY);
-                contentStream.showText(descrizione);
-                contentStream.endText();
+                // Scrivi il nome del prodotto con controllo della lunghezza e gestione del font
+                float maxWidth = 223.5f; // Larghezza massima per il nome del prodotto
+                float adjustedY = coordinataProdottoY + 5f; // Alza leggermente il nome del prodotto
+                writeProductName(contentStream, descrizione, coordinataProdottoX, adjustedY, maxWidth);
+
+                // Riposiziona coordinata X per il prezzo
                 coordinataProdottoX = 360;
 
+                // Scrivi il prezzo unitario del prodotto
                 contentStream.beginText();
                 contentStream.setFont(font, 12);
                 contentStream.newLineAtOffset(coordinataProdottoX, coordinataProdottoY);
@@ -395,17 +397,19 @@ public class OrdineControl extends HttpServlet {
                 contentStream.endText();
                 coordinataProdottoX = 455.5f;
 
+                // Scrivi il prezzo totale del prodotto
                 contentStream.beginText();
                 contentStream.setFont(font, 12);
                 contentStream.newLineAtOffset(coordinataProdottoX, coordinataProdottoY);
                 contentStream.showText(String.valueOf(prezzoTotale + " €"));
                 contentStream.endText();
 
+                // Reset coordinata X e aggiorna la Y per il prossimo prodotto
                 coordinataProdottoX = 83;
-                coordinataProdottoY = coordinataProdottoY - 24.9f;
-
+                coordinataProdottoY -= 24.9f;  // La distanza per la prossima riga, regola se necessario
             }
 
+            // Scrivi il totale
             coordinataProdottoX = 360;
             contentStream.beginText();
             contentStream.setFont(font, 12);
@@ -420,7 +424,7 @@ public class OrdineControl extends HttpServlet {
             String prezzoArrotondato;
             Locale.setDefault(Locale.ITALY);
 
-            prezzoSpesa = prezzoSpesa + 5.0f; //spedizione
+            prezzoSpesa = prezzoSpesa + 5.0f; // spedizione
 
             prezzoArrotondato = String.format("%.2f", prezzoSpesa);
 
@@ -458,6 +462,84 @@ public class OrdineControl extends HttpServlet {
     }
 
     // Metodi utili per la generazione della fattura
+
+    /**
+     * funzione per gestire la corretta scrittura del nome del prodotto nella fattura
+     * @param contentStream
+     * @param productName
+     * @param startX
+     * @param startY
+     * @param maxWidth
+     * @param fontSize
+     * @throws IOException
+     */
+    private void writeProductName(PDPageContentStream contentStream, String productName, float startX, float startY, float maxWidth) throws IOException {
+        PDType1Font font = PDType1Font.TIMES_ROMAN;
+        float fontSize = 12.0f; // Dimensione iniziale del font
+        float leading = 14.0f; // Spazio tra le righe
+
+        // Calcola la larghezza del testo
+        float textWidth = font.getStringWidth(productName) / 1000 * fontSize;
+
+        // Riduci il font se il testo è più largo della larghezza massima
+        while (textWidth > maxWidth && fontSize > 8) {
+            fontSize -= 0.5f;  // Riduci il font di 0.5 punti
+            textWidth = font.getStringWidth(productName) / 1000 * fontSize;
+        }
+
+        // Controlla se è necessario spezzare il testo su due righe
+        if (textWidth > maxWidth) {
+            int splitIndex = findSplitIndex(productName, font, fontSize, maxWidth);
+            String line1 = productName.substring(0, splitIndex).trim();
+            String line2 = productName.substring(splitIndex).trim();
+
+            // Prima riga
+            contentStream.beginText();
+            contentStream.setFont(font, fontSize);
+            contentStream.newLineAtOffset(startX, startY);
+            contentStream.showText(line1);
+            contentStream.endText();
+
+            // Seconda riga leggermente più in basso
+            contentStream.beginText();
+            contentStream.setFont(font, fontSize);
+            contentStream.newLineAtOffset(startX, startY - leading); // La distanza tra le righe
+            contentStream.showText(line2);
+            contentStream.endText();
+        } else {
+            // Scrivi il nome su una sola riga se non è troppo lungo
+            contentStream.beginText();
+            contentStream.setFont(font, fontSize);
+            contentStream.newLineAtOffset(startX, startY);
+            contentStream.showText(productName);
+            contentStream.endText();
+        }
+    }
+
+    /**
+     * funzione per gestire la corretta scrittura del nome del prodotto nella fattura
+     * @param text
+     * @param font
+     * @param fontSize
+     * @param maxWidth
+     * @return
+     * @throws IOException
+     */
+    private int findSplitIndex(String text, PDType1Font font, float fontSize, float maxWidth) throws IOException {
+        int length = text.length();
+        int splitIndex = length;
+        for (int i = length - 1; i > 0; i--) {
+            // Trova l'ultimo spazio o un altro carattere di separazione
+            if (text.charAt(i) == ' ' || text.charAt(i) == '-') {
+                String subStr = text.substring(0, i).trim();
+                if (font.getStringWidth(subStr) / 1000 * fontSize <= maxWidth) {
+                    splitIndex = i;
+                    break;
+                }
+            }
+        }
+        return splitIndex;
+    }
 
     /**
      * restituisce la quantità del prodotto acquistato

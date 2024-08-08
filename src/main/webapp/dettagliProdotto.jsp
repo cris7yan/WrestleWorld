@@ -169,7 +169,7 @@
                 <%
                     for (TagliaProdottoBean taglia : taglieProd) {
                 %>
-                <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %></option>
+                <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %> Quantità: <%= taglia.getQuantita()%></option>
                 <%
                     }
                 %>
