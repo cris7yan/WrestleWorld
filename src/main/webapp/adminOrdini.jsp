@@ -35,8 +35,37 @@
 <body>
 <%@ include file="navbar.jsp"%>
 
-<div>
     <div class="ordini-container">
+
+        <div class="filters">
+            <h3>Filtri per Ordini</h3>
+
+            <div class="filter-section">
+                <h4>Prezzo</h4>
+                <input type="radio" id="0-50" name="price">
+                <label for="0-50">0 - 50</label>
+                <input type="radio" id="51-100" name="price">
+                <label for="51-100">51 - 100</label>
+                <input type="radio" id="101-500" name="price">
+                <label for="101-500">101 - 500</label>
+                <input type="radio" id="501-" name="price">
+                <label for="501-">500+</label>
+            </div>
+
+            <div class="filter-section">
+                <h4>Periodo</h4>
+                <label for="start-date">Data Inizio:</label>
+                <input type="date" id="start-date">
+                <label for="end-date">Data Fine:</label>
+                <input type="date" id="end-date">
+            </div>
+
+            <div class="filter-apply">
+                <button id="apply-filters">Applica filtri</button>
+                <button id="reset-filters">Resetta filtri</button>
+            </div>
+        </div>
+
         <h1>Ordini effettuati sulla piattaforma</h1>
 
         <%
@@ -45,7 +74,7 @@
                     if (ordine != null) {
         %>
 
-        <div class="ordine">
+        <div class="ordine" data-prezzo="<%= ordine.getPrezzoTotaleOrdine() %>" data-data="<%= ordine.getDataOrdine() %>">
             ID Ordine: <%= ordine.getIdOrdine() %> <br>
             Utente: <%= ordine.getUtenteOrdine() != null ? (ordine.getUtenteOrdine().getNome() + " " + ordine.getUtenteOrdine().getCognome()) : "N/A" %> <br>
             Email: <%= ordine.getUtenteOrdine() != null ? ordine.getUtenteOrdine().getEmail() : "N/A" %> <br>
@@ -65,7 +94,8 @@
         <% } %>
 
     </div>
-</div>
+
+<script src="js/gestioneFiltroOrdini.js"></script>
 
 <%@ include file="footer.jsp"%>
 </body>
