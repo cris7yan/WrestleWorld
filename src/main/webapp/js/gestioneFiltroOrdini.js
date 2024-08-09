@@ -23,6 +23,11 @@ function applyFilters() {
     const selectedFilters = getSelectedFilters();
     console.log('Selected Filters:', selectedFilters); // Debugging line
 
+    if (!validatePrices(selectedFilters.minPrice, selectedFilters.maxPrice)) {
+        resetFilters();
+        return;
+    }
+
     if (!validateDates(selectedFilters.startDate, selectedFilters.endDate)) {
         resetFilters();
         return;
@@ -42,7 +47,8 @@ function applyFilters() {
 
 function getSelectedFilters() {
     return {
-        price: document.querySelector('input[name="price"]:checked')?.id || null,
+        minPrice: parseFloat(document.getElementById('min-price').value) || 0,
+        maxPrice: parseFloat(document.getElementById('max-price').value) || Infinity,
         startDate: document.getElementById('start-date').value,
         endDate: document.getElementById('end-date').value
     };
@@ -56,25 +62,12 @@ function getOrderData(order) {
 }
 
 function isOrderVisible(orderData, filters) {
-    return checkPrice(orderData.price, filters.price) &&
+    return checkPrice(orderData.price, filters.minPrice, filters.maxPrice) &&
         checkDate(orderData.date, filters.startDate, filters.endDate);
 }
 
-function checkPrice(orderPrice, filterPrice) {
-    if (!filterPrice) return true;
-
-    const [minPrice, maxPrice] = getPriceRange(filterPrice);
+function checkPrice(orderPrice, minPrice, maxPrice) {
     return orderPrice >= minPrice && orderPrice <= maxPrice;
-}
-
-function getPriceRange(priceFilter) {
-    switch (priceFilter) {
-        case '0-50': return [0, 50];
-        case '51-100': return [51, 100];
-        case '101-500': return [101, 500];
-        case '501-': return [501, Infinity];
-        default: return [0, Infinity];
-    }
 }
 
 function checkDate(orderDate, startDate, endDate) {
@@ -85,9 +78,24 @@ function checkDate(orderDate, startDate, endDate) {
     return orderDate >= start && orderDate <= end;
 }
 
+function validatePrices(minPrice, maxPrice) {
+    if (minPrice < 0 || maxPrice < 0) {
+        alert("Inserisci un valore valido, non può essere minore di 0");
+        return false;
+    }
+    return true;
+}
+
 function validateDates(startDate, endDate) {
     const minDate = new Date('2024-01-01');
     const today = new Date();
+
+    // Formatta la data odierna come dd-mm-aaaa
+    const formattedToday = today.toLocaleDateString('it-IT', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    }).split('/').join('-');
 
     if (startDate && new Date(startDate) < minDate) {
         alert("Inserisci una data valida, non può essere una data precedente a 01-01-2024");
@@ -95,7 +103,7 @@ function validateDates(startDate, endDate) {
     }
 
     if (endDate && new Date(endDate) > today) {
-        alert("Inserisci una data valida, non può essere una data successiva a " + today);
+        alert("Inserisci una data valida, non può essere una data successiva a " + formattedToday);
         return false;
     }
 
@@ -103,10 +111,9 @@ function validateDates(startDate, endDate) {
 }
 
 function resetFilters() {
-    // Resetta i radio button
-    document.querySelectorAll('input[type="radio"]').forEach(radio => {
-        radio.checked = false;
-    });
+    // Resetta i campi del prezzo
+    document.getElementById('min-price').value = '';
+    document.getElementById('max-price').value = '';
 
     // Resetta le date
     document.getElementById('start-date').value = '';

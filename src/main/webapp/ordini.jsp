@@ -36,7 +36,6 @@
 <head>
     <meta charset="UTF-8">
     <link href="css/ordini.css" type="text/css" rel="stylesheet">
-    <link href="css/catalogo.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Ordini</title>
 </head>
 <body>
@@ -45,33 +44,35 @@
 <div class="ordini-container">
 
     <div class="filters">
-            <h3>Filtri per Ordini</h3>
-
-            <div class="filter-section">
-                <h4>Prezzo</h4>
-                <input type="radio" id="0-50" name="price">
-                <label for="0-50">0 - 50</label>
-                <input type="radio" id="51-100" name="price">
-                <label for="51-100">51 - 100</label>
-                <input type="radio" id="101-500" name="price">
-                <label for="101-500">101 - 500</label>
-                <input type="radio" id="501-" name="price">
-                <label for="501-">500+</label>
+        <div class="filter-section">
+            <h3>Prezzo</h3>
+            <div class="filter-option">
+                <label for="min-price">Minimo:</label>
+                <input type="number" id="min-price" name="min-price" placeholder="Prezzo minimo" min="0">
             </div>
+            <div class="filter-option">
+                <label for="max-price">Massimo:</label>
+                <input type="number" id="max-price" name="max-price" placeholder="Prezzo massimo" min="0">
+            </div>
+        </div>
 
-            <div class="filter-section">
-                <h4>Periodo</h4>
+        <div class="filter-section">
+            <h3>Periodo</h3>
+            <div class="filter-option">
                 <label for="start-date">Data Inizio:</label>
                 <input type="date" id="start-date">
+            </div>
+            <div class="filter-option">
                 <label for="end-date">Data Fine:</label>
                 <input type="date" id="end-date">
             </div>
-
-            <div class="filter-apply">
-                <button id="apply-filters">Applica filtri</button>
-                <button id="reset-filters">Resetta filtri</button>
-            </div>
         </div>
+
+        <div class="filter-apply">
+            <button id="apply-filters">Applica filtri</button>
+            <button id="reset-filters">Resetta filtri</button>
+        </div>
+    </div>
 
     <div class="orders-container">
             <%

@@ -38,26 +38,28 @@
     <div class="ordini-container">
 
         <div class="filters">
-            <h3>Filtri per Ordini</h3>
-
             <div class="filter-section">
-                <h4>Prezzo</h4>
-                <input type="radio" id="0-50" name="price">
-                <label for="0-50">0 - 50</label>
-                <input type="radio" id="51-100" name="price">
-                <label for="51-100">51 - 100</label>
-                <input type="radio" id="101-500" name="price">
-                <label for="101-500">101 - 500</label>
-                <input type="radio" id="501-" name="price">
-                <label for="501-">500+</label>
+                <h3>Prezzo</h3>
+                <div class="filter-option">
+                    <label for="min-price">Minimo:</label>
+                    <input type="number" id="min-price" name="min-price" placeholder="Prezzo minimo" min="0">
+                </div>
+                <div class="filter-option">
+                    <label for="max-price">Massimo:</label>
+                    <input type="number" id="max-price" name="max-price" placeholder="Prezzo massimo" min="0">
+                </div>
             </div>
 
             <div class="filter-section">
-                <h4>Periodo</h4>
-                <label for="start-date">Data Inizio:</label>
-                <input type="date" id="start-date">
-                <label for="end-date">Data Fine:</label>
-                <input type="date" id="end-date">
+                <h3>Periodo</h3>
+                <div class="filter-option">
+                    <label for="start-date">Data Inizio:</label>
+                    <input type="date" id="start-date">
+                </div>
+                <div class="filter-option">
+                    <label for="end-date">Data Fine:</label>
+                    <input type="date" id="end-date">
+                </div>
             </div>
 
             <div class="filter-apply">
@@ -66,32 +68,34 @@
             </div>
         </div>
 
-        <h1>Ordini effettuati sulla piattaforma</h1>
+        <div class="orders-container">
+            <h1>Ordini effettuati sulla piattaforma</h1>
 
-        <%
-            if (ordini != null && !ordini.isEmpty()) {
-                for (OrdineBean ordine : ordini) {
-                    if (ordine != null) {
-        %>
+            <%
+                if (ordini != null && !ordini.isEmpty()) {
+                    for (OrdineBean ordine : ordini) {
+                        if (ordine != null) {
+            %>
 
-        <div class="ordine" data-prezzo="<%= ordine.getPrezzoTotaleOrdine() %>" data-data="<%= ordine.getDataOrdine() %>">
-            ID Ordine: <%= ordine.getIdOrdine() %> <br>
-            Utente: <%= ordine.getUtenteOrdine() != null ? (ordine.getUtenteOrdine().getNome() + " " + ordine.getUtenteOrdine().getCognome()) : "N/A" %> <br>
-            Email: <%= ordine.getUtenteOrdine() != null ? ordine.getUtenteOrdine().getEmail() : "N/A" %> <br>
-            Data: <%= ordine.getDataOrdine() %> <br>
-            Totale: <%= ordine.getPrezzoTotaleOrdine() %> <br>
-            <a href="./OrdineControl?action=visualizzaDettagliOrdine&idOrdine=<%= ordine.getIdOrdine() %>">
-                <button>Visualizza dettagli</button>
-            </a>
-        </div>
+            <div class="ordine" data-prezzo="<%= ordine.getPrezzoTotaleOrdine() %>" data-data="<%= ordine.getDataOrdine() %>">
+                ID Ordine: <%= ordine.getIdOrdine() %> <br>
+                Utente: <%= ordine.getUtenteOrdine() != null ? (ordine.getUtenteOrdine().getNome() + " " + ordine.getUtenteOrdine().getCognome()) : "N/A" %> <br>
+                Email: <%= ordine.getUtenteOrdine() != null ? ordine.getUtenteOrdine().getEmail() : "N/A" %> <br>
+                Data: <%= ordine.getDataOrdine() %> <br>
+                Totale: <%= ordine.getPrezzoTotaleOrdine() %> <br>
+                <a href="./OrdineControl?action=visualizzaDettagliOrdine&idOrdine=<%= ordine.getIdOrdine() %>">
+                    <button>Visualizza dettagli</button>
+                </a>
+            </div>
 
-        <%
+            <%
+                    }
                 }
-            }
-        } else {
-        %>
-        <p>Non è stato effettuato ancora nessun ordine</p>
-        <% } %>
+            } else {
+            %>
+            <p>Non è stato effettuato ancora nessun ordine</p>
+            <% } %>
+        </div>
 
     </div>
 
