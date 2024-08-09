@@ -237,3 +237,31 @@ h1 {
     top: 5px;
     right: 10px;
 }
+
+/* Stile per il container delle immagini */
+.block-img-container {
+    display: flex;
+    flex-wrap: wrap; /* Permette la visualizzazione in linea */
+    gap: 5px; /* Spazio tra le immagini */
+    justify-content: center; /* Centra le immagini orizzontalmente */
+    align-items: center; /* Centra verticalmente le immagini se necessario */
+    width: 100%; /* Assicura che il contenitore utilizzi tutta la larghezza disponibile */
+    max-width: 100%; /* Assicura che il contenitore non superi la larghezza del viewport */
+    margin: 0 auto; /* Centro orizzontalmente il contenitore */
+}
+
+/* Stile per ciascuna immagine */
+.block-img,
+.block-img a {
+    flex: 1 1 30%; /* Ridotto al 30% della larghezza del contenitore */
+    max-width: 100%; /* Assicura che l'immagine non superi la larghezza del suo contenitore */
+    box-sizing: border-box; /* Include il padding e il bordo nella larghezza e altezza totale */
+    display: flex; /* Assicura che il contenitore dell'immagine occupi tutto lo spazio disponibile */
+    justify-content: center; /* Centro l'immagine all'interno del suo contenitore */
+}
+
+/* Stile per le immagini stesse */
+.block-img img {
+    max-width: 70%; /* Assicura che l'immagine non superi la larghezza del suo contenitore */
+    height: auto; /* Mantiene le proporzioni originali dell'immagine */
+}

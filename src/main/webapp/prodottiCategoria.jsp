@@ -128,6 +128,7 @@
 
         <div class="filter-apply">
             <button id="apply-filters">Applica filtri</button>
+            <button id="reset-filters">Resetta filtri</button>
         </div>
     </div>
 
@@ -177,19 +178,20 @@
                         </span>
                     </div>
                 </div>
-
-                <div class="promo-attiva">Promo attiva!</div>
-
+                <%  if(!prod.getDisponibilitaProdotto()) { %>
+                    <div class="promo-attiva">Non disponibile</div>
+                <% } else { %>
+                    <div class="promo-attiva">Promo attiva!</div>
+                <% } %>
                 <%  } else {   %>
-
                 <div class="price">
                     <span class="product-price">
                         <span class="euro"><%= euroOriginale %></span><span class="decimal">,<%= String.format("%02d", centesimiOriginale) %></span>&euro;
                     </span>
                 </div>
-
-                <%  }   %>
-
+                <%  if(!prod.getDisponibilitaProdotto()) { %>
+                <div class="promo-attiva">Non disponibile</div>
+                <%  }   }  %>
                 <div class="name">
                         <span class="product-name">
                             <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">

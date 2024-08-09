@@ -181,7 +181,7 @@
              data-availability="<%= prod.getDisponibilitaProdotto() %>"
         >
 
-        <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
+            <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
                 <img src="img/prodotti/<%=img%>" alt="IMG Error" class="product-img">
             </a>
             <div class="product-details">
@@ -196,14 +196,20 @@
                         </span>
                     </div>
                 </div>
+                <%  if(!prod.getDisponibilitaProdotto()) { %>
+                <div class="promo-attiva">Non disponibile</div>
+                <%  } else  {%>
                 <div class="promo-attiva">Promo attiva!</div>
+                <% } %>
                 <%  } else {   %>
                 <div class="price">
                     <span class="product-price">
                         <span class="euro"><%= euroOriginale %></span><span class="decimal">,<%= String.format("%02d", centesimiOriginale) %></span>&euro;
                     </span>
                 </div>
-                <%  }   %>
+                <%  if(!prod.getDisponibilitaProdotto()) { %>
+                <div class="promo-attiva">Non disponibile</div>
+                <%  }   }  %>
                 <div class="name">
                     <span class="product-name">
                         <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">

@@ -72,8 +72,6 @@
         </div>
     </section>
 
-    <!-- Pulsanti promo -->
-
     <h1>WrestleWorld Migliori Prodotti</h1>
 
     <div class="product-container">
@@ -114,19 +112,20 @@
                         </span>
                     </div>
                 </div>
-
+                <%  if(!prod.getDisponibilitaProdotto()) { %>
+                <div class="promo-attiva">Non disponibile</div>
+                <%  } else  {%>
                 <div class="promo-attiva">Promo attiva!</div>
-
+                <% } %>
                 <%  } else {   %>
-
                 <div class="price">
                     <span class="product-price">
                         <span class="euro"><%= euroOriginale %></span><span class="decimal">,<%= String.format("%02d", centesimiOriginale) %></span>&euro;
                     </span>
                 </div>
-
-                <%  }   %>
-
+                <%  if(!prod.getDisponibilitaProdotto()) { %>
+                <div class="promo-attiva">Non disponibile</div>
+                <%  }   }  %>
                 <div class="name">
                     <span class="product-name">
                         <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
@@ -263,7 +262,20 @@
         %>
     </div>
 
-    <!-- Blocchi promo -->
+    <div class="block-img-container">
+        <div class="block-img">
+            <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=Roman Reigns">
+                <img src="img/sitoweb/blockPosterReigns.jpeg" alt="Poster Reigns">
+            </a>
+        </div>
+        <div class="block-img">
+            <a href="ProdottoControl?action=visualizzaProdottiCategoria&categoria=The Undertaker">
+                <img src="img/sitoweb/blockPosterUndertaker.jpeg" alt="Poster Undertaker">
+            </a>
+        </div>
+    </div>
+
+    <br><br><br>
 
 <%@ include file="footer.jsp" %>
 </body>
