@@ -1,65 +1,72 @@
 body {
-    margin: 0;
-    padding: 0;
     font-family: "Avenir Next", sans-serif;
 }
 
 .product-container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
+    margin: 20px;
 }
 
-/* Stile per il contenitore delle immagini del prodotto */
-.product-img {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 20px;
-    justify-content: center;
+.carousel {
+    width: 50%;
+    overflow: hidden;
 }
 
-/* Stile per l'immagine del prodotto */
-.product-img img {
-    width: 300px; /* Imposta la larghezza desiderata */
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-/* Stile per i dettagli del prodotto */
-.product-details {
-    flex: 1;
-    padding: 20px;
+.slider-wrapper {
     position: relative;
+    width: 100%;
 }
 
-/* Stile per il nome del prodotto */
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    box-sizing: border-box;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.slider-nav-btn {
+    background-color: transparent;
+    border: none;
+    color: black;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.slider-nav-btn:hover {
+    background-color: transparent;
+}
+
+.product-details {
+    width: 45%;
+    padding: 20px;
+}
+
 .product-name {
     font-size: 24px;
-    font-weight: bold;
-    color: #333;
     margin-bottom: 10px;
 }
 
-/* Stile per la descrizione del prodotto */
-.product-description {
-    font-style: italic;
-    color: #666;
-    margin-bottom: 10px;
-    max-height: 4.5em; /* Limita l'altezza per mostrare solo 3 righe */
-    overflow: hidden; /* Nasconde il testo in eccesso */
-    line-height: 1.5em; /* Altezza della linea per la descrizione */
-}
-
-/* Stile per il prezzo del prodotto */
 .product-price {
     font-family: 'Avenir Next', sans-serif;
     font-size: 14px;
@@ -69,12 +76,12 @@ body {
 }
 
 .product-price .euro {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 600;
 }
 
 .product-price .decimal {
-    font-size: 12px;
+    font-size: 18px;
     font-weight: normal;
 }
 
@@ -91,12 +98,12 @@ body {
 }
 
 .product-price-offerta .euro {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 600;
 }
 
 .product-price-offerta .decimal {
-    font-size: 12px;
+    font-size: 18px;
     font-weight: normal;
 }
 
@@ -104,18 +111,18 @@ body {
     font-family: 'Avenir Next', sans-serif;
     font-size: 14px;
     font-weight: normal;
-    color: gray;
+    color: black;
     position: relative;
     display: inline-block;
 }
 
 .product-price-originale .euro {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: normal;
 }
 
 .product-price-originale .decimal {
-    font-size: 8px;
+    font-size: 10px;
     font-weight: normal;
 }
 
@@ -131,61 +138,99 @@ body {
     transform-origin: center;
 }
 
-/* Stile per le altre informazioni del prodotto */
+.product-description-container {
+    margin-top: 5px;
+    border-top: 1px solid lightgray;
+}
+
+.product-description-container h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.product-description {
+    font-size: 16px;
+    line-height: 1.5;
+    color: darkslategray;
+}
+
+.product-details-container {
+    margin-top: 5px;
+    border-top: 1px solid lightgray;
+}
+
+.product-details-container h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
 .product-marca,
-.product-materiale,
-.product-modello {
-    color: #333;
-    margin-bottom: 5px;
+.product-modello,
+.product-materiale {
+    margin-bottom: 10px;
 }
 
-/* Aggiungi questo CSS al tuo file paginaProdotto.css */
-
-/* Stile base per il menu a tendina */
-select[name="taglie"] {
-    width: 200px; /* Larghezza del menu a tendina */
-    padding: 10px; /* Spaziatura interna */
-    border: 1px solid #ccc; /* Bordo */
-    border-radius: 5px; /* Angoli arrotondati */
-    background-color: #fff; /* Colore di sfondo */
-    font-size: 16px; /* Dimensione del testo */
-    color: #333; /* Colore del testo */
-    appearance: none; /* Rimuovi la freccia standard del browser */
-    -webkit-appearance: none; /* Per Safari/Chrome */
-    -moz-appearance: none; /* Per Firefox */
-    cursor: pointer; /* Cambia il cursore quando si passa sopra */
-    margin-top: 10px; /* Margine superiore */
-}
-
-/* Stile per le opzioni del menu a tendina */
-select[name="taglie"] option {
-    padding: 10px; /* Spaziatura interna */
-    font-size: 16px; /* Dimensione del testo */
-    color: #333; /* Colore del testo */
-    background-color: #fff; /* Colore di sfondo */
-}
-
-/* Aggiungi un'icona per il menu a tendina */
-select[name="taglie"]::after {
-    content: '▼'; /* Icona della freccia */
-    font-size: 12px; /* Dimensione dell'icona */
-    color: #333; /* Colore dell'icona */
-    position: absolute; /* Posizionamento assoluto */
-    right: 10px; /* Distanza dal lato destro */
-    top: 50%; /* Centrato verticalmente */
-    transform: translateY(-50%); /* Centrato verticalmente */
-    pointer-events: none; /* Disabilita gli eventi pointer */
-}
-
-/* Stile per la label del menu a tendina */
-.product-sizes {
-    font-size: 18px; /* Dimensione del testo */
-    font-weight: bold; /* Grassetto */
-    color: #333; /* Colore del testo */
-    margin-bottom: 5px; /* Margine inferiore */
-}
-
-.out-of-stock {
-    color: red;
+.product-marca strong,
+.product-modello strong,
+.product-materiale strong {
+    font-size: 16px;
     font-weight: bold;
+    margin-right: 5px;
+}
+
+.product-detail-value {
+    font-size: 14px;
+}
+
+.custom-btn {
+    width: 200px;
+    height: 40px;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    outline: none;
+}
+
+.btn {
+    background: rgb(255,151,0);
+    border: none;
+    z-index: 1;
+}
+.btn:after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 0;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: 5px;
+    background-color: #eaf818;
+    background-image: linear-gradient(315deg, #eaf818 0%, #f6fc9c 74%);
+    box-shadow: inset 2px 2px 2px 0px rgba(255,255,255,.5),
+                7px 7px 20px 0px rgba(0,0,0,.1),
+                4px 4px 5px 0px rgba(0,0,0,.1);
+    transition: all 0.3s ease;
+}
+.btn:hover {
+    color: #000;
+}
+.btn:hover:after {
+    top: auto;
+    bottom: 0;
+    height: 100%;
+}
+.btn:active {
+    top: 2px;
 }

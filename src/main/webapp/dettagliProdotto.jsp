@@ -36,22 +36,28 @@
 <%@ include file="navbar.jsp"%>
 
 <div class="product-container">
-    <div class="product-img">
-        <%
-            if (prod instanceof ProdottoBean) {
-                for (String img : imgProd) {
-        %>
-        <img src="img/prodotti/<%= img %>" alt="IMG Error" class="product-img">
-        <%
-                }
-            }
-        %>
-    </div>
+    <!-- Carosello di immagini -->
+    <section id="product-carousel" class="carousel">
+        <div class="slider-wrapper">
+            <div class="slider">
+                <% if (prod instanceof ProdottoBean) {
+                    for (String img : imgProd) { %>
+                <div class="slide">
+                    <img src="img/prodotti/<%= img %>" alt="IMG Error">
+                </div>
+                <% } } %>
+            </div>
+            <div class="slider-nav">
+                <button class="slider-nav-btn" onclick="prevSlide()">&#10094;</button>
+                <button class="slider-nav-btn" onclick="nextSlide()">&#10095;</button>
+            </div>
+        </div>
+    </section>
+    <script src="js/gestioneCaroselloImmagini.js"></script>
 
+    <!-- Dettagli prodotto -->
     <div class="product-details">
-        <p class="product-name"><%= ((ProdottoBean) prod).getNomeProdotto() %>  <br></p>
-        <p class="product-description"><%= ((ProdottoBean) prod).getDescrizioneProdotto() %>  <br></p>
-
+        <h2 class="product-name"><%= ((ProdottoBean) prod).getNomeProdotto() %></h2>
         <%
             BigDecimal prezzoOriginale = new BigDecimal(((ProdottoBean) prod).getPrezzoProdotto());
             BigDecimal prezzoOfferta = new BigDecimal(((ProdottoBean) prod).getPrezzoOffertaProdotto());
@@ -72,59 +78,37 @@
                 <span class="euro"><%= euroOriginale %></span><span class="decimal">,<%= String.format("%02d", centesimiOriginale) %></span>&euro;
             </span>
         </p>
-        <%
-        } else {
+        <% } else {
             prezzoDaUsare = prezzoOriginale;
         %>
         <p class="product-price">
             <span class="euro"><%= euroOriginale %></span><span class="decimal">,<%= String.format("%02d", centesimiOriginale) %></span>&euro;
         </p>
-        <%
-            }
-        %>
+        <% } %>
 
         <input type="hidden" id="prezzo-da-usare" value="<%= prezzoDaUsare %>">
 
-        <%-- Sezione per l'Admin --%>
         <% if ("Admin".equals(tipoUtente)) { %>
         <div class="admin-price-update-container">
-            <button onclick="mostraModificaPrezzo()">Modifica Prezzo</button>
-            <button onclick="mostraModificaPrezzoOfferta()">Modifica Prezzo Offerta</button>
+            <button class="custom-btn btn" onclick="mostraModificaPrezzo()">Modifica Prezzo</button>
+            <button class="custom-btn btn" onclick="mostraModificaPrezzoOfferta()">Modifica Prezzo Offerta</button>
         </div>
         <div id="modifica-prezzo" style="display:none;">
             <input type="number" id="nuovo-prezzo" placeholder="Nuovo Prezzo">
-            <button onclick="modificaPrezzo('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiorna Prezzo</button>
+            <button class="custom-btn btn" onclick="modificaPrezzo('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiorna Prezzo</button>
         </div>
         <div id="modifica-prezzo-offerta" style="display:none;">
             <input type="number" id="nuovo-prezzo-offerta" placeholder="Nuovo Prezzo Offerta">
-            <button onclick="modificaPrezzoOfferta('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiorna Prezzo Offerta</button>
+            <button class="custom-btn btn" onclick="modificaPrezzoOfferta('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiorna Prezzo Offerta</button>
         </div>
         <% } %>
 
-        <p class="product-marca">Marca: <%= ((ProdottoBean) prod).getMarcaProdotto() %>  <br></p>
-        <p class="product-materiale">Materiale: <%= ((ProdottoBean) prod).getMaterialeProdotto() %>  <br></p>
-        <p class="product-modello">Modello: <%= ((ProdottoBean) prod).getModelloProdotto() %>  <br></p>
-
-        <%
-            boolean disponibilita = ((ProdottoBean) prod).getDisponibilitaProdotto();
-            if (!disponibilita) {
-        %>
+        <% boolean disponibilita = ((ProdottoBean) prod).getDisponibilitaProdotto();
+            if (!disponibilita) { %>
         <p class="out-of-stock">Questo prodotto non è attualmente disponibile.</p>
-        <%
-            }
-        %>
-
-        <p class="product-sizes">Taglie disponibili:</p>
+        <% } %>
+        <strong><p class="product-sizes">Taglie disponibili:</p></strong>
         <% if ("Admin".equals(tipoUtente)) { %>
-        <div class="admin-add-category-container">
-            <button onclick="mostraAggiungiCategoria()">Aggiungi Categoria</button>
-        </div>
-        <div id="aggiungi-categoria" style="display:none;">
-            <h3>Aggiungi una nuova appartenenza</h3>
-            <input type="text" id="nuova-categoria" placeholder="Nome Categoria">
-            <button onclick="aggiungiAppartenenza('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Appartenenza</button>
-        </div>
-
         <div class="admin-quantita-container">
             <table>
                 <tr>
@@ -140,7 +124,7 @@
                     <td><%= taglia.getQuantita() %></td>
                     <td>
                         <input type="number" id="quantita-<%= taglia.getTaglia() %>" placeholder="Quantità">
-                        <button onclick="aggiungiQuantita('<%= ((ProdottoBean) prod).getIDProdotto() %>', '<%= taglia.getTaglia() %>')">Aggiungi quantità</button>
+                        <button class="custom-btn btn" onclick="aggiungiQuantita('<%= ((ProdottoBean) prod).getIDProdotto() %>', '<%= taglia.getTaglia() %>')">Aggiungi quantità</button>
                     </td>
                 </tr>
                 <%
@@ -149,18 +133,14 @@
             </table>
 
             <div class="admin-add-size-container">
-                <button onclick="mostraAggiungiTaglia()">Aggiungi una nuova taglia</button>
+                <button class="custom-btn btn" onclick="mostraAggiungiTaglia()">Aggiungi una nuova taglia</button>
             </div>
             <div id="aggiungi-taglia" style="display:none;">
                 <h3>Aggiungi una nuova taglia</h3>
                 <input type="text" id="nuova-taglia" placeholder="Nuova Taglia">
                 <input type="number" id="quantita-taglia" placeholder="Quantità">
-                <button onclick="aggiungiTaglia('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Taglia</button>
+                <button class="custom-btn btn" onclick="aggiungiTaglia('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Taglia</button>
             </div>
-
-            <button id="delete-product-button" onclick="eliminaProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Elimina prodotto</button>
-            <button id="make-unavailable-button" onclick="rendiIndisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')" style="<%= disponibilita ? "display: inline;" : "display: none;" %>">Rendi indisponibile</button>
-            <button id="make-available-button" onclick="rendiDisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')" style="<%= !disponibilita ? "display: inline;" : "display: none;" %>">Rendi disponibile</button>
         </div>
         <% } else { %>
         <div class="select-container">
@@ -169,14 +149,46 @@
                 <%
                     for (TagliaProdottoBean taglia : taglieProd) {
                 %>
-                <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %> Quantità: <%= taglia.getQuantita()%></option>
+                <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %> - Quantità: <%= taglia.getQuantita()%></option>
                 <%
                     }
                 %>
             </select>
         </div>
         <br><br>
-        <button id="add-to-cart-button">Aggiungi al carrello</button>
+        <button class="custom-btn btn" id="add-to-cart-button">Aggiungi al carrello</button>
+        <% } %>
+
+        <!-- Descrizione del prodotto -->
+        <div class="product-description-container">
+            <h3>Descrizione:</h3>
+            <p class="product-description"><i><%= ((ProdottoBean) prod).getDescrizioneProdotto() %></i></p>
+        </div>
+
+        <!-- Dettagli del prodotto -->
+        <div class="product-details-container">
+            <h3 onclick="toggleDetails()">Dettagli: &#9662;</h3>
+            <div id="product-details-content" style="display: none;">
+                <p class="product-marca"><strong>Marca:</strong> <span class="product-detail-value"><%= ((ProdottoBean) prod).getMarcaProdotto() %></span></p>
+                <p class="product-modello"><strong>Modello:</strong> <span class="product-detail-value"><%= ((ProdottoBean) prod).getModelloProdotto() %></span></p>
+                <p class="product-materiale"><strong>Materiale:</strong> <span class="product-detail-value"><%= ((ProdottoBean) prod).getMaterialeProdotto() %></span></p>
+            </div>
+        </div>
+        <br><br><br>
+
+        <% if ("Admin".equals(tipoUtente)) { %>
+        <div class="admin-actions">
+            <button class="custom-btn btn" onclick="mostraAggiungiCategoria()">Aggiungi Categoria</button>
+            <div id="aggiungi-categoria" style="display:none;">
+                <h3>Aggiungi una nuova appartenenza</h3>
+                <input type="text" id="nuova-categoria" placeholder="Nome Categoria">
+                <button class="custom-btn btn" onclick="aggiungiAppartenenza('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Appartenenza</button>
+            </div>
+
+            <button class="custom-btn btn" id="delete-product-button" onclick="eliminaProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Elimina prodotto</button>
+            <button class="custom-btn btn" id="make-unavailable-button" onclick="rendiIndisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')" style="<%= disponibilita ? "display: inline;" : "display: none;" %>">Rendi indisponibile</button>
+            <button class="custom-btn btn" id="make-available-button" onclick="rendiDisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')" style="<%= !disponibilita ? "display: inline;" : "display: none;" %>">Rendi disponibile</button>
+        </div>
         <% } %>
     </div>
 </div>
@@ -209,6 +221,15 @@
 
     function aggiornaVisualizzazioneCarrello(carrello) {
         document.getElementById('cart-count').innerText = carrello.length;
+    }
+
+    function toggleDetails() {
+        var detailsContent = document.getElementById('product-details-content');
+        if (detailsContent.style.display === 'none') {
+            detailsContent.style.display = 'block';
+        } else {
+            detailsContent.style.display = 'none';
+        }
     }
 </script>
 

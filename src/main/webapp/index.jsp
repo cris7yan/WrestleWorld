@@ -190,8 +190,7 @@
         </div>
     </section>
 
-
-    <script src="js/index.js"></script>
+    <script src="js/gestioneCaroselloImmagini.js"></script>
 
     <h1>WrestleWorld Migliori in Offerta</h1>
 
