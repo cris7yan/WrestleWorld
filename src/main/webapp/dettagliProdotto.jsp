@@ -132,9 +132,10 @@
             </table><br>
 
             <div class="admin-add-size-container">
-                <button class="custom-btn-3 btn" onclick="mostraAggiungiTaglia()">Aggiungi una nuova taglia</button>
+                <button class="custom-btn-3 btn" onclick="mostraAggiungiTaglia()">Aggiungi nuova taglia</button>
             </div>
             <div id="aggiungi-taglia" style="display:none;">
+                <h3>Inserisci i dati relativi alla taglia</h3>
                 <input type="text" id="nuova-taglia" class="input-nuova-taglia" placeholder="Nuova Taglia">
                 <input type="number" id="quantita-taglia" class="input-nuova-quantita" placeholder="Quantità">
                 <button class="custom-btn btn" onclick="aggiungiTaglia('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Taglia</button>
@@ -177,7 +178,7 @@
         <div class="admin-actions">
             <button class="custom-btn btn" onclick="mostraAggiungiCategoria()">Aggiungi Categoria</button>
             <div id="aggiungi-categoria" style="display:none;">
-                <h3>Aggiungi una nuova appartenenza</h3>
+                <h3>Inserisci la categoria di appartenenza</h3>
                 <input type="text" id="nuova-categoria" class="input-nuova-categoria" placeholder="Nome Categoria">
                 <button class="custom-btn btn" onclick="aggiungiAppartenenza('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Appartenenza</button>
             </div><br><br>
