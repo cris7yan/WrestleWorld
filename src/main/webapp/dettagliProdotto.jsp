@@ -91,15 +91,18 @@
         <% if ("Admin".equals(tipoUtente)) { %>
         <div class="admin-price-update-container">
             <button class="custom-btn btn" onclick="mostraModificaPrezzo()">Modifica Prezzo</button>
+            <div id="modifica-prezzo" class="input-container" style="display:none;">
+                <input type="number" id="nuovo-prezzo" placeholder="Nuovo Prezzo">
+                <button class="custom-btn btn" onclick="modificaPrezzo('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiorna Prezzo</button>
+            </div>
+        </div>
+
+        <div class="admin-price-update-container">
             <button class="custom-btn btn" onclick="mostraModificaPrezzoOfferta()">Modifica Prezzo Offerta</button>
-        </div>
-        <div id="modifica-prezzo" style="display:none;">
-            <input type="number" id="nuovo-prezzo" placeholder="Nuovo Prezzo">
-            <button class="custom-btn btn" onclick="modificaPrezzo('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiorna Prezzo</button>
-        </div>
-        <div id="modifica-prezzo-offerta" style="display:none;">
-            <input type="number" id="nuovo-prezzo-offerta" placeholder="Nuovo Prezzo Offerta">
-            <button class="custom-btn btn" onclick="modificaPrezzoOfferta('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiorna Prezzo Offerta</button>
+            <div id="modifica-prezzo-offerta" class="input-container" style="display:none;">
+                <input type="number" id="nuovo-prezzo-offerta" placeholder="Nuovo Prezzo Offerta">
+                <button class="custom-btn btn" onclick="modificaPrezzoOfferta('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiorna Prezzo Offerta</button>
+            </div>
         </div>
         <% } %>
 
@@ -107,7 +110,7 @@
             if (!disponibilita) { %>
         <p class="out-of-stock">Questo prodotto non è attualmente disponibile.</p>
         <% } %>
-        <strong><p class="product-sizes">Taglie disponibili:</p></strong>
+        <h3>Taglie disponibili:</h3>
         <% if ("Admin".equals(tipoUtente)) { %>
         <div class="admin-quantita-container">
             <table>
@@ -116,36 +119,31 @@
                     <th>Quantità</th>
                     <th>Aggiungi quantità</th>
                 </tr>
-                <%
-                    for (TagliaProdottoBean taglia : taglieProd) {
-                %>
+                <% for (TagliaProdottoBean taglia : taglieProd) { %>
                 <tr>
                     <td><%= taglia.getTaglia() %></td>
                     <td><%= taglia.getQuantita() %></td>
                     <td>
-                        <input type="number" id="quantita-<%= taglia.getTaglia() %>" placeholder="Quantità">
-                        <button class="custom-btn btn" onclick="aggiungiQuantita('<%= ((ProdottoBean) prod).getIDProdotto() %>', '<%= taglia.getTaglia() %>')">Aggiungi quantità</button>
+                        <button class="custom-btn-2 btn" onclick="aggiungiQuantita('<%= ((ProdottoBean) prod).getIDProdotto() %>', '<%= taglia.getTaglia() %>')">Aggiungi quantità</button>
+                        <input type="number" id="quantita-<%= taglia.getTaglia() %>" class="input-quantity" placeholder="Quantità">
                     </td>
                 </tr>
-                <%
-                    }
-                %>
-            </table>
+                <% } %>
+            </table><br>
 
             <div class="admin-add-size-container">
-                <button class="custom-btn btn" onclick="mostraAggiungiTaglia()">Aggiungi una nuova taglia</button>
+                <button class="custom-btn-3 btn" onclick="mostraAggiungiTaglia()">Aggiungi una nuova taglia</button>
             </div>
             <div id="aggiungi-taglia" style="display:none;">
-                <h3>Aggiungi una nuova taglia</h3>
-                <input type="text" id="nuova-taglia" placeholder="Nuova Taglia">
-                <input type="number" id="quantita-taglia" placeholder="Quantità">
+                <input type="text" id="nuova-taglia" class="input-nuova-taglia" placeholder="Nuova Taglia">
+                <input type="number" id="quantita-taglia" class="input-nuova-quantita" placeholder="Quantità">
                 <button class="custom-btn btn" onclick="aggiungiTaglia('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Taglia</button>
             </div>
         </div>
         <% } else { %>
         <div class="select-container">
             <select name="taglie" id="taglia-select" required>
-                <option value="" disabled selected>--Seleziona una taglia--</option>
+                <option value="" disabled selected>-- Seleziona una taglia --</option>
                 <%
                     for (TagliaProdottoBean taglia : taglieProd) {
                 %>
@@ -181,9 +179,9 @@
             <button class="custom-btn btn" onclick="mostraAggiungiCategoria()">Aggiungi Categoria</button>
             <div id="aggiungi-categoria" style="display:none;">
                 <h3>Aggiungi una nuova appartenenza</h3>
-                <input type="text" id="nuova-categoria" placeholder="Nome Categoria">
+                <input type="text" id="nuova-categoria" class="input-nuova-categoria" placeholder="Nome Categoria">
                 <button class="custom-btn btn" onclick="aggiungiAppartenenza('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Aggiungi Appartenenza</button>
-            </div>
+            </div><br><br>
 
             <button class="custom-btn btn" id="delete-product-button" onclick="eliminaProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')">Elimina prodotto</button>
             <button class="custom-btn btn" id="make-unavailable-button" onclick="rendiIndisponibileProdotto('<%= ((ProdottoBean) prod).getIDProdotto() %>')" style="<%= disponibilita ? "display: inline;" : "display: none;" %>">Rendi indisponibile</button>
@@ -229,6 +227,42 @@
             detailsContent.style.display = 'block';
         } else {
             detailsContent.style.display = 'none';
+        }
+    }
+
+    function mostraModificaPrezzo() {
+        var divPrezzo = document.getElementById('modifica-prezzo');
+        if (divPrezzo.style.display === 'none') {
+            divPrezzo.style.display = 'block';
+        } else {
+            divPrezzo.style.display = 'none';
+        }
+    }
+
+    function mostraModificaPrezzoOfferta() {
+        var divPrezzoOfferta = document.getElementById('modifica-prezzo-offerta');
+        if (divPrezzoOfferta.style.display === 'none') {
+            divPrezzoOfferta.style.display = 'block';
+        } else {
+            divPrezzoOfferta.style.display = 'none';
+        }
+    }
+
+    function mostraAggiungiTaglia() {
+        var divTaglia = document.getElementById('aggiungi-taglia');
+        if (divTaglia.style.display === 'none') {
+            divTaglia.style.display = 'block';
+        } else {
+            divTaglia.style.display = 'none';
+        }
+    }
+
+    function mostraAggiungiCategoria() {
+        var divCategoria = document.getElementById('aggiungi-categoria');
+        if (divCategoria.style.display === 'none') {
+            divCategoria.style.display = 'block';
+        } else {
+            divCategoria.style.display = 'none';
         }
     }
 </script>

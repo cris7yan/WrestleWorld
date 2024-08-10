@@ -91,15 +91,6 @@ function rendiDisponibileProdotto(idProdotto) {
     });
 }
 
-function mostraAggiungiTaglia() {
-    const divTaglia = document.getElementById('aggiungi-taglia');
-    if (divTaglia.style.display === 'none') {
-        divTaglia.style.display = 'block';
-    } else {
-        divTaglia.style.display = 'none';
-    }
-}
-
 function aggiungiTaglia(idProdotto) {
     const taglia = document.getElementById('nuova-taglia').value;
     const quantita = document.getElementById('quantita-taglia').value;
@@ -126,14 +117,6 @@ function aggiungiTaglia(idProdotto) {
             alert("Errore durante l'aggiunta della taglia: " + xhr.responseText);
         }
     });
-}
-
-function mostraModificaPrezzo() {
-    document.getElementById('modifica-prezzo').style.display = 'block';
-}
-
-function mostraModificaPrezzoOfferta() {
-    document.getElementById('modifica-prezzo-offerta').style.display = 'block';
 }
 
 function modificaPrezzo(idProdotto) {
@@ -186,10 +169,6 @@ function modificaPrezzoOfferta(idProdotto) {
             alert("Errore durante l'aggiornamento del prezzo offerta: " + xhr.responseText);
         }
     });
-}
-
-function mostraAggiungiCategoria() {
-    document.getElementById('aggiungi-categoria').style.display = 'block';
 }
 
 function aggiungiAppartenenza(idProdotto) {
