@@ -165,14 +165,13 @@
 
         <!-- Dettagli del prodotto -->
         <div class="product-details-container">
-            <h3 onclick="toggleDetails()">Dettagli: &#9662;</h3>
+            <button onclick="toggleDetails()" class="details-button">Dettagli: &#9662;</button>
             <div id="product-details-content" style="display: none;">
                 <p class="product-marca"><strong>Marca:</strong> <span class="product-detail-value"><%= ((ProdottoBean) prod).getMarcaProdotto() %></span></p>
                 <p class="product-modello"><strong>Modello:</strong> <span class="product-detail-value"><%= ((ProdottoBean) prod).getModelloProdotto() %></span></p>
                 <p class="product-materiale"><strong>Materiale:</strong> <span class="product-detail-value"><%= ((ProdottoBean) prod).getMaterialeProdotto() %></span></p>
             </div>
-        </div>
-        <br><br><br>
+        </div><br><br><br>
 
         <% if ("Admin".equals(tipoUtente)) { %>
         <div class="admin-actions">

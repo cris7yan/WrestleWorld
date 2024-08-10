@@ -273,6 +273,17 @@ body {
     top: 2px;
 }
 
+.details-button {
+    background: none;
+    border: none;
+    font-family: "Avenir Next", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: black; /* Adatta il colore secondo il design */
+    cursor: pointer;
+    padding: 0;
+}
+
 .out-of-stock {
     color: red;
     font-weight: bold;
