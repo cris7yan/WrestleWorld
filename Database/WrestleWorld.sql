@@ -89,7 +89,7 @@ END;
 
 CREATE TABLE MetodoPagamento (
     ID_Pagamento int AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    NumeroCarta varchar(16) NOT NULL,
+    NumeroCarta varchar(19) NOT NULL,
     Intestatario varchar(50) NOT NULL,
     DataScadenza date NOT NULL,
     EmailUtente varchar(255) NOT NULL,

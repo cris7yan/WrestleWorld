@@ -34,8 +34,8 @@
     <% } else { %>
         <a href="./modificaDatiAccesso.jsp">Modifica i tuoi dati di accesso</a>
         <a href="./modificaDatiPersonali.jsp">Modifica i tuoi dati personali</a>
-        <a href="./indirizzi.jsp">Visualizza i tuoi indirizzi</a>
         <a href="./ordini.jsp">Visualizza i tuoi ordini</a>
+        <a href="./indirizzi.jsp">Visualizza i tuoi indirizzi</a>
         <a href="./metodiPagamento.jsp">Visualizza i tuoi metodi di pagamento</a>
     <% } %>
 </div>

@@ -24,27 +24,28 @@
 <body>
 <%@ include file="navbar.jsp"%>
 
-<div>
-    <form action="UtenteControl?action=modificaDatiAccesso" method="post" class="form">
-
+<div class="form-wrapper">
+    <form action="UtenteControl?action=modificaDatiAccesso" method="post" class="form" id="modificaDatiform">
         <div class="form-title">
-            <span>Modifica i tuoi dati di accesso</span>
+            <span><h1>Modifica i tuoi dati di accesso</h1></span>
+        </div>
+        <div class="form-title2">
+            <span>WrestleWorld Superstar</span>
         </div>
 
         <div class="input-container">
-            <input name="email" type="email" placeholder="Nuova Email" class="input-email" value="<%=session.getAttribute("email")%>">
+            <label for="email">Email:</label>
+            <input name="email" type="email" placeholder="Inserisci una nuova email..." class="input-email" value="<%=session.getAttribute("email")%>">
             <span> </span>
         </div>
 
         <div class="input-container">
-            <input name="password" type="password" placeholder="Nuova Password" class="input-password">
+            <label for="password">Password:</label>
+            <input name="password" type="password" placeholder="Inserisci una nuova password..." class="input-password">
             <span> </span>
         </div>
 
-        <button type="submit" class="submitButton">
-            <span>Conferma modifiche</span>
-        </button>
-
+        <button type="submit" class="custom-btn btn"><span>Conferma modifiche</span></button>
     </form>
 </div>
 

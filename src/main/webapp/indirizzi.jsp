@@ -33,87 +33,92 @@
     <link href="css/modificaDati.css" type="text/css" rel="stylesheet">
     <title>WrestleWorld | Indirizzi</title>
 </head>
-<style>
-    /* Aggiunta per evitare sovrapposizione con la navbar */
-    body {
-        margin-top: 70px; /* Altezza della navbar + margine */
-        padding-top: 10px; /* Spaziatura sopra il contenuto del body */
-    }
-</style>
 <body>
 <%@ include file="navbar.jsp"%>
 
-<div class="form-container">
-
-    <div class="indirizzi-container">
-        <h1>Indirizzi personali</h1>
-
-        <%
-            if(indirizzi != null && !indirizzi.isEmpty()) {
-                Iterator<?> indIt = indirizzi.iterator();
-                while (indIt.hasNext()) {
-                    IndirizzoBean indirizzo = (IndirizzoBean) indIt.next();
-        %>
-
-        <%
-            if (indirizzo != null) {
-        %>
-
-        <div class="indirizzo">
-            Via: <%= indirizzo.getViaIndirizzo() %> <br>
-            Città: <%= indirizzo.getCittaIndirizzo() %> <br>
-            Provincia: <%= indirizzo.getProvinciaIndirizzo() %> <br>
-            CAP: <%= indirizzo.getCAPIndirizzo() %> <br>
-            Nome: <%= indirizzo.getNomeCompletoIndirizzo() %> <br><br>
-            <a href="UtenteControl?action=rimuoviIndirizzo&ID_Indirizzo=<%=indirizzo.getIdIndirizzo()%>" class="removeAddress-link">Rimuovi Indirizzo</a>
-        </div>
-
-        <%
-                    }
-
-                }
-
-            }
-        %>
-    </div>
-
+<div class="form-wrapper">
     <form action="UtenteControl?action=aggiungiIndirizzo" method="post" class="form">
         <div class="form-title">
-            <span>Nuovo indirizzo</span>
+            <span><h2>Inserisci i dati del tuo indirizzo</h2></span>
         </div>
 
         <div class="input-container">
+            <label for="nomeCompleto">Destinatario:</label>
             <input class="input-nomeCompleto" name="nomeCompleto" type="text" placeholder="Nome e Cognome">
             <span> </span>
         </div>
 
         <div class="input-container">
+            <label for="via">Via:</label>
             <input class="input-via" name="via" type="text" placeholder="Via">
             <span> </span>
         </div>
 
         <div class="input-container">
+            <label for="citta">Città:</label>
             <input class="input-citta" name="citta" type="text" placeholder="Città">
             <span> </span>
         </div>
 
         <div class="input-container">
+            <label for="provincia">Provincia:</label>
             <input class="input-provincia" name="provincia" type="text" placeholder="Provincia">
             <span> </span>
         </div>
 
         <div class="input-container">
+            <label for="cap">CAP:</label>
             <input class="input-cap" name="cap" type="text" placeholder="CAP">
             <span> </span>
         </div>
 
-        <button type="submit" class="submitButton">
-            <span class="sign text">Conferma</span>
-        </button>
-
+        <button type="submit" class="custom-btn btn"><span>Conferma</span></button>
     </form>
-
 </div>
+
+<div class="indirizzi-container">
+    <div class="form-title">
+        <span><h1>Indirizzi personali selezionati</h1></span>
+    </div>
+    <div class="form-title2">
+        <span>Qui troverai tutti gli indirizzi che hai precedentemente salvato.<br>Se un indirizzo non è più utilizzato puoi anche eliminarlo.</span>
+    </div>
+
+    <%
+        if(indirizzi != null && !indirizzi.isEmpty()) {
+            for(IndirizzoBean indirizzo : indirizzi) {
+                if (indirizzo != null) {
+    %>
+    <div class="indirizzo" id="indirizzo-<%= indirizzo.getIdIndirizzo() %>">
+        <strong>Via:</strong> <%= indirizzo.getViaIndirizzo() %> <br>
+        <strong>Città:</strong> <%= indirizzo.getCittaIndirizzo() %> <br>
+        <strong>Provincia:</strong> <%= indirizzo.getProvinciaIndirizzo() %> <br>
+        <strong>CAP:</strong> <%= indirizzo.getCAPIndirizzo() %> <br>
+        <strong>Destinatario:</strong> <%= indirizzo.getNomeCompletoIndirizzo() %> <br><br>
+        <button type="button" class="custom-btn btn" onclick="rimuoviIndirizzo(<%= indirizzo.getIdIndirizzo() %>)"><span>Rimuovi Indirizzo</span></button>
+    </div>
+    <% } } } %>
+</div>
+
+<script>
+    function rimuoviIndirizzo(idIndirizzo) {
+        if (confirm("Sei sicuro di voler rimuovere questo indirizzo?")) {
+            $.ajax({
+                url: "UtenteControl?action=rimuoviIndirizzo",
+                type: "POST",
+                data: { ID_Indirizzo: idIndirizzo },
+                success: function(response) {
+                    // Rimuove l'elemento dal DOM
+                    document.getElementById("indirizzo-" + idIndirizzo).remove();
+                    alert("Indirizzo rimosso con successo.");
+                },
+                error: function() {
+                    alert("Si è verificato un errore durante la rimozione dell'indirizzo.");
+                }
+            });
+        }
+    }
+</script>
 
 <%@ include file="footer.jsp"%>
 </body>

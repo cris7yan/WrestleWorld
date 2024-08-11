@@ -1,16 +1,33 @@
-/* modificaDati.css */
-
-/* Stile generale del form di modifica dati */
-.form {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+body {
+    font-family: "Avenir Next", sans-serif;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-/* Stile dell'intestazione del form */
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: calc(100vh - 200px);
+}
+
+form {
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 750px;
+    box-sizing: border-box;
+}
+
+/* Titolo della pagina */
+h1 {
+    color: black;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 .form-title {
     text-align: center;
     margin-bottom: 10px;
@@ -19,10 +36,9 @@
 .form-title span {
     font-size: 24px;
     font-weight: bold;
-    color: #333;
+    color: black;
 }
 
-/* Stile del sottotitolo del form */
 .form-title2 {
     text-align: center;
     margin-bottom: 20px;
@@ -30,7 +46,15 @@
 
 .form-title2 span {
     font-size: 18px;
-    color: #666;
+    color: darkslategray;
+}
+
+/* Etichette e input */
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 /* Stile del contenitore dell'input */
@@ -43,25 +67,69 @@
 .input-container input[type="password"],
 .input-container input[type="text"],
 .input-container input[type="date"] {
-    width: 100%;
+    width: calc(100% - 22px);
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    color: black;
+    font-size: 12px;
+    position: relative;
+    display: inline-block;
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    outline: none;
 }
 
-/* Stile del pulsante di invio */
-.submitButton {
+.custom-btn {
     width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-    font-size: 16px;
+    height: 40px;
+    color: black;
     font-weight: bold;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Avenir Next', sans-serif;
+    background: transparent;
     cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    outline: none;
 }
 
-.submitButton:hover {
-    background-color: #0056b3;
+.btn {
+    background: rgb(255,151,0); /* Rosso puro */
+    border: none;
+    z-index: 1;
+}
+.btn:after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 0;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: 5px;
+    background-color: #ffb700; /* Giallo chiaro */
+    background-image: linear-gradient(315deg, #ff4e50 0%, #ffb700 74%); /* Gradiente dal rosso al giallo */
+    box-shadow: inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    transition: all 0.3s ease;
+}
+.btn:hover {
+    color: #000;
+}
+.btn:hover:after {
+    top: auto;
+    bottom: 0;
+    height: 100%;
+}
+.btn:active {
+    top: 2px;
 }

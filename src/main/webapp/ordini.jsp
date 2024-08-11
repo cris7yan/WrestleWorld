@@ -42,7 +42,6 @@
 <%@ include file="navbar.jsp"%>
 
 <div class="ordini-container">
-
     <div class="filters">
         <div class="filter-section">
             <h3>Prezzo</h3>
@@ -125,7 +124,6 @@
                 <a href="./OrdineControl?action=visualizzaDettagliOrdine&idOrdine=<%=ordine.getIdOrdine()%>">
                     <button>Visualizza dettagli</button>
                 </a>
-                <button>Scarica fattura</button>
             </div>
 
             <%
