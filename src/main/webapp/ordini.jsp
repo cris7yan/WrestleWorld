@@ -66,78 +66,89 @@
                 <input type="date" id="end-date">
             </div>
         </div>
-
         <div class="filter-apply">
-            <button id="apply-filters">Applica filtri</button>
-            <button id="reset-filters">Resetta filtri</button>
+            <button id="apply-filters" class="custom-btn btn">Applica filtri</button>
+            <button id="reset-filters" class="custom-btn btn">Resetta filtri</button>
         </div>
     </div>
 
     <div class="orders-container">
-            <%
-                if ("Utente".equals(tipoUtente)) {
-            %>
-            <h1>I tuoi ordini</h1>
-            <%
-                if (ordini != null && !ordini.isEmpty()) {
-                    Iterator<?> ordIt = ordini.iterator();
-                    while (ordIt.hasNext()) {
-                        OrdineBean ordine = (OrdineBean) ordIt.next();
-                        if (ordine != null) {
-            %>
-
-            <div class="ordine" data-prezzo="<%= ordine.getPrezzoTotaleOrdine() %>" data-data="<%= ordine.getDataOrdine() %>">
-                ID Ordine: <%= ordine.getIdOrdine() %> <br>
-                Data: <%= ordine.getDataOrdine() %> <br>
-                Totale: <%= ordine.getPrezzoTotaleOrdine() %> <br>
-                <a href="./OrdineControl?action=visualizzaDettagliOrdine&idOrdine=<%=ordine.getIdOrdine()%>">
-                    <button>Visualizza dettagli</button>
-                </a>
-                <%  if("Utente".equals(tipoUtente)) { %>
-                <button onclick="location.href='OrdineControl?action=generaFattura&IdOrdine=<%=ordine.getIdOrdine()%>'">Scarica fattura</button>
-                <%  }  %>
-            </div>
-
-            <%
-                    }
-                }
-            } else {
-            %>
-            <p>Non hai effettuato ancora nessun ordine</p>
-            <p><a href="./catalogo.jsp">Dai un'occhiata al nostro catalogo</a></p>
-            <%
-                }
-            } else if ("Admin".equals(tipoUtente)) {
-                if (ordini != null && !ordini.isEmpty()) {
-            %>
-            <h1>Ordini effettuati da <%= nomeOrdine %> <%= cognomeOrdine %></h1>
-            <%
+        <% if ("Utente".equals(tipoUtente)) { %>
+        <h1>I tuoi ordini</h1>
+        <%
+            if (ordini != null && !ordini.isEmpty()) {
                 Iterator<?> ordIt = ordini.iterator();
                 while (ordIt.hasNext()) {
                     OrdineBean ordine = (OrdineBean) ordIt.next();
-            %>
+                    if (ordine != null) {
+        %>
 
+        <div class="ordine" data-prezzo="<%= ordine.getPrezzoTotaleOrdine() %>" data-data="<%= ordine.getDataOrdine() %>">
             <div class="ordine" data-prezzo="<%= ordine.getPrezzoTotaleOrdine() %>" data-data="<%= ordine.getDataOrdine() %>">
-                ID Ordine: <%= ordine.getIdOrdine() %> <br>
-                Data: <%= ordine.getDataOrdine() %> <br>
-                Totale: <%= ordine.getPrezzoTotaleOrdine() %> <br>
-                <a href="./OrdineControl?action=visualizzaDettagliOrdine&idOrdine=<%=ordine.getIdOrdine()%>">
-                    <button>Visualizza dettagli</button>
-                </a>
+                <div class="img-order">
+                    <img src="img/sitoweb/box-order.png" alt="Immagine ordine">
+                    <img src="img/logo/WrestleWorldIconremove.png " alt="WrestleWorld Logo" class="logo">
+                </div>
+                <div class="dettagli">
+                    <div class="dettaglio">
+                        <strong>ID Ordine:</strong>
+                        <span><%= ordine.getIdOrdine() %></span>
+                    </div>
+                    <div class="dettaglio">
+                        <strong>Data:</strong>
+                        <span><%= ordine.getDataOrdine() %></span>
+                    </div>
+                    <div class="dettaglio">
+                        <strong>Totale:</strong>
+                        <span><%= ordine.getPrezzoTotaleOrdine() %>€</span>
+                    </div>
+                </div>
+                <div class="bottoni">
+                    <button onclick="location.href='OrdineControl?action=visualizzaDettagliOrdine&idOrdine=<%=ordine.getIdOrdine()%>'" class="custom-btn btn">Visualizza dettagli</button>
+                    <% if("Utente".equals(tipoUtente)) { %>
+                    <button onclick="location.href='OrdineControl?action=generaFattura&IdOrdine=<%=ordine.getIdOrdine()%>'" class="custom-btn btn">Scarica fattura</button>
+                    <% } %>
+                </div>
             </div>
+        </div>
+        <% } } } else { %>
+        <h3>Non hai effettuato ancora nessun ordine</h3>
+        <h4><a href="./catalogo.jsp">Dai un'occhiata al nostro catalogo</a></h4>
 
-            <%
-                }
-            } else {
-            %>
-            <h1>Ordini effettuati da <%= nomeOrdine %> <%= cognomeOrdine %></h1>
-            <p>L'utente <%= nomeOrdine %> <%= cognomeOrdine %> non ha ancora effettuato alcun ordine</p>
-            <%
-                    }
-                }
-            %>
+        <% } } else if ("Admin".equals(tipoUtente)) {
+            if (ordini != null && !ordini.isEmpty()) { %>
+        <h1>Ordini effettuati da <%= nomeOrdine %> <%= cognomeOrdine %></h1>
+        <%
+            Iterator<?> ordIt = ordini.iterator();
+            while (ordIt.hasNext()) {
+                OrdineBean ordine = (OrdineBean) ordIt.next();
+        %>
+        <div class="ordine" data-prezzo="<%= ordine.getPrezzoTotaleOrdine() %>" data-data="<%= ordine.getDataOrdine() %>">
+            <img src="img/sitoweb/box-order.png" alt="Immagine ordine">
+            <div class="dettagli">
+                <div class="dettaglio">
+                    <strong>ID Ordine:</strong>
+                    <span><%= ordine.getIdOrdine() %></span>
+                </div>
+                <div class="dettaglio">
+                    <strong>Data:</strong>
+                    <span><%= ordine.getDataOrdine() %></span>
+                </div>
+                <div class="dettaglio">
+                    <strong>Totale:</strong>
+                    <span><%= ordine.getPrezzoTotaleOrdine() %>€</span>
+                </div>
+            </div>
+            <div class="bottoni">
+                <button onclick="location.href='OrdineControl?action=visualizzaDettagliOrdine&idOrdine=<%=ordine.getIdOrdine()%>'" class="custom-btn btn">Visualizza dettagli</button>
+            </div>
         </div>
 
+        <% } } else { %>
+        <h1>Ordini effettuati da <%= nomeOrdine %> <%= cognomeOrdine %></h1>
+        <h3>L'utente <%= nomeOrdine %> <%= cognomeOrdine %> non ha ancora effettuato alcun ordine</h3>
+        <% } } %>
+    </div>
 </div>
 
 <script src="js/gestioneFiltroOrdini.js"></script>

@@ -18,10 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function applyFilters() {
-    console.log('applyFilters function called'); // Debugging line
-
     const selectedFilters = getSelectedFilters();
-    console.log('Selected Filters:', selectedFilters); // Debugging line
 
     if (!validatePrices(selectedFilters.minPrice, selectedFilters.maxPrice)) {
         resetFilters();
@@ -36,10 +33,13 @@ function applyFilters() {
     const orders = document.querySelectorAll('.ordine');
     orders.forEach(order => {
         const orderData = getOrderData(order);
-        console.log('Order Data:', orderData); // Debugging line
 
         const isVisible = isOrderVisible(orderData, selectedFilters);
-        order.style.display = isVisible ? 'block' : 'none';
+        // Utilizza visibility invece di display per mantenere il layout
+        order.style.visibility = isVisible ? 'visible' : 'hidden';
+        order.style.position = isVisible ? 'relative' : 'absolute';
+        order.style.opacity = isVisible ? '1' : '0';
+        order.style.pointerEvents = isVisible ? 'auto' : 'none';
     });
 
     window.scrollTo(0, 0);
