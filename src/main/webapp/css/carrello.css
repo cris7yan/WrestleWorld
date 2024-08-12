@@ -4,6 +4,10 @@ body {
     padding: 0;
 }
 
+.cart-container {
+    min-height: calc(100vh - 200px);
+}
+
 .cart-details {
     width: 80%;
     margin: 20px auto;

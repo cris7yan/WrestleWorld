@@ -114,6 +114,7 @@ input[type="date"] {
     max-width: 800px;
     margin: 50px auto;
     padding: 20px;
+    min-height: calc(100vh - 200px);
 }
 
 /* Stile per l'intestazione degli ordini */

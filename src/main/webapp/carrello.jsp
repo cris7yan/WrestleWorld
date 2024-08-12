@@ -18,6 +18,7 @@
 <body>
 <%@ include file="navbar.jsp"%>
 
+<div class="cart-container">
     <%
         if (carrello != null && !carrello.getCarrello().isEmpty()) {
             float prezzoTotaleCarrello = carrello.getPrezzoCarrello();
@@ -49,9 +50,7 @@
             <p class="product-total-price"><%= prezzoTotaleProdotto %>€</p>
             <a class="remove-button" href="ProdottoControl?action=rimuoviDalCarrello&IDProd=<%= prod.getIDProdotto() %>&taglia=<%= prod.getTagliaSelezionata() %>">Rimuovi</a>
         </div>
-        <%
-            }
-        %>
+        <% } %>
         <div class="total-price">
             <h3>Prezzo Totale: <%= new BigDecimal(prezzoTotaleCarrello).setScale(2, BigDecimal.ROUND_HALF_UP) %>€</h3>
         </div>
@@ -59,13 +58,11 @@
             <a href="paginaAcquisto.jsp">Acquista</a><br>
         </div>
     </div>
-    <%
-    } else {
-    %>
+    <% } else { %>
     <h2>Il carrello è vuoto</h2>
-    <%
-        }
-    %>
+    <% } %>
+</div>
 
+<%@ include file="footer.jsp" %>
 </body>
 </html>
