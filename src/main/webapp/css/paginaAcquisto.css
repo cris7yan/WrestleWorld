@@ -1,49 +1,209 @@
-.acquisto-container {
+body {
     font-family: "Avenir Next", sans-serif;
-    background-color: #f8f8f8;
     margin: 0;
     padding: 0;
+}
+
+h2, h5 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.cart-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh;
+    text-align: center;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.cart-details {
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.product-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-details p, .product-details a {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+}
+
+.product-details p {
+    margin: 0 10px;
+}
+
+.product-quantity {
+    flex: 0.5;
+}
+
+.product-details a {
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    color: blue;
+    transition: color 0.3s ease;
+}
+
+.product-details a:hover {
+    color: red; /* Cambia il colore a rosso al passaggio del mouse */
+    text-decoration: none; /* Mantiene la sottolineatura disabilitata anche al passaggio del mouse */
+}
+
+.total-price {
+    text-align: right;
+    padding: 10px;
+}
+
+.total-price h3 {
+    margin: 0;
+}
+
+.custom-btn {
+    width: 200px;
+    height: 40px;
+    color: black;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Avenir Next', sans-serif;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    outline: none;
+}
+
+.custom-btn-2 {
+    width: 150px;
+    height: 40px;
+    color: black;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Avenir Next', sans-serif;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    outline: none;
+}
+
+.btn {
+    background: rgb(255,151,0); /* Rosso puro */
+    border: none;
+    z-index: 1;
+}
+.btn:after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 0;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    border-radius: 5px;
+    background-color: #ffb700; /* Giallo chiaro */
+    background-image: linear-gradient(315deg, #ff4e50 0%, #ffb700 74%); /* Gradiente dal rosso al giallo */
+    box-shadow: inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    transition: all 0.3s ease;
+}
+.btn:hover {
+    color: #000;
+}
+.btn:hover:after {
+    top: auto;
+    bottom: 0;
+    height: 100%;
+}
+.btn:active {
+    top: 2px;
+}
+
+.acquisto-container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    text-align: left;
+    margin-top: 0;
+}
+
+.acquisto-container h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .acquisto-container form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+div.section .options {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5px; /* Spazio tra il titolo e le opzioni */
+}
+
+/* Etichette e input */
+div.section .options label {
+    display: flex;
+    align-items: center;
+    margin-right: 20px; /* Spazio tra i gruppi di opzioni */
+    margin-bottom: 10px; /* Spazio tra le righe di opzioni */
+}
+
+/* Input (radio/checkbox) */
+div.section .options label input[type="radio"] {
+    margin-right: 5px; /* Spazio tra input e testo */
+}
+
+.acquisto-container .custom-btn-2 {
     width: 100%;
+    margin-top: 20px;
+    text-align: center;
 }
 
-.acquisto-container input[type="radio"] {
-    margin-right: 10px;
-}
-
-.acquisto-container label {
-    display: block;
-    margin-bottom: 10px;
+.acquisto-container .warning-message {
+    color: red;
     font-size: 14px;
-    cursor: pointer;
+    margin-top: 10px;
+    display: none;
 }
 
-.acquisto-container button {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 100%;
-}
-
-.acquisto-container button:hover {
-    background-color: #0056b3;
-}
-
-.acquisto-container form > div {
-    margin-bottom: 20px;
+/* Titoli per le sezioni degli indirizzi e dei metodi di pagamento */
+.acquisto-container .section-title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
 }
