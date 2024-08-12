@@ -171,3 +171,18 @@ input[type="date"] {
     display: flex;
     justify-content: space-between;
 }
+
+.ordini-container h3,
+.ordini-container h4 {
+    margin: 10px 0;
+}
+
+.ordini-container h4 a {
+    color: blue;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.ordini-container h4 a:hover {
+    color: red; /* Cambia il colore a rosso al passaggio del mouse */
+}

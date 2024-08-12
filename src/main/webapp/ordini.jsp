@@ -113,7 +113,7 @@
         </div>
         <% } } } else { %>
         <h3>Non hai effettuato ancora nessun ordine</h3>
-        <h4><a href="./catalogo.jsp">Dai un'occhiata al nostro catalogo</a></h4>
+        <h4>Dai un'occhiata al nostro <a href="./catalogo.jsp">catalogo</a> per trovare cià che gradisci</h4>
 
         <% } } else if ("Admin".equals(tipoUtente)) {
             if (ordini != null && !ordini.isEmpty()) { %>

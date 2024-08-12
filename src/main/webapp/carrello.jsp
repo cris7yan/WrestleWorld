@@ -24,7 +24,7 @@
             float prezzoTotaleCarrello = carrello.getPrezzoCarrello();
     %>
     <div class="cart-details">
-        <h2>Dettagli del Carrello</h2>
+        <h2>Prodotti aggiunti al carrello</h2>
         <%
             for (ProdottoBean prod : carrello.getCarrello()) {
                 BigDecimal prezzoOriginale = new BigDecimal(prod.getPrezzoProdotto());
@@ -48,18 +48,20 @@
             <p class="product-size"><%= prod.getTagliaSelezionata() %></p>
             <p class="product-quantity"><%= prod.getQuantitaCarrello() %></p>
             <p class="product-total-price"><%= prezzoTotaleProdotto %>€</p>
-            <a class="remove-button" href="ProdottoControl?action=rimuoviDalCarrello&IDProd=<%= prod.getIDProdotto() %>&taglia=<%= prod.getTagliaSelezionata() %>">Rimuovi</a>
+            <button class="custom-btn-2 btn" onclick="location.href='ProdottoControl?action=rimuoviDalCarrello&IDProd=<%= prod.getIDProdotto() %>&taglia=<%= prod.getTagliaSelezionata() %>'">Rimuovi</button>
         </div>
         <% } %>
         <div class="total-price">
             <h3>Prezzo Totale: <%= new BigDecimal(prezzoTotaleCarrello).setScale(2, BigDecimal.ROUND_HALF_UP) %>€</h3>
-        </div>
-        <div>
-            <a href="paginaAcquisto.jsp">Acquista</a><br>
+            <h3 style="color: red">Spedizione: 5€</h3>
         </div>
     </div>
+    <div>
+        <button onclick="location.href='paginaAcquisto.jsp'" class="custom-btn btn">Acquista</button>
+    </div>
     <% } else { %>
-    <h2>Il carrello è vuoto</h2>
+    <h3>Non hai ancora aggiunto nessun prodotto al carrello</h3>
+    <h4>Dai un'occhiata al nostro <a href="./catalogo.jsp">catalogo</a> per trovare cià che gradisci</h4>
     <% } %>
 </div>
 

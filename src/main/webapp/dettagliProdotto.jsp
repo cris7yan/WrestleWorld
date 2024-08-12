@@ -148,14 +148,15 @@
                 <%
                     for (TagliaProdottoBean taglia : taglieProd) {
                 %>
-                <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %> - Quantità: <%= taglia.getQuantita()%></option>
-                <%
-                    }
-                %>
+                <% if(taglia.getQuantita() <=3 ) { %>
+                <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %> - Quantità rimanenti: <%= taglia.getQuantita()%></option>
+                <% } else { %>
+                <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %></option>
+                <% } } %>
             </select>
         </div>
         <br><br>
-        <button class="custom-btn btn" id="add-to-cart-button">Aggiungi al carrello</button>
+        <button class="custom-btn-4 btn" id="add-to-cart-button">Aggiungi al carrello</button>
         <% } %>
 
         <!-- Descrizione del prodotto -->

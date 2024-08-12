@@ -149,8 +149,8 @@
         <hr class="filter-divider">
 
         <div class="filter-apply">
-            <button id="apply-filters">Applica filtri</button>
-            <button id="reset-filters">Resetta filtri</button>
+            <button id="apply-filters" class="custom-btn btn">Applica filtri</button>
+            <button id="reset-filters" class="custom-btn btn">Resetta filtri</button>
         </div>
     </div>
 
