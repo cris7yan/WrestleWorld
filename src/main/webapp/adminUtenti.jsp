@@ -27,54 +27,92 @@
 <!DOCTYPE html>
 <html lang="it" xml:lang="it">
 <head>
-    <title>WrestleWorld | Admin</title>
-    <style>
-        .user-box {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin: 15px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .user-box h2 {
-            margin-top: 0;
-        }
-        .user-box button {
-            display: block;
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .user-box button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <link href="css/utenti.css" rel="stylesheet" type="text/css">
+    <title>WrestleWorld | Utenti</title>
 </head>
 <body>
 <%@ include file="navbar.jsp" %>
 
-<div class="container">
-    <h1>Utenti registrati alla piattaforma</h1>
-    <div class="user-list">
-        <%
-            for (UtenteBean utente : utenti) {
-        %>
-        <div class="user-box">
-            <h2><%= utente.getNome() %> <%= utente.getCognome() %></h2>
-            <p><strong>Email:</strong> <%= utente.getEmail() %></p>
-            <p><strong>Data di Nascita:</strong> <%= utente.getDataNascita() %></p>
-            <p><strong>Tipo Utente:</strong> <%= utente.getTipoUtente() %></p>
-            <button onclick="location.href='AdminControl?action=visualizzaOrdiniUtenti&email=<%= utente.getEmail() %>'">Ordini Utente</button>
+<div class="utenti-container">
+    <div class="filters">
+        <div class="filter-section">
+            <h3>Ordina per</h3>
+            <div class="filter-option">
+                <label for="order-by">Criterio di ordinamento:</label>
+                <select id="order-by">
+                    <option value="nome-asc">Nome (A-Z)</option>
+                    <option value="nome-desc">Nome (Z-A)</option>
+                    <option value="cognome-asc">Cognome (A-Z)</option>
+                    <option value="cognome-desc">Cognome (Z-A)</option>
+                </select>
+            </div>
         </div>
-        <%
-            }
-        %>
+
+        <div class="filter-section">
+            <h3>Cerca per cognome</h3>
+            <div class="filter-option">
+                <label for="cognome-search">Cognome:</label>
+                <input type="text" id="cognome-search" name="cognome-search" placeholder="Inserisci il cognome">
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h3>Periodo di nascita:</h3>
+            <div class="filter-option">
+                <label for="start-date">Data Inizio:</label>
+                <input type="date" id="start-date">
+            </div>
+            <div class="filter-option">
+                <label for="end-date">Data Fine:</label>
+                <input type="date" id="end-date">
+            </div>
+        </div>
+
+        <div class="filter-apply">
+            <button id="apply-filters" class="custom-btn btn">Applica filtri</button>
+            <button id="reset-filters" class="custom-btn btn">Resetta filtri</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Utenti registrati alla piattaforma</h1>
+
+        <% for (UtenteBean utente : utenti) { %>
+        <div class="user-box" data-nome="<%= utente.getNome() %>" data-cognome="<%= utente.getCognome() %>" data-datanascita="<%=utente.getDataNascita() %>">
+            <div>
+                <div class="img-user">
+                    <img src="img/sitoweb/box-user.png" alt="Immagine utente">
+                    <img src="img/logo/WrestleWorldIconremove.png " alt="WrestleWorld Logo" class="logo">
+                </div>
+                <div class="dettagli">
+                    <div class="dettaglio">
+                        <strong>Utente:</strong>
+                        <span><%= utente.getNome() %> <%= utente.getCognome() %></span>
+                    </div>
+                    <div class="dettaglio">
+                        <strong>Email:</strong>
+                        <span><%= utente.getEmail() %></span>
+                    </div>
+                    <div class="dettaglio">
+                        <strong>Data di Nascita</strong>
+                        <span><%= utente.getDataNascita() %></span>
+                    </div>
+                    <div class="dettaglio">
+                        <strong>Tipo Utente:</strong>
+                        <span><%= utente.getTipoUtente() %></span>
+                    </div>
+                </div>
+                <div class="bottoni">
+                    <button onclick="location.href='AdminControl?action=visualizzaOrdiniUtenti&email=<%= utente.getEmail() %>'" class="custom-btn btn">Ordini Utente</button>
+                </div>
+            </div>
+        </div>
+        <% } %>
     </div>
 </div>
+
+<script src="js/gestioneFiltroUtenti.js"></script>
 
 </body>
 </html>

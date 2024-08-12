@@ -26,12 +26,21 @@
 
 <div class="form-wrapper">
     <form action="UtenteControl?action=modificaDati" method="post" class="form" id="modificaDatiform">
+        <% if ("Utente".equals(tipoUtente)) { %>
         <div class="form-title">
             <span><h1>Modifica i tuoi dati Superstar!</h1></span>
         </div>
         <div class="form-title2">
             <span>WrestleWorld Superstar</span>
         </div>
+        <% } else if ("Admin".equals(tipoUtente)) { %>
+        <div class="form-title">
+            <span><h1>Modifica i tuoi dati Admin!</h1></span>
+        </div>
+        <div class="form-title2">
+            <span>WrestleWorld Admin</span>
+        </div>
+        <% } %>
 
         <div class="input-container">
             <label for="nome">Nome:</label>
