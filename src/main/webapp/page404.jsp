@@ -21,8 +21,9 @@
     </div>
 
     <div class="torna">
-      <a href="./index.jsp"><input class="error-comeback" type="button" value="Torna alla Homepage"> </a>
+        <button onclick="location.href='./index.jsp'" class="custom-btn btn">Torna alla Homepage</button>
     </div>
 
+<%@ include file="footer.jsp" %>
 </body>
 </html>
