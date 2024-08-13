@@ -167,7 +167,6 @@
             <div class="product-details">
 
                 <%  if (prod.getPrezzoOffertaProdotto() > 0 && prod.getPrezzoOffertaProdotto() < prod.getPrezzoProdotto()) {    %>
-
                 <div class="price">
                     <div class="product-price-container">
                         <span class="product-price-offerta">
@@ -191,13 +190,13 @@
                 </div>
                 <%  if(!prod.getDisponibilitaProdotto()) { %>
                 <div class="promo-attiva">Non disponibile</div>
-                <%  }   }  %>
+                <% } } %>
                 <div class="name">
-                        <span class="product-name">
-                            <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
-                                <%= prod.getNomeProdotto() %>
-                            </a>
-                        </span>
+                    <span class="product-name">
+                        <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%=((ProdottoBean) prod).getIDProdotto()%>">
+                            <%= prod.getNomeProdotto() %>
+                        </a>
+                    </span>
                 </div>
 
                 <div class="button">
@@ -206,25 +205,18 @@
                         <a href="ProdottoControl?action=visualizzaDettagliProdotto&IDProd=<%= ((ProdottoBean) prod).getIDProdotto() %>">Visualizza prodotto</a>
                     </button>
                 </div>
-
-                <%
-                    }
-                %>
+                <% } %>
             </div>
 
         </div>
 
-        <%
-                }
-            } else {
-        %>
+        <% } } else { %>
         <div class="error-message">
-            <p>Nessun prodotto disponibile per questa categoria.</p>
-            <p>A breve saranno disponibili.</p>
+            <h2 style="color: red">Nessun prodotto disponibile.</h2>
+            <h3 style="color: red">Attendere! A breve saranno disponibili!</h3>
+            <h4 style="color: blue">Dai un'occhiata al nostro <a href="./catalogo.jsp">catalogo</a> per trovare ciò che gradisci.</h4>
         </div>
-        <%
-            }
-        %>
+        <% } %>
     </div>
 </div>
 

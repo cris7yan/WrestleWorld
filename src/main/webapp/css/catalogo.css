@@ -1,4 +1,4 @@
-h1 {
+h1, h2, h3, h4 {
     text-align: center;                     /* Per centrare i titoli */
     font-family: 'Avenir Next', sans-serif; /* Imposta il font */
 }
@@ -187,20 +187,6 @@ h1 {
     color: #fff; /* Assicura che il testo sia sempre bianco */
 }
 
-.error-message {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
-    padding: 10px;
-    margin: 20px 0;
-    border: 1px solid transparent;
-    border-radius: .25rem;
-}
-
-.error-message p {
-    margin: 0;
-}
-
 .promo-attiva {
     background-color: red;
     color: white;
@@ -333,4 +319,14 @@ h1 {
 }
 .btn:active {
     top: 2px;
+}
+
+.error-message h4 a {
+    color: blue;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.error-message h4 a:hover {
+    color: red;
 }
