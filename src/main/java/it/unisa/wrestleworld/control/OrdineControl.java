@@ -164,7 +164,13 @@ public class OrdineControl extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("idOrdine"));
             List<ProdottoBean> prodottiOrdine = new ArrayList<>(ordineModel.doRetrieveOrdineByID(id));
 
+            List<String> imgProdotti = new ArrayList<>();
+            for (ProdottoBean prodotto : prodottiOrdine) {
+                imgProdotti.add(prodModel.doRetrieveAllImages(prodotto).get(0));
+            }
+
             request.setAttribute("prodottiOrdine", prodottiOrdine);
+            request.setAttribute("imgProdotti", imgProdotti);
             RequestDispatcher reqDispatcher = getServletContext().getRequestDispatcher("/dettagliOrdine.jsp");
             reqDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {

@@ -1,0 +1,144 @@
+body {
+    font-family: "Avenir Next", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h2, h4 {
+    text-align: center;
+}
+
+.product-order-container {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    min-height: calc(100vh - 200px);
+}
+
+.product {
+    display: inline-block;
+    width: 250px;
+    height: 550px;
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    background: linear-gradient(white, white) padding-box,
+    linear-gradient(45deg, yellow, red) border-box;
+    text-align: left;
+    overflow: hidden;
+    vertical-align: top;
+    font-family: 'Avenir Next', sans-serif;
+    position: relative;
+}
+
+/* Stile per l'immagine del prodotto */
+.product-img {
+    width: 100%;
+    height: 60%;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Stile per il nome del prodotto */
+.product-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0;
+    width: 85%;
+}
+
+/* Stile per i link nel nome del prodotto */
+.product-name a {
+    text-decoration: none;
+    color: black; /* Assicurati che il colore del testo sia nero */
+}
+
+.product-name a:hover {
+    text-decoration: none; /* Rimuove la sottolineatura al passaggio del mouse */
+    color: red; /* Cambia il colore del testo al passaggio del mouse */
+}
+
+/* Stile per il prezzo del prodotto */
+.product-price {
+    font-family: 'Avenir Next', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    color: black;
+    position: relative;
+}
+
+.product-price .euro {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.product-price .decimal {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.product-price-container {
+    display: inline-block;
+    position: relative;
+}
+
+/* Stile per il bottone del prodotto */
+.product-order-container .button {
+    position: absolute;
+    bottom: 10px; /* Distanza dal fondo */
+    width: calc(100% - 20px); /* Larghezza leggermente inferiore alla card */
+    height: 40px; /* Altezza del bottone */
+    border-radius: 15px; /* Arrotondamento dei bordi */
+    overflow: hidden;
+    border: 2px solid yellow, red;
+    text-align: center;
+}
+
+.product-order-container .button .button-layer {
+    position: absolute;
+    height: 100%;
+    width: 300%;
+    left: -100%;
+    background-image: linear-gradient(135deg, yellow, red, yellow, red, yellow, red, yellow);
+    transition: all 0.4s ease;
+    border-radius: 15px; /* Arrotondamento dei bordi */
+}
+
+.product-order-container .button:hover .button-layer {
+    left: 0;
+}
+
+.product-order-container .button button {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background: none;
+    outline: none;
+    border: none;
+    font-size: 16px; /* Riduci leggermente la dimensione del testo */
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #fff;
+    padding: 10px; /* Padding interno per spaziatura */
+    cursor: pointer;
+}
+
+.product-order-container .button button a {
+    text-decoration: none; /* Rimuove la sottolineatura */
+    color: #fff; /* Assicura che il testo sia sempre bianco */
+}
+
+.product-order-container .button button:hover {
+    text-decoration: none; /* Rimuove la sottolineatura al passaggio del mouse */
+    color: #fff; /* Assicura che il testo sia sempre bianco */
+}
