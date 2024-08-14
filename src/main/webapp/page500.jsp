@@ -17,7 +17,7 @@
     <div class="text-error">
       <span>Pagina 500</span><br>
       <span>Attenzione!</span><br>
-      <span><%= request.getAttribute("error") %></span>
+      <span>Errore verificatosi:<br><%= request.getAttribute("error") %></span>
     </div>
 
     <div class="torna">
