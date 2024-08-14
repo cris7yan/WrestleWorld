@@ -42,7 +42,7 @@
 <body>
 <%@ include file="navbar.jsp"%>
 
-<div class="form-wrapper">
+<div class="form-wrapper" id="add-payment-method">
     <form action="UtenteControl?action=aggiungiMetodoPagamento" method="post" class="form">
         <div class="form-title">
             <span><h2>Inserisci i dati del tuo metodo di pagamento</h2></span>
@@ -70,7 +70,7 @@
     </form>
 </div>
 
-<div class="metodi-container">
+<div class="metodi-container" id="view-payment-method">
     <div class="form-title">
         <span><h1>Metodi di pagamento selezionati</h1></span>
     </div>

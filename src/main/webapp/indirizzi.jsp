@@ -36,7 +36,7 @@
 <body>
 <%@ include file="navbar.jsp"%>
 
-<div class="form-wrapper">
+<div class="form-wrapper" id="add-indirizzi">
     <form action="UtenteControl?action=aggiungiIndirizzo" method="post" class="form">
         <div class="form-title">
             <span><h2>Inserisci i dati del tuo indirizzo</h2></span>
@@ -76,7 +76,7 @@
     </form>
 </div>
 
-<div class="indirizzi-container">
+<div class="indirizzi-container" id="view-indirizzi">
     <div class="form-title">
         <span><h1>Indirizzi personali selezionati</h1></span>
     </div>

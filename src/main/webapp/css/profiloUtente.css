@@ -6,6 +6,32 @@ body {
     font-family: "Avenir Next", sans-serif;
     margin: 0;
     padding: 0;
+    min-height: calc(100vh - 200px);
+}
+
+.top-links {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.top-links a {
+    font-family: 'Avenir Next', sans-serif;
+    color: blue;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+    padding-bottom: 5px; /* Spazio tra il testo e il bordo */
+    border-bottom: 4px solid blue; /* Linea sotto il link */
+    border-radius: 5px; /* Arrotondamento dei bordi della linea */
+    transition: all 0.3s ease; /* Transizione per effetto hover */
+}
+
+.top-links a:hover {
+    color: red;
+    border-bottom-color: red;
+    text-decoration-thickness: 2px;
 }
 
 /* Stile per il contenitore dell'intestazione */
@@ -16,13 +42,39 @@ body {
     margin-top: 20px;
     padding: 0 20px;
     text-align: center;
-    width: 100%;
 }
 
 .header-container h1 {
-    color: #333;
+    color: blue; /* Colore del testo durante la scrittura */
     margin: 0;
-    white-space: nowrap; /* Impedisce che il titolo vada a capo */
+    white-space: nowrap;
+    font-family: 'Avenir Next', sans-serif;
+    overflow: hidden; /* Nasconde il testo che esce fuori durante l'animazione */
+    white-space: nowrap; /* Evita che il testo vada a capo */
+    letter-spacing: 2px; /* Aumenta lo spazio tra le lettere */
+    width: fit-content; /* Riserva lo spazio necessario per il testo */
+    max-width: 100%; /* Assicura che l'elemento non si estenda oltre il suo contenitore */
+    animation: typing 4s steps(30, end), blink-caret 0.75s step-end infinite, glow 2s ease-in-out 2s infinite alternate;
+}
+
+/* Animazione per l'effetto di digitazione */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+/* Animazione per il cursore lampeggiante */
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: blue; }
+}
+
+/* Animazione per l'effetto glow (illuminazione) */
+@keyframes glow {
+    0% { color: #1E90FF; text-shadow: 0 0 5px #1E90FF; } /* Blu brillante */
+    33% { color: #4169E1; text-shadow: 0 0 10px #4169E1; } /* Blu royal */
+    66% { color: #0000CD; text-shadow: 0 0 15px #0000CD; } /* Blu medio */
+    100% { color: #1E90FF; text-shadow: 0 0 5px #1E90FF; } /* Blu brillante */
 }
 
 /* Stile per il contenitore dei dati */
@@ -33,33 +85,77 @@ body {
     max-width: 600px;
 }
 
-/* Stile per i titoli */
+/* Stile per i paragrafi */
 .dati-container p {
     margin: 10px 0;
 }
 
+/* Stile per Nome e Cognome */
+.dati-container .nome-cognome .value {
+    font-size: 30px;
+    font-weight: bold;
+    color: blue;
+}
+
+/* Stile per Email e Data di Nascita */
+.dati-container .email,
+.dati-container .data-nascita {
+    color: gray;
+    font-size: 14px;
+}
+
+/* Stile per le etichette (Label) */
 .dati-container .label {
     font-weight: bold;
-    color: #333;
+    color: darkslategray;
 }
 
-/* Stile per i dati */
+/* Stile per i valori (Value) */
 .dati-container .value {
-    color: #555;
+    color: gray;
 }
 
-/* Stile per il contenitore dei link */
-.link-container {
-    text-align: center;
+.box-container {
+    display: flex;
+    gap: 20px;
 }
 
-.link-container a {
-    display: block;
-    color: #007bff;
+.box-container a {
     text-decoration: none;
-    margin: 10px 0;
 }
 
-.link-container a:hover {
-    text-decoration: underline;
+.box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    border: 2px solid blue;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.box:hover {
+    transform: scale(1.1);
+}
+
+.box-image {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.text {
+    font-size: 14px;
+    font-weight: bold;
+    color: blue;
+}
+
+.text:hover {
+    font-size: 14px;
+    font-weight: bold;
+    color: red;
 }
