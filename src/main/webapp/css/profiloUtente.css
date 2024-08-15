@@ -50,7 +50,6 @@ body {
     white-space: nowrap;
     font-family: 'Avenir Next', sans-serif;
     overflow: hidden; /* Nasconde il testo che esce fuori durante l'animazione */
-    white-space: nowrap; /* Evita che il testo vada a capo */
     letter-spacing: 2px; /* Aumenta lo spazio tra le lettere */
     width: fit-content; /* Riserva lo spazio necessario per il testo */
     max-width: 100%; /* Assicura che l'elemento non si estenda oltre il suo contenitore */
