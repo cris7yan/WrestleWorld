@@ -89,7 +89,7 @@
                 <span class="text">Aggiungi una nuova categoria</span>
             </div>
         </a>
-        <a href="./categorie.jsp">
+        <a href="CategoriaControl?action=visualizzaCategorie">
             <div class="box">
                 <img src="img/sitoweb/eye.png" alt="Visualizza categorie" class="box-image">
                 <span class="text">Visualizza categoria</span>
