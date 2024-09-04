@@ -57,6 +57,11 @@
         </div>
     </div>
     <div>
+        <% if(emailUtente == null) { %>
+            <div class="error-message">
+                <h4 style="color: blue">Se vuoi acquistare, effettua prima il <a href="login.jsp">login</a></h4>
+            </div>
+        <% } %>
         <button onclick="location.href='paginaAcquisto.jsp'" class="custom-btn btn">Acquista</button>
     </div>
     <% } else { %>
