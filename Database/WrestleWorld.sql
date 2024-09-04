@@ -1,4 +1,4 @@
-DROP SCHEMA wrestleworld;
+DROP SCHEMA IF EXISTS wrestleworld;
 CREATE SCHEMA wrestleworld;
 USE wrestleworld;
 
