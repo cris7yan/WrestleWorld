@@ -1005,7 +1005,6 @@ public class ProdottoModel implements ProdottoDAO {
             conn.commit();  // Conferma la transazione
         } catch (SQLException e) {
             logger.log(Level.WARNING, e.getMessage());
-            throw e;  // Rilancia l'eccezione dopo il log
         }
     }
 
