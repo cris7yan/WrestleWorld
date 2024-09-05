@@ -984,53 +984,28 @@ public class ProdottoModel implements ProdottoDAO {
      * @param id
      * @throws SQLException
      */
-    public synchronized void doDeleteProduct (int id) throws SQLException {
-        Connection conn = null;
-        PreparedStatement psProdotto = null;
-        PreparedStatement psTagliaProdotto = null;
-
+    public synchronized void doDeleteProduct(int id) throws SQLException {
         String updateDisponibilitaQuery = "UPDATE Prodotto SET Disponibilita = 0 WHERE ID_Prodotto = ?";
         String updateQuantitaQuery = "UPDATE TagliaProdotto SET Quantita = 0 WHERE ID_Prodotto = ?";
 
-        try {
-            conn = dataSource.getConnection();
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement psProdotto = conn.prepareStatement(updateDisponibilitaQuery);
+             PreparedStatement psTagliaProdotto = conn.prepareStatement(updateQuantitaQuery)) {
+
             conn.setAutoCommit(false);  // Inizia una transazione
 
             // Aggiorna la disponibilità del prodotto
-            psProdotto = conn.prepareStatement(updateDisponibilitaQuery);
             psProdotto.setInt(1, id);
             psProdotto.executeUpdate();
 
             // Aggiorna la quantità del prodotto nelle taglie associate
-            psTagliaProdotto = conn.prepareStatement(updateQuantitaQuery);
             psTagliaProdotto.setInt(1, id);
             psTagliaProdotto.executeUpdate();
 
             conn.commit();  // Conferma la transazione
         } catch (SQLException e) {
-            if (conn != null) {
-                conn.rollback();  // Rollback in caso di errore
-            }
             logger.log(Level.WARNING, e.getMessage());
-        } finally {
-            // chiusura PreparedStatement e Connection
-            try {
-                if (psProdotto != null) {
-                    psProdotto.close();
-                }
-                if (psTagliaProdotto != null) {
-                    psTagliaProdotto.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_PS, e);
-            }
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.WARNING, MSG_ERROR_CONN, e);
-            }
+            throw e;  // Rilancia l'eccezione dopo il log
         }
     }
 
