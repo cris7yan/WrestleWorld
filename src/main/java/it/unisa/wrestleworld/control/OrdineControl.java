@@ -296,7 +296,6 @@ public class OrdineControl extends HttpServlet {
         try {
             int id = Integer.parseInt(request.getParameter("IdOrdine"));
             String email = ordineModel.doRetrieveOrdineByOrderId(id).getUtenteOrdine().getEmail();
-
             String nomeCognome = utModel.doRetrieveByEmail(email).getNome() + " " + utModel.doRetrieveByEmail(email).getCognome();
             Date data = ordineModel.doRetrieveOrdineByOrderId(id).getDataOrdine();
 
@@ -306,6 +305,11 @@ public class OrdineControl extends HttpServlet {
 
             String servletPath = request.getServletContext().getRealPath("");
             String totalPath = servletPath + File.separator + fatturePath + File.separator + "WrestleWorldFattura" + id + ".pdf";
+
+            File directory = new File(servletPath + File.separator + fatturePath);
+            if (!directory.exists()) {
+                directory.mkdirs();  // Crea la directory se non esiste
+            }
 
             File file = new File(servletPath + templateFatturePath + File.separator + "WrestleWordFatturapagina1.pdf");
             PDDocument fattura = PDDocument.load(file);
