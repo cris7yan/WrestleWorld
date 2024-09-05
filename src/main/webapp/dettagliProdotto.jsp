@@ -145,10 +145,10 @@
         <div class="select-container">
             <select name="taglie" id="taglia-select" required>
                 <option value="" disabled selected>-- Seleziona una taglia --</option>
-                <%
-                    for (TagliaProdottoBean taglia : taglieProd) {
-                %>
-                <% if(taglia.getQuantita() <=3 ) { %>
+                <% for (TagliaProdottoBean taglia : taglieProd) {
+                    if (taglia.getQuantita() == 0) { %>
+                <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %> - Non disponibile</option>
+                <% } else if (taglia.getQuantita() <= 3) { %>
                 <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %> - Quantità rimanenti: <%= taglia.getQuantita()%></option>
                 <% } else { %>
                 <option value="<%= taglia.getTaglia() %>"><%= taglia.getTaglia() %></option>
